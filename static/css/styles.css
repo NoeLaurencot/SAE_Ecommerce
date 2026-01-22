@@ -1,12 +1,14 @@
+:root {
+    /* Variables */
+    --black: black;
+    --white: white;
+    --gold: #d4af37;
+}
+
 html,body {
     margin: 0;
 }
 
-nav {
-    box-shadow: 1px 1px 10px 0 rgba(0,0,0,100);
-    display: flex;
-    margin-bottom: 10px;
-}
 .log-button {
     background: whitesmoke;
     cursor: pointer;

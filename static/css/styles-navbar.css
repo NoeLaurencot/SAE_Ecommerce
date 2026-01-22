@@ -1,0 +1,58 @@
+:root {
+    /* Variables */
+    --black: black;
+    --white: white;
+    --gold: #d4af37;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--black);
+    padding: 10px 20px;
+}
+
+nav .nav-burger-container {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+nav .nav-burger-container:hover {
+    cursor: pointer;
+}
+
+nav .nav-burger-container span {
+    background-color: var(--white);
+    height: 3px;
+    width: 30px;
+}
+
+nav .nav-logo {
+    width: 150px;
+    justify-self: center;
+}
+
+nav .nav-misc-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+nav .nav-misc-container .button-search-bar {
+    background: none;
+    border: none;
+    color: var(--white);
+}
+
+nav .nav-misc-container .button-search-bar:hover {
+    cursor: pointer;
+}
+
+nav .nav-misc-container .nav-basket {
+    color: var(--white);
+    text-decoration: none;
+}
+
