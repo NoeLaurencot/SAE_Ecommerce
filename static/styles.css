@@ -1,0 +1,19 @@
+html,body {
+    margin: 0;
+}
+
+nav {
+    box-shadow: 1px 1px 10px 0 rgba(0,0,0,100);
+    display: flex;
+    margin-bottom: 10px;
+}
+.log-button {
+    background: whitesmoke;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    border-radius: 10px;
+    box-shadow: 1px 1px 10px 0 rgba(0,0,0,20);
+    padding: 10px;
+    margin: 10px;
+}

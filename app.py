@@ -4,6 +4,7 @@ from flask import g
 import os
 import pymysql.cursors
 import datetime
+from controllers.auth_security import *
 
 load_dotenv()
 flask_key = os.environ["FLASK_KEY"]
@@ -30,6 +31,10 @@ def home():
 @app.errorhandler(404)
 def not_found(e):
     return render_template("error404.html")
+
+
+app.register_blueprint(auth_security)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
