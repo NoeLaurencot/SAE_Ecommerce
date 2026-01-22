@@ -24,7 +24,7 @@ def teardown_db(exception):
 
 @app.route('/')
 def home():
-    return render_template('index.html', current_route='home')
+    return render_template('home.html', current_route='home')
 
 ### Page 404 ###
 
