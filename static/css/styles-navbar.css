@@ -8,16 +8,19 @@
 nav {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     background-color: var(--black);
     padding: 10px 20px;
 }
 
+nav .nav-burger-wrapper {
+    flex: 1;
+}
+
 nav .nav-burger-container {
     display: flex;
+    width: fit-content;
     gap: 5px;
     flex-direction: column;
-    align-items: flex-start;
 }
 
 nav .nav-burger-container:hover {
@@ -32,12 +35,16 @@ nav .nav-burger-container span {
 
 nav .nav-logo {
     width: 150px;
-    justify-self: center;
+}
+
+nav .nav-misc-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
 }
 
 nav .nav-misc-container {
     display: flex;
-    align-items: center;
     gap: 15px;
 }
 
