@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles-navbar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles-footer.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles-home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles-login.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles-utilities.css') }}">
     {% endblock %}
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
@@ -36,5 +37,6 @@
 {% endblock %}
 {% include('_footer.html') %}
 </body>
+<script src="{{ url_for('static', filename='js/passwordShow.js')}}"></script>
 
 </html>

@@ -1,26 +1,26 @@
 {% extends('layout.html') %}
 
 {% block title %}
-<title>Connexion | Gaullois</title>
+<title>Inscription | Gaullois</title>
 {% endblock %}
 
 {% block body %}
 <main class="offset-nav">
 	<div class="main-container">
 		<form class="log-container" method="post" action="/login">
-			<h2 class="form-title">Connexion</h2>
+			<h2 class="form-title">Inscription</h2>
 			<label for="login"><span class="red-text">*</span> Nom d'utilisateur :</label>
 			<input type="text" id="login" required name="login">
 
 			<div class="login-password-container">
 				<label for="password"><span class="red-text">*</span> Mot de passe :</label>
 				<div class="login-password">
-					<input type="password" id="password" required autocomplete="off" name="password">
+					<input type="password" id="password" required name="password">
 					<button class="material-symbols-outlined" id="password-visibility" type="button">visibility</button>
 				</div>
 			</div>
 
-			<input class="validate-button" type="submit" value="Se connecter">
+			<input class="validate-button" type="submit" value="S'inscrire">
 		</form>
 	</div>
 </main>
