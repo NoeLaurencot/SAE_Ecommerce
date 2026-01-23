@@ -1,15 +1,13 @@
-:root {
-    /* Variables */
-    --black: black;
-    --white: white;
-    --gold: #d4af37;
-}
-
 nav {
     display: flex;
     align-items: center;
+	position: fixed;
+	z-index: 1000;
+	width: calc(100vw - 40px);
+	top: 0;
     background-color: var(--black);
-    padding: 10px 20px;
+    padding: 0px 20px;
+	height: var(--nav-height);
 }
 
 nav .nav-burger-wrapper {
@@ -34,7 +32,7 @@ nav .nav-burger-container span {
 }
 
 nav .nav-logo {
-    width: 150px;
+    width: clamp(150px, calc(150px + 5rem), 300px);
 }
 
 nav .nav-misc-wrapper {

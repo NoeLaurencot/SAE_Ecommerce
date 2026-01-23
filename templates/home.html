@@ -1,12 +1,14 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-  <title>Accueil | Gaullois</title>
+<title>Accueil | Gaullois</title>
 {% endblock %}
 
 {% block body %}
-  <main>
-    <div>
-    </div>
-  </main>
+<main>
+	<div class="video-player-container offset-nav">
+		<video id="test" src="../static/assets/videos/home_background_video.mp4" autoplay muted loop disablePictureInPicture></video>
+		<a class="main-button" href="#">Visitez la boutique</a>
+	</div>
+</main>
 {% endblock %}

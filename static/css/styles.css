@@ -1,21 +1,39 @@
 :root {
-    /* Variables */
-    --black: black;
-    --white: white;
-    --gold: #d4af37;
+	/* Variables */
+	--black: black;
+	--white: white;
+	--gold: rgb(153, 142, 57);
+	--nav-height: 90px;
 }
 
-html,body {
-    margin: 0;
+html,
+body {
+	margin: 0;
+	font-family: "Nanuto", sans-serif;
+}
+
+.main-button {
+	position: absolute;
+	color: var(--white);
+	text-decoration: none;
+	padding: 10px 60px;
+	background-color: var(--black);
+	border: solid 2px var(--black);
+	transition: 0.5s;
+}
+
+.main-button:hover {
+	color: var(--gold);
+	border: solid 2px var(--gold);
 }
 
 .log-button {
-    background: whitesmoke;
-    cursor: pointer;
-    text-decoration: none;
-    color: black;
-    border-radius: 10px;
-    box-shadow: 1px 1px 10px 0 rgba(0,0,0,20);
-    padding: 10px;
-    margin: 10px;
+	background: whitesmoke;
+	cursor: pointer;
+	text-decoration: none;
+	color: black;
+	border-radius: 10px;
+	box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, 20);
+	padding: 10px;
+	margin: 10px;
 }

@@ -1,8 +1,13 @@
-:root {
-    /* Variables */
-    --black: black;
-    --white: white;
-    --gold: #d4af37;
+.video-player-container {
+	display: flex;
+	justify-content: center;
+	position: relative;
+	align-items: center;
 }
 
-
+.video-player-container video {
+	overflow: hidden;
+	width: 100vw;
+	height: calc(100vh - var(--nav-height));
+	object-fit: cover;
+}
