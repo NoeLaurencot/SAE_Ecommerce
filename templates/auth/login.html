@@ -5,15 +5,15 @@
 {% endblock %}
 
 {% block body %}
-	<div>
-		<form method="post" action="/login">
-			<label for="login">Login :</label>
-			<input type="text" id="login" name="login">
+    <div class="main-container">
+        <form class="log-container" method="post" action="/login">
+            <label for="login">Login :</label>
+            <input type="text" id="login" name="login">
 
 			<label for="password">Password :</label>
 			<input type="text" id="password" name="password">
 
-			<input type="submit" value="Log in">
-		</form>
-	</div>
+            <input type="submit" value="Log-in">
+        </form>
+    </div>
 {% endblock %}
