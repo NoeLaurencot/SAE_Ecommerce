@@ -52,45 +52,15 @@ body {
 	color: var(--gold);
 }
 
-.log-button {
-	background: whitesmoke;
-	cursor: pointer;
-	text-decoration: none;
-	color: black;
-	border-radius: 10px;
-	box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, 20);
-	padding: 10px;
-	margin: 10px;
-}
+
 .main-container {
-    padding:10px;
+    padding: 20px;
     display: flex;
-    width: calc(100% - 20px);
-    height: 500px;
     justify-content: center;
     align-items: center;
-
 }
-.log-container {
-    padding: 50px;
-    display: flex;
-    align-content: flex-start;
-    flex-direction: column;
-    height: fit-content;
-    border: solid 2px var(--black);
 
-
-}
-.log-container input {
-    padding: 3px 20px;
-    margin: 10px;
-}
-.log-container input[type="submit"] {
-    margin-top: 20%;
-    border-radius: 20px;
-    color: var(--black);
-    box-shadow: 0px 0px 1px 0 rgba(0,0,0,10);
-    border : none;
-    background-color: var(--gold);
-    font-size: 1rem;
+.form-title {
+	color: var(--white);
+	font-family: "The Seasons", sans-serif;
 }

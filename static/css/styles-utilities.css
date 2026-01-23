@@ -9,3 +9,7 @@
 .no-padding {
 	padding: 0 !important;
 }
+
+.red-text {
+	color: red !important;
+}

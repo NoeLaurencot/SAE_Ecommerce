@@ -1,0 +1,60 @@
+.log-container {
+    padding: 20px 50px 50px 50px;
+	margin: 80px 0;
+    display: flex;
+    align-content: flex-start;
+    flex-direction: column;
+    height: fit-content;
+	background-color: var(--black);
+}
+
+.log-container input {
+    padding: 3px 40px 3px 5px;
+    margin: 10px;
+}
+
+.log-container label {
+	color: var(--white);
+}
+
+.log-container .login-password-container {
+	display: flex;
+	flex-direction: column;
+}
+
+.log-container .login-password {
+	position: relative;
+}
+
+.log-container .login-password button {
+	position: absolute;
+	border: none;
+	background: none;
+	font-size: 1.2rem;
+	right: 18px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: rgb(0, 0, 0);
+	transition: 0.3s;
+}
+
+.log-container .login-password button:hover {
+	cursor: pointer;
+	color: var(--gold);
+}
+
+.log-container .validate-button {
+    margin-top: 20%;
+    color: var(--black);
+    border : none;
+    background-color: var(--white);
+	padding: 10px 40px 8px 40px;
+	font-weight: bold;
+	font-family: "The Seasons", sans-serif;
+	transition: 0.5s color;
+}
+
+.log-container .validate-button:hover {
+    color: var(--gold);
+	cursor: pointer;
+}
