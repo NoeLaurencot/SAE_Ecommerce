@@ -17,6 +17,7 @@ nav .nav-burger-wrapper {
 nav .nav-burger-container {
     display: flex;
     width: fit-content;
+	padding: 10px;
     gap: 5px;
     flex-direction: column;
 }
@@ -32,7 +33,7 @@ nav .nav-burger-container span {
 }
 
 nav .nav-logo {
-    width: clamp(150px, calc(150px + 5rem), 300px);
+    width: clamp(100px, calc(150px + 5rem), 400px);
 }
 
 nav .nav-misc-wrapper {
@@ -56,8 +57,20 @@ nav .nav-misc-container .button-search-bar:hover {
     cursor: pointer;
 }
 
-nav .nav-misc-container .nav-basket {
+nav .nav-misc-container * {
+	font-size: 2rem;
+	transition: 0.5s color;
+}
+
+nav .nav-misc-container button:hover {
+	color: var(--gold);
+}
+
+nav .nav-misc-container a:hover {
+	color: var(--gold);
+}
+
+nav .nav-misc-container .nav-link {
     color: var(--white);
     text-decoration: none;
 }
-

@@ -2,29 +2,54 @@
 	/* Variables */
 	--black: black;
 	--white: white;
-	--gold: rgb(153, 142, 57);
+	--gold: rgb(178, 164, 56);
 	--nav-height: 90px;
+}
+
+@font-face {
+  font-family: 'The Seasons';
+  src:
+    url('../assets/fonts/Seasons.woff2') format('woff2'),;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src:
+    url('../assets/fonts/Nunito.woff2') format('woff2'),;
+}
+
+@font-face {
+  font-family: 'EB Garamond';
+  src:
+    url('../assets/fonts/EBGaramond.woff2') format('woff2'),;
 }
 
 html,
 body {
 	margin: 0;
-	font-family: "Nanuto", sans-serif;
+	font-family: "Nunito", sans-serif;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
 }
 
 .main-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	position: absolute;
-	color: var(--white);
+	color: var(--black);
 	text-decoration: none;
-	padding: 10px 60px;
-	background-color: var(--black);
-	border: solid 2px var(--black);
-	transition: 0.5s;
+	padding: 22px 70px 18px;
+	background-color: var(--white);
+	font-size: 1.4rem;
+	font-weight: bold;
+	font-family: "The Seasons", serif;
+	transition: 0.5s color;
 }
 
 .main-button:hover {
 	color: var(--gold);
-	border: solid 2px var(--gold);
 }
 
 .log-button {

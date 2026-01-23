@@ -1,0 +1,42 @@
+footer {
+	display: flex;
+	flex-direction: column;
+	height: fit-content;
+	background-color: var(--black);
+	color: var(--white);
+	margin-top: auto;
+}
+
+footer .footer-tile {
+	display: flex;
+	padding: 20px;
+}
+
+footer .footer-socials {
+	display: flex;
+	gap: 20px;
+}
+
+footer .footer-socials a img {
+	width: 30px;
+	height: 30px;
+}
+
+footer .footer-socials img {
+	width: 30px;
+	height: 30px;
+}
+
+footer .footer-socials img:hover {
+	cursor: pointer;
+}
+
+footer .footer-team {
+	display: flex;
+	flex-direction: column;
+}
+
+footer .footer-copyright {
+	display: flex;
+	justify-content: center;
+}
