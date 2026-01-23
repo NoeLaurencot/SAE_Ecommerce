@@ -10,14 +10,12 @@
     {% block stylesheets %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles-navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles-footer.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles-home.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles-utilities.css') }}">
     {% endblock %}
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png')}}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/logo/favicon.avif')}}">
 </head>
 
 
@@ -36,6 +34,7 @@
     {% endwith %}
 {% block body %}
 {% endblock %}
+{% include('_footer.html') %}
 </body>
 
 </html>
