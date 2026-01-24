@@ -3,7 +3,15 @@
 	--black: black;
 	--white: white;
 	--gold: rgb(178, 164, 56);
+    --burger-background: rgb(13, 13, 13);
+    --burger-border: rgb(46, 46, 46);
+
 	--nav-height: 90px;
+
+    --nav-zindex: 1000;
+    --hamburger-zindex: 2000;
+    --hamburger-button-zindex: 2500;
+    --alert-zindex: 3000;
 }
 
 @font-face {
@@ -69,9 +77,10 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+    gap: 20px;
 	position: fixed;
 	bottom: 20px;
-	z-index: 1000;
+	z-index: var(--alert-zindex);
 	left: -100%;
 	padding: 20px;
 	transition: 1s left;
@@ -96,4 +105,21 @@ body {
 
 .alert-success {
 	background-color: rgb(71, 176, 48);
+}
+
+.screen-blur {
+    position: fixed;
+    top: 0;
+    left: 0;
+    backdrop-filter: blur(10px);
+    height: 100vh;
+    width: 100vw;
+    opacity: 0%;
+    visibility: hidden;
+    transition: 0.2s;
+}
+
+.screen-blur-active {
+    visibility: visible;
+    opacity: 100%;
 }
