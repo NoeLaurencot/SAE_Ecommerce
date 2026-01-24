@@ -25,10 +25,9 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for categorie, message in messages %}
-                <div class="alert alert-dismissible fade show {{ categorie }}" role="alert">
-                    <span class="material-symbols-outlined">check_circle</span>
-                    <span><strong>{{ message }}</strong></span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="{{ categorie }} offset-nav alert" role="alert">
+                    <span>{{ message }}</span>
+                    <button type="button" class="material-symbols-outlined">close</button>
                 </div>
             {% endfor %}
         {% endif %}
@@ -38,5 +37,6 @@
 {% include('_footer.html') %}
 </body>
 <script src="{{ url_for('static', filename='js/passwordShow.js')}}"></script>
+<script src="{{ url_for('static', filename='js/alerts.js')}}"></script>
 
 </html>

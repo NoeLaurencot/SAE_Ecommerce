@@ -7,22 +7,26 @@
 {% block body %}
 <main class="offset-nav">
 	<div class="main-container">
-		<form class="log-container" method="post" action="/login">
-			<h2 class="form-title">Connexion</h2>
-			<label for="login"><span class="red-text">*</span> Nom d'utilisateur :</label>
-			<input type="text" id="login" required name="login">
+		<div class="log-container">
+			<form method="post" action="/login">
+				<h2 class="form-title">Connexion</h2>
 
-			<div class="login-password-container">
-				<label for="password"><span class="red-text">*</span> Mot de passe :</label>
-				<div class="login-password">
-					<input type="password" id="password" required autocomplete="off" name="password">
-					<button class="material-symbols-outlined" id="password-visibility" type="button">visibility</button>
+				<label for="login">Nom d'utilisateur <span class="red-text">*</span></label>
+				<input type="text" id="login" required name="login">
+
+				<div class="login-password-container">
+					<label for="password">Mot de passe <span class="red-text">*</span></label>
+					<div class="login-password">
+						<input type="password" id="password" required autocomplete="off" name="password">
+						<button class="material-symbols-outlined" id="password-visibility" type="button">visibility</button>
+					</div>
+					<a class="forgot-password" href="#">Mot de passe oublié?</a>
 				</div>
-				<a class="forgot-password" href="#">Mot de passe oublié?</a>
-			</div>
 
-			<input class="validate-button" type="submit" value="Se connecter">
-		</form>
+				<input class="validate-button" type="submit" value="Se connecter">
+			</form>
+			<a class="log-sign-link" href="/signup">Pas de compte? S'inscrire</a>
+		</div>
 	</div>
 </main>
 {% endblock %}
