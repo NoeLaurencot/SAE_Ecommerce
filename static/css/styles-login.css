@@ -76,3 +76,7 @@
 	color: var(--black);
 	margin-top: 25px;
 }
+
+.log-container .log-sign-link:hover {
+    color: var(--gold);
+}

@@ -14,21 +14,13 @@ footer .footer-tile {
 
 footer .footer-socials {
 	display: flex;
+    align-items: center;
 	gap: 20px;
 }
 
 footer .footer-socials a img {
-	width: 30px;
-	height: 30px;
-}
-
-footer .footer-socials img {
-	width: 30px;
-	height: 30px;
-}
-
-footer .footer-socials img:hover {
-	cursor: pointer;
+    width: clamp(5px, 2rem, 100px);
+    height: auto;
 }
 
 footer .footer-team {
