@@ -5,9 +5,10 @@
 {% endblock %}
 
 {% block body %}
-<main class="offset-nav">
+<script>0</script> <!-- Pour fix un bug FOUC (Flash of unstyled content) de firefox -->
+<main>
 	<div class="video-player-container">
-		<video id="test" src="../static/assets/videos/home_background_video.mp4" autoplay muted loop disablePictureInPicture></video>
+		<video id="test" src="{{ url_for('static', filename='assets/videos/home_background_video.mp4') }}" autoplay muted loop disablePictureInPicture></video>
 		<a class="main-button" href="#">Visitez la boutique</a>
 	</div>
 </main>
