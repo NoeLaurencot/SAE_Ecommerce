@@ -1,13 +1,13 @@
-from flask import Flask, request, render_template, redirect, url_for, abort, flash, session, g
+from flask import g
 from dotenv import load_dotenv
 import os
 import pymysql.cursors
 
 load_dotenv()
 db_login = os.environ["DB_LOGIN"]
+db_name = os.environ["DB_NAME"]
 db_password = os.environ["DB_PASSWORD"]
 db_host = os.environ["DB_HOST"]
-db_name = os.environ["DB_NAME"]
 
 def get_db():
     if 'db' not in g:
