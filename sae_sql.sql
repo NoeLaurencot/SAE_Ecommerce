@@ -7,13 +7,14 @@ DROP TABLE IF EXISTS commandes;
 DROP TABLE IF EXISTS tailles;
 DROP TABLE IF EXISTS type_vetements;
 DROP TABLE IF EXISTS etats;
+DROP TABLE IF EXISTS utilisateurs;
 
 CREATE TABLE utilisateurs
 (
     id_utilisateur INT AUTO_INCREMENT,
     login          VARCHAR(50),
     password       VARCHAR(255),
-    email          VARCHAR(255),
+    email          VARCHAR(255) UNIQUE,
     role           VARCHAR(25),
     est_actif      BOOLEAN,
     nom            VARCHAR(50),
