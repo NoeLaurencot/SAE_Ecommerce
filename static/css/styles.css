@@ -64,3 +64,36 @@ body {
 	color: var(--white);
 	font-family: "The Seasons", sans-serif;
 }
+
+.alert {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	position: fixed;
+	bottom: 20px;
+	z-index: 1000;
+	left: -100%;
+	padding: 20px;
+	transition: 1s left;
+}
+
+.alert button {
+	border: none;
+	background: none;
+}
+
+.alert button:hover {
+	cursor: pointer;
+}
+
+.alert-warning {
+	background-color: var(--gold);
+}
+
+.alert-danger {
+	background-color: rgb(189, 51, 51);
+}
+
+.alert-success {
+	background-color: rgb(71, 176, 48);
+}
