@@ -1,0 +1,19 @@
+{% extends('layout.html') %}
+
+{% block title %}
+<title>Déconnexion | Gaullois</title>
+{% endblock %}
+
+{% block body %}
+<main>
+    <div class="main-container">
+        <div class="log-container">
+            <form method="post" action="/logout">
+                <h2 class="form-title">Deconnexion</h2>
+
+                <input class="validate-button" type="submit" value="Se deconnecter">
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}

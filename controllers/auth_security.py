@@ -20,7 +20,7 @@ def auth_login_post():
     password = request.form.get('password')
     tuple_select = (login)
     sql = """
-    SELECT login, password, role, id_user
+    SELECT login, password, role, id_utilisateur
     FROM utilisateurs
     WHERE login = %s;
     """
@@ -38,9 +38,11 @@ def auth_login_post():
             session['id_user'] = user['id_utilisateur']
             print(user['login'], user['role'])
             if user['role'] == 'ROLE_admin':
-                return redirect('/admin/commande/index')
+                # return redirect('/admin/commande/index')
+                return redirect('/')
             else:
-                return redirect('/client/article/show')
+                # return redirect('/client/article/show')
+                return redirect('/')
     else:
         flash(u'Nom d\'utilisateur ou mot de passe invalide.', 'alert-warning')
         return redirect('/login')
@@ -80,23 +82,30 @@ def auth_signup_post():
     """
     mycursor.execute(sql, tuple_insert)
     get_db().commit()
-    # sql = """  requete_auth_security_4  """
-    # mycursor.execute(sql)
-    # info_last_id = mycursor.fetchone()
-    # id_user = info_last_id['last_insert_id']
-    # print('last_insert_id', id_user)
-    # session.pop('login', None)
-    # session.pop('role', None)
-    # session.pop('id_user', None)
-    # session['login'] = login
-    # session['role'] = 'ROLE_client'
-    # session['id_user'] = id_user
-    # return redirect('/client/article/show')
-    return redirect('/login')
 
+    sql = """
+        SELECT LAST_INSERT_ID() as last_insert_id;
+        """
+    mycursor.execute(sql)
+    info_last_id = mycursor.fetchone()
+    id_user = info_last_id['last_insert_id']
+    print('last_insert_id', id_user)
+    session.pop('login', None)
+    session.pop('role', None)
+    session.pop('id_user', None)
+    session['login'] = login
+    session['role'] = 'ROLE_client'
+    session['id_user'] = id_user
+    flash(u'Compte crée avec succès', 'alert-success')
+    # return redirect('/client/article/show')
+    return redirect('/')
 
 @auth_security.route('/logout', methods=['GET'])
 def auth_logout():
+    return render_template('auth/logout.html')
+
+@auth_security.route('/logout', methods=['POST'])
+def auth_logout_post():
     session.pop('login', None)
     session.pop('role', None)
     session.pop('id_user', None)
@@ -105,4 +114,10 @@ def auth_logout():
 @auth_security.route('/forget-password', methods=['GET'])
 def forget_password():
     return render_template('auth/forget_password.html')
+
+@auth_security.route('/forget-password', methods=['POST'])
+def forget_password_post():
+    flash(u'Email envoyé si le compte existe (pas implémenté)','alert-warning')
+    return redirect('/login')
+
 
