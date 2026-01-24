@@ -2,7 +2,7 @@ const toggleButton = document.getElementById("password-visibility");
 const passwordInput = document.getElementById("password");
 
 if (toggleButton && passwordInput) {
-	toggleButton.addEventListener("click", function (event) {
+	toggleButton.addEventListener("click", function() {
 
 		if (passwordInput.type === "password") {
 			passwordInput.type = "text";

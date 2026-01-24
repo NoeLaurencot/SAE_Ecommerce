@@ -58,3 +58,10 @@
     color: var(--gold);
 	cursor: pointer;
 }
+
+.log-container .forgot-password {
+	margin-left: 10px;
+	color: var(--white);
+	font-size: 0.8rem;
+	width: fit-content;
+}
