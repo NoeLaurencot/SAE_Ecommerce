@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation CSS - Gaullois E-commerce</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 40px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1a1a1a;
+            border-bottom: 3px solid #b2a438;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #2c2c2c;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background-color: #f0f0f0;
+            border-left: 4px solid #b2a438;
+        }
+        h3 {
+            color: #444;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        h4 {
+            color: #555;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f8f8f8;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            color: #c7254e;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        pre code {
+            background-color: transparent;
+            color: #f8f8f2;
+            padding: 0;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .class-name {
+            font-size: 1.1em;
+            color: #0066cc;
+            font-weight: 600;
+        }
+        .file-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .file-list li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        .file-list li::before {
+            content: "-";
+            position: absolute;
+            left: 5px;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .combiner {
+            background-color: #fff3cd;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .intro {
+            background-color: #e8f4fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Documentation CSS - Gaullois E-commerce</h1>
+        
+        <div class="intro">
+            <p>Ce document fournit une reference complete des classes CSS definies dans <code>styles.css</code> et <code>styles-utilities.css</code>.</p>
+        </div>
+
+        <h2>styles.css</h2>
+
+        <h3>Variables CSS (<code>:root</code>)</h3>
+        <table>
+            <tr>
+                <th>Variable</th>
+                <th>Valeur</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>--black</code></td>
+                <td><code>black</code></td>
+                <td>Couleur noire principale</td>
+            </tr>
+            <tr>
+                <td><code>--white</code></td>
+                <td><code>white</code></td>
+                <td>Couleur blanche principale</td>
+            </tr>
+            <tr>
+                <td><code>--gold</code></td>
+                <td><code>rgb(178, 164, 56)</code></td>
+                <td>Couleur doree pour les etats hover</td>
+            </tr>
+            <tr>
+                <td><code>--burger-background</code></td>
+                <td><code>rgb(13, 13, 13)</code></td>
+                <td>Couleur de fond du menu burger</td>
+            </tr>
+            <tr>
+                <td><code>--burger-border</code></td>
+                <td><code>rgb(46, 46, 46)</code></td>
+                <td>Couleur de bordure du menu burger</td>
+            </tr>
+            <tr>
+                <td><code>--nav-height</code></td>
+                <td><code>90px</code></td>
+                <td>Hauteur fixe de la barre de navigation</td>
+            </tr>
+            <tr>
+                <td><code>--collection-info-zindex</code></td>
+                <td><code>100</code></td>
+                <td>Z-index pour l'overlay des collections</td>
+            </tr>
+            <tr>
+                <td><code>--alert-zindex</code></td>
+                <td><code>300</code></td>
+                <td>Z-index pour les notifications</td>
+            </tr>
+            <tr>
+                <td><code>--blur-zindex</code></td>
+                <td><code>400</code></td>
+                <td>Z-index pour l'effet de flou</td>
+            </tr>
+            <tr>
+                <td><code>--nav-zindex</code></td>
+                <td><code>500</code></td>
+                <td>Z-index pour la navigation</td>
+            </tr>
+            <tr>
+                <td><code>--hamburger-zindex</code></td>
+                <td><code>600</code></td>
+                <td>Z-index pour le menu hamburger</td>
+            </tr>
+            <tr>
+                <td><code>--hamburger-button-zindex</code></td>
+                <td><code>700</code></td>
+                <td>Z-index pour le bouton hamburger</td>
+            </tr>
+        </table>
+
+        <h3>Polices personnalisees</h3>
+        <table>
+            <tr>
+                <th>Famille de police</th>
+                <th>Source</th>
+                <th>Utilisation</th>
+            </tr>
+            <tr>
+                <td><code>Playfair</code></td>
+                <td><code>Playfair.woff2</code></td>
+                <td>Titres, en-tetes, boutons</td>
+            </tr>
+            <tr>
+                <td><code>Nunito</code></td>
+                <td><code>Nunito.woff2</code></td>
+                <td>Police par defaut du corps</td>
+            </tr>
+            <tr>
+                <td><code>EB Garamond</code></td>
+                <td><code>EBGaramond.woff2</code></td>
+                <td>Texte decoratif</td>
+            </tr>
+        </table>
+
+        <h3>Classes de mise en page</h3>
+
+        <div class="section">
+            <h4><span class="class-name">.main-button</span></h4>
+            <table>
+                <tr>
+                    <th>Propriete</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Objectif</strong></td>
+                    <td>Bouton d'appel a l'action principal</td>
+                </tr>
+                <tr>
+                    <td><strong>Apparence</strong></td>
+                    <td>Fond blanc, texte noir, police Playfair</td>
+                </tr>
+                <tr>
+                    <td><strong>Hover</strong></td>
+                    <td>Le texte devient dore (<code>--gold</code>)</td>
+                </tr>
+                <tr>
+                    <td><strong>Position</strong></td>
+                    <td>Positionnement absolu (utiliser dans un conteneur relatif)</td>
+                </tr>
+            </table>
+            <p><strong>Utilise dans :</strong></p>
+            <ul class="file-list">
+                <li><a href="templates/home.html">home.html (ligne 12)</a> - Bouton "Visitez la boutique"</li>
+            </ul>
+            <pre><code>&lt;a class="main-button" href="#"&gt;Visitez la boutique&lt;/a&gt;</code></pre>
+        </div>
+
+        <div class="section">
+            <h4><span class="class-name">.main-container</span></h4>
+            <table>
+                <tr>
+                    <th>Propriete</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Objectif</strong></td>
+                    <td>Conteneur principal du contenu de la page</td>
+                </tr>
+                <tr>
+                    <td><strong>Disposition</strong></td>
+                    <td>Flexbox, direction colonne, centre</td>
+                </tr>
+                <tr>
+                    <td><strong>Padding</strong></td>
+                    <td><code>20px</code> sur tous les cotes</td>
+                </tr>
+            </table>
+            <p><strong>Utilise dans :</strong></p>
+            <ul class="file-list">
+                <li><a href="templates/home.html">home.html (ligne 14)</a> - Contenu principal de la page</li>
+                <li><a href="templates/auth/login.html">login.html (ligne 9)</a> - Conteneur du formulaire de connexion</li>
+                <li><a href="templates/auth/logout.html">logout.html (ligne 9)</a> - Conteneur du formulaire de deconnexion</li>
+                <li><a href="templates/auth/signup.html">signup.html (ligne 9)</a> - Conteneur du formulaire d'inscription</li>
+                <li><a href="templates/auth/forget_password.html">forget_password.html (ligne 9)</a> - Conteneur de reinitialisation du mot de passe</li>
+            </ul>
+            <pre><code>&lt;div class="main-container"&gt;
+    &lt;!-- Contenu de la page ici --&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <div class="section">
+            <h4><span class="class-name">.main-tile</span></h4>
+            <table>
+                <tr>
+                    <th>Propriete</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Objectif</strong></td>
+                    <td>Conteneur de section de contenu horizontal</td>
+                </tr>
+                <tr>
+                    <td><strong>Disposition</strong></td>
+                    <td>Flexbox, direction ligne, centre</td>
+                </tr>
+                <tr>
+                    <td><strong>Largeur</strong></td>
+                    <td><code>calc(100% - 160px)</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Padding</strong></td>
+                    <td><code>40px 0</code> (haut/bas)</td>
+                </tr>
+            </table>
+            <p><strong>Utilise dans :</strong></p>
+            <ul class="file-list">
+                <li><a href="templates/home.html">home.html (ligne 19)</a> - Conteneur des tuiles de collection</li>
+                <li><a href="templates/home.html">home.html (ligne 57)</a> - Section des nouveaux articles</li>
+            </ul>
+            <pre><code>&lt;div class="main-tile"&gt;
+    &lt;!-- Contenu de la tuile ici --&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <div class="section">
+            <h4><span class="class-name">.text-box</span></h4>
+            <table>
+                <tr>
+                    <th>Propriete</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Objectif</strong></td>
+                    <td>Conteneur pour les sections de texte avec titres stylises</td>
+                </tr>
+                <tr>
+                    <td><strong>Police des titres</strong></td>
+                    <td><code>Playfair</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Police des paragraphes</strong></td>
+                    <td><code>GB Garamond</code></td>
+                </tr>
+            </table>
+            <p><strong>Utilise dans :</strong></p>
+            <ul class="file-list">
+                <li><a href="templates/home.html">home.html (ligne 15)</a> - Section de texte hero</li>
+            </ul>
+            <pre><code>&lt;div class="text-box"&gt;
+    &lt;h1&gt;Titre&lt;/h1&gt;
+    &lt;p&gt;Texte de description&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <div class="section">
+            <h4><span class="class-name">.divider-fancy</span></h4>
+            <table>
+                <tr>
+                    <th>Propriete</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Objectif</strong></td>
+                    <td>Ligne de separation horizontale decorative</td>
+                </tr>
+                <tr>
+                    <td><strong>Hauteur</strong></td>
+                    <td><code>1px</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Largeur</strong></td>
+                    <td><code>calc(80% - 20px)</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Style</strong></td>
+                    <td>Degrade de transparent vers gris vers transparent</td>
+                </tr>
+            </table>
+            <p><strong>Utilise dans :</strong></p>
+            <ul class="file-list">
+                <li><a href="templates/home.html">home.html (ligne 54)</a> - Separateur de sections</li>
+            </ul>
+            <pre><code>&lt;div class="divider-fancy"&gt;&lt;/div&gt;</code></pre>
+        </div>
+
+        <h3>Classes de formulaire</h3>
+
+        <div class="section">
+            <h4><span class="class-name">.form-title</span></h4>
+            <table>
+                <tr>
+                    <th>Propriete</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Objectif</strong></td>
+                    <td>Titre pour les sections de formulaire</td>
+                </tr>
+                <tr>
+                    <td><strong>Couleur</strong></td>
+                    <td>Blanc (<code>--white</code>)</td>
+                </tr>
+                <tr>
+                    <td><strong>Police</strong></td>
+                    <td><code>Playfair</code></td>
+                </tr>
+            </table>
+            <p><strong>Utilise dans :</strong></p>
+            <ul class="file-list">
+                <li><a href="templates/auth/login.html">login.html (ligne 12)</a> - "Connexion"</li>
+                <li><a href="templates/auth/logout.html">logout.html (ligne 12)</a> - "Deconnexion"</li>
+                <li><a href="templates/auth/signup.html">signup.html (ligne 12)</a> - "Inscription"</li>
+                <li><a href="templates/auth/forget_password.html">forget_password.html (ligne 12)</a> - "Mot de passe oublie"</li>
+            </ul>
+            <pre><code>&lt;h2 class="form-title"&gt;Titre du formulaire&lt;/h2&gt;</code></pre>
+        </div>
+
+        <h3>Systeme d'alertes</h3>
+
+        <div class="section">
+            <h4><span class="class-name">.alert</span></h4>
+            <table>
+                <tr>
+                    <th>Propriete</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Objectif</strong></td>
+                    <td>Conteneur de notification toast</td>
+                </tr>
+                <tr>
+                    <td><strong>Position</strong></td>
+                    <td>Fixe, en bas a gauche (glisse depuis la gauche)</td>
+                </tr>
+                <tr>
+                    <td><strong>Disposition</strong></td>
+                    <td>Flexbox avec gap</td>
+                </tr>
+                <tr>
+                    <td><strong>Animation</strong></td>
+                    <td>Glissement via transition <code>left</code> (1s)</td>
+                </tr>
+                <tr>
+                    <td><strong>Z-index</strong></td>
+                    <td><code>var(--alert-zindex)</code> (300)</td>
+                </tr>
+            </table>
+            <p><strong>Utilise dans :</strong></p>
+            <ul class="file-list">
+                <li><a href="templates/layout.html">layout.html (ligne 28)</a> - Notifications de messages flash</li>
+                <li><a href="static/js/alerts.js">alerts.js</a> - Animation et comportement de fermeture</li>
+            </ul>
+            <pre><code>&lt;div class="alert alert-success" role="alert"&gt;
+    &lt;span&gt;Message&lt;/span&gt;
+    &lt;button&gt;x&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <div class="section">
+            <h4><span class="class-name">.alert-warning</span></h4>
+            <table>
+                <tr>
+                    <th>Propriete</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Objectif</strong></td>
+                    <td>Variante de notification d'avertissement</td>
+                </tr>
+                <tr>
+                    <td><strong>Fond</strong></td>
+                    <td>Dore (<code>--gold</code>)</td>
+                </tr>
+            </table>
+            <div class="combiner"><strong>A combiner avec :</strong> <code>.alert</code></div>
+            <pre><code>&lt;div class="alert-warning alert"&gt;Message d'avertissement&lt;/div&gt;</code></pre>
+        </div>
+
+        <div class="section">
+            <h4><span class="class-name">.alert-danger</span></h4>
+            <table>
+                <tr>
+                    <th>Propriete</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Objectif</strong></td>
+                    <td>Variante de notification d'erreur/danger</td>
+                </tr>
+                <tr>
+                    <td><strong>Fond</strong></td>
+                    <td>Rouge (<code>rgb(189, 51, 51)</code>)</td>
+                </tr>
+            </table>
+            <div class="combiner"><strong>A combiner avec :</strong> <code>.alert</code></div>
+            <pre><code>&lt;div class="alert-danger alert"&gt;Message d'erreur&lt;/div&gt;</code></pre>
+        </div>
+
+        <div class="section">
+            <h4><span class="class-name">.alert-success</span></h4>
+            <table>
+                <tr>
+                    <th>Propriete</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Objectif</strong></td>
+                    <td>Variante de notification de succes</td>
+                </tr>
+                <tr>
+                    <td><strong>Fond</strong></td>
+                    <td>Vert (<code>rgb(71, 176, 48)</code>)</td>
+                </tr>
+            </table>
+            <div class="combiner"><strong>A combiner avec :</strong> <code>.alert</code></div>
+            <pre><code>&lt;div class="alert-success alert"&gt;Message de succes&lt;/div&gt;</code></pre>
+        </div>
+
+        <h2>styles-utilities.css</h2>
+        <p>Classes utilitaires avec <code>!important</code> pour des surcharges rapides.</p>
+
+        <div class="section">
+            <h4><span class="class-name">.no-margin</span></h4>
+            <table>
+                <tr>
+                    <th>Propriete</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Objectif</strong></td>
+                    <td>Supprimer toutes les marges</td>
+                </tr>
+                <tr>
+                    <td><strong>Valeur</strong></td>
+                    <td><code>margin: 0 !important</code></td>
+                </tr>
+            </table>
+            <pre><code>&lt;p class="no-margin"&gt;Texte sans marge&lt;/p&gt;</code></pre>
+        </div>
+
+        <div class="section">
+            <h4><span class="class-name">.no-padding</span></h4>
+            <table>
+                <tr>
+                    <th>Propriete</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Objectif</strong></td>
+                    <td>Supprimer tout le padding</td>
+                </tr>
+                <tr>
+                    <td><strong>Valeur</strong></td>
+                    <td><code>padding: 0 !important</code></td>
+                </tr>
+            </table>
+            <p><strong>Utilise dans :</strong></p>
+            <ul class="file-list">
+                <li><a href="templates/_nav.html">_nav.html (ligne 20)</a> - Bouton de recherche</li>
+            </ul>
+            <pre><code>&lt;button class="button-search-bar no-padding"&gt;search&lt;/button&gt;</code></pre>
+        </div>
+
+        <div class="section">
+            <h4><span class="class-name">.red-text</span></h4>
+            <table>
+                <tr>
+                    <th>Propriete</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Objectif</strong></td>
+                    <td>Rendre le texte rouge (pour les indicateurs de champs obligatoires)</td>
+                </tr>
+                <tr>
+                    <td><strong>Valeur</strong></td>
+                    <td><code>color: red !important</code></td>
+                </tr>
+            </table>
+            <p><strong>Utilise dans :</strong></p>
+            <ul class="file-list">
+                <li><a href="templates/auth/login.html">login.html (ligne 14)</a> - Asterisque de champ obligatoire</li>
+                <li><a href="templates/auth/signup.html">signup.html (ligne 14)</a> - Asterisques de champs obligatoires</li>
+                <li><a href="templates/auth/forget_password.html">forget_password.html (ligne 14)</a> - Asterisque de champ obligatoire</li>
+            </ul>
+            <pre><code>&lt;label&gt;Nom d'utilisateur &lt;span class="red-text"&gt;*&lt;/span&gt;&lt;/label&gt;</code></pre>
+        </div>
+
+        <div class="section">
+            <h4><span class="class-name">.no-link-style</span></h4>
+            <table>
+                <tr>
+                    <th>Propriete</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Objectif</strong></td>
+                    <td>Supprimer le style par defaut des liens</td>
+                </tr>
+                <tr>
+                    <td><strong>Couleur</strong></td>
+                    <td>Blanc</td>
+                </tr>
+                <tr>
+                    <td><strong>Decoration du texte</strong></td>
+                    <td>Aucune</td>
+                </tr>
+                <tr>
+                    <td><strong>Heritage</strong></td>
+                    <td>S'applique a tous les elements enfants (<code>*</code>)</td>
+                </tr>
+            </table>
+            <p><strong>Utilise dans :</strong></p>
+            <ul class="file-list">
+                <li><a href="templates/home.html">home.html (ligne 20)</a> - Liens des conteneurs de collection</li>
+                <li><a href="templates/home.html">home.html (ligne 36)</a> - Liens des conteneurs de collection</li>
+            </ul>
+            <pre><code>&lt;a class="collection-container no-link-style" href="/"&gt;
+    &lt;span&gt;Texte de lien sans soulignement&lt;/span&gt;
+&lt;/a&gt;</code></pre>
+        </div>
+
+        <h2>Tableau de reference rapide</h2>
+        <table>
+            <tr>
+                <th>Classe</th>
+                <th>Fichier</th>
+                <th>Objectif</th>
+            </tr>
+            <tr>
+                <td><code>.main-button</code></td>
+                <td>styles.css</td>
+                <td>Bouton CTA principal</td>
+            </tr>
+            <tr>
+                <td><code>.main-container</code></td>
+                <td>styles.css</td>
+                <td>Conteneur de contenu de page</td>
+            </tr>
+            <tr>
+                <td><code>.main-tile</code></td>
+                <td>styles.css</td>
+                <td>Conteneur de section horizontal</td>
+            </tr>
+            <tr>
+                <td><code>.text-box</code></td>
+                <td>styles.css</td>
+                <td>Conteneur de texte stylise</td>
+            </tr>
+            <tr>
+                <td><code>.divider-fancy</code></td>
+                <td>styles.css</td>
+                <td>Ligne de separation decorative</td>
+            </tr>
+            <tr>
+                <td><code>.form-title</code></td>
+                <td>styles.css</td>
+                <td>Titre de formulaire</td>
+            </tr>
+            <tr>
+                <td><code>.alert</code></td>
+                <td>styles.css</td>
+                <td>Base de notification toast</td>
+            </tr>
+            <tr>
+                <td><code>.alert-warning</code></td>
+                <td>styles.css</td>
+                <td>Toast d'avertissement jaune</td>
+            </tr>
+            <tr>
+                <td><code>.alert-danger</code></td>
+                <td>styles.css</td>
+                <td>Toast d'erreur rouge</td>
+            </tr>
+            <tr>
+                <td><code>.alert-success</code></td>
+                <td>styles.css</td>
+                <td>Toast de succes vert</td>
+            </tr>
+            <tr>
+                <td><code>.no-margin</code></td>
+                <td>styles-utilities.css</td>
+                <td>Supprimer les marges</td>
+            </tr>
+            <tr>
+                <td><code>.no-padding</code></td>
+                <td>styles-utilities.css</td>
+                <td>Supprimer le padding</td>
+            </tr>
+            <tr>
+                <td><code>.red-text</code></td>
+                <td>styles-utilities.css</td>
+                <td>Couleur de texte rouge</td>
+            </tr>
+            <tr>
+                <td><code>.no-link-style</code></td>
+                <td>styles-utilities.css</td>
+                <td>Supprimer le style des liens</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
