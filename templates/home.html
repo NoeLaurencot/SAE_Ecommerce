@@ -5,11 +5,75 @@
 {% endblock %}
 
 {% block body %}
-<script>0</script> <!-- Pour fix un bug FOUC (Flash of unstyled content) de firefox -->
+<script>0</script> <!-- Pour fix un bug FOUC (Flash Of Unstyled Content) de firefox -->
 <main>
-	<div class="video-player-container">
-		<video id="test" src="{{ url_for('static', filename='assets/videos/home_background_video.mp4') }}" autoplay muted loop disablePictureInPicture></video>
-		<a class="main-button" href="#">Visitez la boutique</a>
-	</div>
+    <div class="video-player-container">
+        <video id="test" src="{{ url_for('static', filename='assets/videos/home_background_video.mp4') }}" autoplay muted loop disablePictureInPicture></video>
+        <a class="main-button" href="#">Visitez la boutique</a>
+    </div>
+    <div class="main-container">
+        <div class="text-box">
+            <h1>La mode française</h1>
+            <p>Nos articles inutilement trop chers ne sauront vous résister</p>
+        </div>
+        <div class="main-tile tile-collection">
+            <a class="collection-container no-link-style" href="/">
+                <img class="collection-img" src="../static/assets/images/collection-homme.avif" alt="collection homme">
+                <div class="collection-overlay">
+                    <div class="collection-info">
+                        <div class="collection-title">
+                            <h2>Homme</h2>
+                        </div>
+                        <div class="collection-desc">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vestibulum orci magna, vel
+                                luctus purus placerat quis. Nunc congue tincidunt malesuada.</p>
+                        </div>
+                    </div>
+                    <div class="collection-img-dimmer"></div>
+                </div>
+            </a>
+
+            <a class="collection-container no-link-style" href="/">
+                <img class="collection-img" src="../static/assets/images/collection-femme.avif" alt="collection femme">
+                <div class="collection-overlay">
+                    <div class="collection-info">
+                        <div class="collection-title">
+                            <h2>Femme</h2>
+                        </div>
+                        <div class="collection-desc">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vestibulum orci magna, vel
+                                luctus purus placerat quis. Nunc congue tincidunt malesuada.</p>
+                        </div>
+                    </div>
+                    <div class="collection-img-dimmer"></div>
+                </div>
+            </a>
+        </div>
+
+
+        <div class="divider-fancy"></div>
+
+
+        <div class="main-tile tile-new">
+            <div class="new-collection-info">
+                <h1>Nouveautés</h1>
+                <p>Les dernières tendances, fraîchement sorties des usines du Bangladesh</p>
+            </div>
+            <div class="new-collection-container">
+                <a href="#">
+                    <img src="../static/assets/images/placeholder.svg" alt="placeholder">
+                </a>
+                <a href="#">
+                    <img src="../static/assets/images/placeholder.svg" alt="placeholder">
+                </a>
+                <a href="#">
+                    <img src="../static/assets/images/placeholder.svg" alt="placeholder">
+                </a>
+                <a href="#">
+                    <img src="../static/assets/images/placeholder.svg" alt="placeholder">
+                </a>
+            </div>
+        </div>
+    </div>
 </main>
 {% endblock %}
