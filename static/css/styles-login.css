@@ -80,3 +80,7 @@
 .log-container .log-sign-link:hover {
     color: var(--gold);
 }
+
+.log-container p {
+    color: white;
+}
