@@ -138,7 +138,12 @@ body {
 
 h1, h2, h3 {
     font-weight: 500;
+    color: white;
     font-family: 'Playfair';
+}
+
+p {
+    color: white;
 }
 
 .text-box h1, .text-box h2, .text-box h3 {
