@@ -8,16 +8,18 @@
 
 	--nav-height: 90px;
 
-    --nav-zindex: 1000;
-    --hamburger-zindex: 2000;
-    --hamburger-button-zindex: 2500;
-    --alert-zindex: 3000;
+    --collection-info-zindex: 100;
+    --alert-zindex: 300;
+    --blur-zindex: 400;
+    --nav-zindex: 500;
+    --hamburger-zindex: 600;
+    --hamburger-button-zindex: 700;
 }
 
 @font-face {
-  font-family: 'The Seasons';
+  font-family: 'Playfair';
   src:
-    url('../assets/fonts/Seasons.woff2') format('woff2'),;
+    url('../assets/fonts/Playfair.woff2') format('woff2'),;
 }
 
 @font-face {
@@ -48,11 +50,11 @@ body {
 	position: absolute;
 	color: var(--black);
 	text-decoration: none;
-	padding: 22px 70px 18px;
+	padding: 22px 70px;
 	background-color: var(--white);
 	font-size: 1.4rem;
-	font-weight: bold;
-	font-family: "The Seasons", serif;
+	font-weight: 500;
+	font-family: "Playfair", serif;
 	transition: 0.5s color;
 }
 
@@ -64,13 +66,22 @@ body {
 .main-container {
     padding: 20px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
+.main-tile {
+    display: flex;
+    padding: 40px 0;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% - 160px);
+}
+
 .form-title {
 	color: var(--white);
-	font-family: "The Seasons", sans-serif;
+	font-family: "Playfair", sans-serif;
 }
 
 .alert {
@@ -112,6 +123,7 @@ body {
     top: 0;
     left: 0;
     backdrop-filter: blur(10px);
+    z-index: var(--blur-zindex);
     height: 100vh;
     width: 100vw;
     opacity: 0%;
@@ -122,4 +134,23 @@ body {
 .screen-blur-active {
     visibility: visible;
     opacity: 100%;
+}
+
+h1, h2, h3 {
+    font-weight: 500;
+    font-family: 'Playfair';
+}
+
+.text-box h1, .text-box h2, .text-box h3 {
+    font-family: 'Playfair';
+}
+
+.text-box p {
+    font-family: 'GB Gamarond';
+}
+
+.divider-fancy {
+    height: 1px;
+    width: calc(80% - 20px);
+    background-image: linear-gradient(to right, transparent, rgb(48,49,51), transparent)
 }

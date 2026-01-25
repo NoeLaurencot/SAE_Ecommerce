@@ -4,7 +4,7 @@ nav {
     position: fixed;
     z-index: var(--nav-zindex);
     top: 0;
-    width: 100vw;
+    width: 100%;
 }
 
 .horizontal-nav {
@@ -12,7 +12,7 @@ nav {
     align-items: center;
     position: relative;
     z-index: var(--nav-zindex);
-    width: calc(100vw - 40px);
+    width: calc(100% - 40px);
     background-color: var(--black);
     padding: 0px 20px;
     height: var(--nav-height);

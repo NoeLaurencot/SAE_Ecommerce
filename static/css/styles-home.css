@@ -1,5 +1,8 @@
+/* Video */
+
 .video-player-container {
 	display: flex;
+    color: white;
 	justify-content: center;
 	position: relative;
 	align-items: center;
@@ -7,7 +10,111 @@
 
 .video-player-container video {
 	overflow: hidden;
-	width: 100vw;
+	width: 100%;
 	height: calc(100vh - var(--nav-height));
 	object-fit: cover;
+}
+
+/* Collection homme femme */
+
+.main-tile .collection-container {
+    position: relative;
+    cursor: pointer;
+}
+
+.main-tile .collection-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.main-tile .collection-container .collection-img-dimmer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    opacity: 0%;
+    visibility: hidden;
+    transition: 0.3s;
+}
+
+.main-tile .collection-container:hover .collection-img-dimmer {
+    visibility: visible;
+    opacity: 50%;
+}
+
+.main-tile .collection-img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.main-tile .collection-info {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    z-index: var(--collection-info-zindex);
+}
+
+.main-tile .collection-info .collection-title {
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    transform: translate(-50%, -8%);
+    font-size: 3vw;
+    font-family: 'Playfair', serif;
+}
+
+.main-tile .collection-container .collection-desc {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    width: 85%;
+    transform: translate(-50%, -40%);
+    font-size: 1vw;
+    font-family: 'GB Garamond', serif;
+    letter-spacing: 1px;
+    visibility: hidden;
+    opacity: 0%;
+    transition: 0.3s;
+}
+
+.main-tile .collection-container:hover .collection-desc {
+    visibility: visible;
+    opacity: 100%;
+}
+
+.tile-collection {
+    padding: 40px 80px;
+    gap: 40px;
+}
+
+/* Nouveautées */
+
+.tile-new {
+    justify-content: space-between;
+    gap: 50px;
+}
+
+.tile-new .new-collection-info {
+    flex: 1;
+}
+
+.tile-new .new-collection-info p {
+    font-family: 'GB Garamond';
+}
+
+.tile-new .new-collection-container {
+    display: flex;
+    flex: 2;
+    gap: 15px;
+}
+
+.tile-new .new-collection-container img {
+    width: 100%;
+    height: auto;
 }

@@ -9,3 +9,13 @@
 .red-text {
 	color: red !important;
 }
+
+.no-link-style {
+    color: white;
+    text-decoration: none;
+}
+
+.no-link-style * {
+    color: white;
+    text-decoration: none;
+}

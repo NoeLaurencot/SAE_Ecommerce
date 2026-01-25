@@ -54,9 +54,9 @@
     color: var(--black);
     border : none;
     background-color: var(--white);
-	padding: 10px 40px 8px 40px;
-	font-weight: bold;
-	font-family: "The Seasons", sans-serif;
+	padding: 10px 40px;
+	font-weight: 500;
+	font-family: "Playfair", sans-serif;
 	transition: 0.5s color;
 }
 
