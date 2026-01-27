@@ -21,7 +21,7 @@ def auth_login_post():
     tuple_select = (login)
     sql = """
     SELECT login, password, role, id_utilisateur, email
-    FROM utilisateurs
+    FROM utilisateur
     WHERE login = %s;
     """
     mycursor.execute(sql, tuple_select)
@@ -63,8 +63,8 @@ def auth_signup_post():
     name = request.form.get('name')
     tuple_select = (login, email)
     sql = """
-    SELECT login,email
-    FROM utilisateurs
+    SELECT login, email
+    FROM utilisateur
     WHERE login = %s OR email = %s;
     """
     mycursor.execute(sql, tuple_select)
@@ -78,7 +78,7 @@ def auth_signup_post():
     password = generate_password_hash(password, method='pbkdf2:sha256')
     tuple_insert = (login, email, password, 'ROLE_client', True, name)
     sql = """
-    INSERT INTO utilisateurs (login, email, password, role, est_actif ,nom)
+    INSERT INTO utilisateur (login, email, password, role, est_actif, nom)
     VALUES (%s,%s,%s,%s,%s,%s);
     """
     mycursor.execute(sql, tuple_insert)
@@ -94,8 +94,10 @@ def auth_signup_post():
     session.pop('login', None)
     session.pop('role', None)
     session.pop('id_user', None)
+    session.pop('email', None)
     session['login'] = login
     session['role'] = 'ROLE_client'
+    session['email'] = email
     session['id_user'] = id_user
     flash(u'Compte crée avec succès', 'alert-success')
     # return redirect('/client/article/show')
