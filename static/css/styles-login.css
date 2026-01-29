@@ -49,7 +49,7 @@
 	color: var(--gold);
 }
 
-.log-container .validate-button {
+.log-container .validate-button-black {
     margin-top: 20%;
     color: var(--black);
     border : none;
@@ -60,7 +60,7 @@
 	transition: 0.5s color;
 }
 
-.log-container .validate-button:hover {
+.log-container .validate-button-black:hover {
     color: var(--gold);
 	cursor: pointer;
 }

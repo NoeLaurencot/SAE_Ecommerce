@@ -58,20 +58,17 @@
             <div class="new-collection-info">
                 <h1>Nouveautés</h1>
                 <p>Les dernières tendances, fraîchement sorties des usines du Bangladesh</p>
+                <a class="validate-button-black" href="">Découvrire les nouveautés</a>
             </div>
             <div class="new-collection-container">
-                <a href="#">
-                    <img src="../static/assets/images/placeholder.svg" alt="placeholder">
+                {% for nouveaute in nouveautes %}
+                <a class="new-collection-img-container" href="#">
+                    <img src="../static/assets/images/clothes/{{ nouveaute.photo }}" alt="{{ nouveaute.nom_vetement }}">
+                    <div class="overlay">
+                        <div class="overlay-dimmer"></div>
+                    </div>
                 </a>
-                <a href="#">
-                    <img src="../static/assets/images/placeholder.svg" alt="placeholder">
-                </a>
-                <a href="#">
-                    <img src="../static/assets/images/placeholder.svg" alt="placeholder">
-                </a>
-                <a href="#">
-                    <img src="../static/assets/images/placeholder.svg" alt="placeholder">
-                </a>
+                {% endfor %}
             </div>
         </div>
     </div>

@@ -20,7 +20,7 @@ def auth_login_post():
     password = request.form.get('password')
     tuple_select = (login)
     sql = """
-    SELECT login, password, role, id_utilisateur, email
+    SELECT login, password, role, id_utilisateur, email, nom
     FROM utilisateur
     WHERE login = %s;
     """
@@ -37,7 +37,12 @@ def auth_login_post():
             session['role'] = user['role']
             session['id_user'] = user['id_utilisateur']
             session['email'] = user['email']
+            session['nom'] = user['nom']
             print(user['login'], user['role'])
+            if user['nom']:
+                flash(u'Bienvenue ' + user['nom'], 'alert-success')
+            else:
+                flash(u'Bienvenue ' + user['login'], 'alert-success')
             if user['role'] == 'ROLE_admin':
                 # return redirect('/admin/commande/index')
                 return redirect('/')
@@ -95,10 +100,12 @@ def auth_signup_post():
     session.pop('role', None)
     session.pop('id_user', None)
     session.pop('email', None)
+    session.pop('nom', None)
     session['login'] = login
     session['role'] = 'ROLE_client'
     session['email'] = email
     session['id_user'] = id_user
+    session['nom'] = name;
     flash(u'Compte crée avec succès', 'alert-success')
     # return redirect('/client/article/show')
     return redirect('/')
