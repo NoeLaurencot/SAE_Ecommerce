@@ -166,12 +166,12 @@ VALUES ('Masculin'),
        ('Nouveauté');
 
 INSERT INTO type_vetement (libelle_type_vetement)
-VALUES ('Chaussures'),
+VALUES ('Chemises'),
        ('Pantalons'),
-       ('Chemises'),
        ('Polos'),
        ('Robes'),
-       ('Manteaux & vestes');
+       ('Manteaux & vestes'),
+       ('Chaussures');
 
 INSERT INTO matiere (libelle_matiere)
 VALUES ('Coton'),
@@ -199,26 +199,19 @@ VALUES ('Global Fabric'),
 
 INSERT INTO vetement (nom_vetement, prix_vetement, description, matiere_id, type_vetement_id, photo, marque_id,
                       fournisseur_id, taille_id)
-VALUES ('Manteau vert', 1320, 'tmp', 1, 6, 'coat_designer.avif', 6, 3, 3),
-       ('Manteau New York', 750, 'tmp', 1, 6, 'coat_jacket_classic.avif', 2, 2, 3),
-       ('Veste en cuir', 4360, 'tmp', 2, 6, 'coat_jacket_leather.avif', 3, 2, 3),
-       ('Doudoune verte', 365, 'tmp', 3, 6, 'coat_jacket_puffer.avif', 3, 1, 3),
-       ('Meanteau gris', 2300, 'tmp', 4, 6, 'coat_jacket_straight.avif', 4, 3, 3),
-       ('Veste de costume', 8630, 'tmp', 4, 6, 'coat_suit.avif', 6, 1, 3),
+VALUES ('shirt_classy', 370, 'tmp', 1, 1, 'shirt_classy.avif', 2, 1, 3),
+       ('shirt_diamonds', 7000, 'tmp', 5, 1, 'shirt_diamonds.avif', 2, 1, 3),
+       ('shirt_feathers', 2850, 'tmp', 5, 1, 'shirt_feathers.avif', 2, 3, 3),
+       ('shirt_gold', 1630, 'tmp', 5, 1, 'shirt_gold.avif', 3, 3, 3),
+       ('shirt_jeans', 710, 'tmp', 6, 1, 'shirt_jeans.avif', 4, 3, 3),
+       ('shirt_silk', 2100, 'tmp', 5, 1, 'shirt_silk.avif', 5, 1, 3),
 
-       ('dress_blue', 570, 'tmp', 1, 5, 'dress_blue.avif', 2, 1, 3),
-       ('dress_designer', 1880, 'tmp', 5, 5, 'dress_designer.avif', 1, 1, 3),
-       ('dress_dots', 120, 'tmp', 1, 5, 'dress_dots.avif', 2, 3, 3),
-       ('dress_pencil_white', 1900, 'tmp', 5, 5, 'dress_pencil_white.avif', 5, 3, 3),
-       ('dress_red', 380, 'tmp', 1, 5, 'dress_red.avif', 1, 2, 3),
-       ('dress_rose', 1560, 'tmp', 1, 5, 'dress_rose.avif', 1, 3, 3),
-
-       ('pants_black', 2050, 'tmp', 1, 4, 'pants_black.avif', 2, 3, 3),
-       ('pants_classic', 950, 'tmp', 1, 4, 'pants_classic.avif', 4, 3, 3),
-       ('pants_holes', 1600, 'tmp', 1, 4, 'pants_holes.avif', 4, 2, 3),
-       ('pants_jeans', 410, 'tmp', 6, 4, 'pants_jeans.avif', 4, 1, 3),
-       ('pants_ski', 525, 'tmp', 3, 4, 'pants_ski.avif', 5, 1, 3),
-       ('pants_tweed', 830, 'tmp', 4, 4, 'pants_tweed.avif', 6, 1, 3),
+       ('pants_black', 2050, 'tmp', 1, 2, 'pants_black.avif', 2, 3, 3),
+       ('pants_classic', 950, 'tmp', 1, 2, 'pants_classic.avif', 4, 3, 3),
+       ('pants_holes', 1600, 'tmp', 1, 2, 'pants_holes.avif', 4, 2, 3),
+       ('pants_jeans', 410, 'tmp', 6, 2, 'pants_jeans.avif', 4, 1, 3),
+       ('pants_ski', 525, 'tmp', 3, 2, 'pants_ski.avif', 5, 1, 3),
+       ('pants_tweed', 830, 'tmp', 4, 2, 'pants_tweed.avif', 6, 1, 3),
 
        ('polo_basic', 390, 'tmp', 1, 3, 'polo_basic.avif', 5, 2, 3),
        ('polo_cat', 1640, 'tmp', 1, 3, 'polo_cat.avif', 5, 3, 3),
@@ -227,19 +220,26 @@ VALUES ('Manteau vert', 1320, 'tmp', 1, 6, 'coat_designer.avif', 6, 3, 3),
        ('polo_glossy', 620, 'tmp', 3, 3, 'polo_glossy.avif', 3, 2, 3),
        ('polo_patern', 550, 'tmp', 1, 3, 'polo_patern.avif', 3, 2, 3),
 
-       ('shirt_classy', 370, 'tmp', 1, 2, 'shirt_classy.avif', 2, 1, 3),
-       ('shirt_diamonds', 7000, 'tmp', 5, 2, 'shirt_diamonds.avif', 2, 1, 3),
-       ('shirt_feathers', 2850, 'tmp', 5, 2, 'shirt_feathers.avif', 2, 3, 3),
-       ('shirt_gold', 1630, 'tmp', 5, 2, 'shirt_gold.avif', 3, 3, 3),
-       ('shirt_jeans', 710, 'tmp', 6, 2, 'shirt_jeans.avif', 4, 3, 3),
-       ('shirt_silk', 2100, 'tmp', 5, 2, 'shirt_silk.avif', 5, 1, 3),
+       ('dress_blue', 570, 'tmp', 1, 4, 'dress_blue.avif', 2, 1, 3),
+       ('dress_designer', 1880, 'tmp', 5, 4, 'dress_designer.avif', 1, 1, 3),
+       ('dress_dots', 120, 'tmp', 1, 4, 'dress_dots.avif', 2, 3, 3),
+       ('dress_pencil_white', 1900, 'tmp', 5, 4, 'dress_pencil_white.avif', 5, 3, 3),
+       ('dress_red', 380, 'tmp', 1, 4, 'dress_red.avif', 1, 2, 3),
+       ('dress_rose', 1560, 'tmp', 1, 4, 'dress_rose.avif', 1, 3, 3),
 
-       ('shoes_boots', 3700, 'tmp', 2, 1, 'shoes_boots.avif', 6, 3, 3),
-       ('shoes_glass', 6200, 'tmp', 7, 1, 'shoes_glass.avif', 6, 1, 3),
-       ('shoes_hike', 2600, 'tmp', 2, 1, 'shoes_hike.avif', 4, 1, 3),
-       ('shoes_leather', 980, 'tmp', 2, 1, 'shoes_leather.avif', 2, 2, 3),
-       ('shoes_sneaker', 710, 'tmp', 8, 1, 'shoes_sneaker.avif', 3, 3, 3),
-       ('shoes_sport', 1200, 'tmp', 8, 1, 'shoes_sport.avif', 3, 3, 3);
+       ('Manteau vert', 1320, 'tmp', 1, 5, 'coat_designer.avif', 6, 3, 3),
+       ('Manteau New York', 750, 'tmp', 1, 5, 'coat_jacket_classic.avif', 2, 2, 3),
+       ('Veste en cuir', 4360, 'tmp', 2, 5, 'coat_jacket_leather.avif', 3, 2, 3),
+       ('Doudoune verte', 365, 'tmp', 3, 5, 'coat_jacket_puffer.avif', 3, 1, 3),
+       ('Meanteau gris', 2300, 'tmp', 4, 5, 'coat_jacket_straight.avif', 4, 3, 3),
+       ('Veste de costume', 8630, 'tmp', 4, 5, 'coat_suit.avif', 6, 1, 3),
+
+       ('shoes_boots', 3700, 'tmp', 2, 6, 'shoes_boots.avif', 6, 3, 3),
+       ('shoes_glass', 6200, 'tmp', 7, 6, 'shoes_glass.avif', 6, 1, 3),
+       ('shoes_hike', 2600, 'tmp', 2, 6, 'shoes_hike.avif', 4, 1, 3),
+       ('shoes_leather', 980, 'tmp', 2, 6, 'shoes_leather.avif', 2, 2, 3),
+       ('shoes_sneaker', 710, 'tmp', 8, 6, 'shoes_sneaker.avif', 3, 3, 3),
+       ('shoes_sport', 1200, 'tmp', 8, 6, 'shoes_sport.avif', 3, 3, 3);
 
 INSERT INTO vetement_collection (vetement_id, collection_id)
 VALUES (1, 2),
@@ -290,3 +290,18 @@ VALUES (1, 2),
        (36, 1),
        (36, 3);
 
+-- R1
+
+SELECT photo, id_vetement
+FROM vetement
+         INNER JOIN vetement_collection ON vetement.id_vetement = vetement_collection.vetement_id
+         INNER JOIN collection ON vetement_collection.collection_id = collection.id_collection
+WHERE id_collection = 3
+ORDER BY id_vetement DESC
+LIMIT 4;
+
+-- R2
+
+SELECT libelle_type_vetement
+FROM type_vetement
+ORDER BY id_type_vetement;

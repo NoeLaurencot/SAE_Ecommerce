@@ -36,11 +36,37 @@ def teardown_db(exception):
     if db is not None:
         db.close()
 
+### SQL à passer à toutes les templates ###
+
+@app.context_processor
+def inject_types_vetements():
+    mycursor = get_db().cursor()
+    sql = """
+    SELECT libelle_type_vetement
+    FROM type_vetement
+    ORDER BY id_type_vetement;
+    """
+    mycursor.execute(sql)
+    types_vetements_nav = mycursor.fetchall()
+    return dict(types_vetements_nav = types_vetements_nav)
+
 ### Home ###
 
 @app.route('/')
 def home():
-    return render_template('home.html', current_route='home')
+    mycursor = get_db().cursor()
+    sql = """
+    SELECT nom_vetement, photo
+    FROM vetement
+    INNER JOIN vetement_collection ON vetement.id_vetement = vetement_collection.vetement_id
+    INNER JOIN collection ON vetement_collection.collection_id = collection.id_collection
+    WHERE id_collection = 3
+    ORDER BY id_vetement DESC
+    LIMIT 4;
+    """
+    mycursor.execute(sql)
+    nouveautes = mycursor.fetchall()
+    return render_template('home.html', current_route='home', nouveautes = nouveautes)
 
 ### Page 404 ###
 
