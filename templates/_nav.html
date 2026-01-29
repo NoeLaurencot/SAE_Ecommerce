@@ -1,35 +1,60 @@
 <nav>
     <div class="burger-menu-container" id="burger-menu">
-        {% if session['login'] %}
-        <h1>Bienvenue, {% if session['nom'] %}
-            {{ session['nom'] }}
+        <div class="burger-top-spacer"></div>
+        <div class="burger-menu-scroll-wrapper">
+            {% if session['login'] %}
+            <h1 class="no-margin">Bienvenue, {% if session['nom'] %}
+                {{ session['nom'] }}
+                {% else %}
+                {{ session['login'] }}
+                {% endif %}</h1>
+            <a class="validate-button-white" href="/logout">Compte</a>
             {% else %}
-            {{ session['login'] }}
-            {% endif %}</h1>
-        <a class="validate-button-white" href="/logout">Compte</a>
-        {% else %}
-        <div class="burger-menu-button-container">
-            <a class="validate-button-white" href="/login">Se connecter</a>
-            <a class="validate-button-black-outline" href="/signup">S'inscrire</a>
-        </div>
-        {% endif %}
-        <div class="divider-fancy"></div>
-        <div class="burger-content">
-            <div class="burger-boutique-category">
-                <a href="">
-                    <h2 class="no-margin">Boutique</h2>
-                </a>
-                <div class="category-item-container">
-                    {% for categorie in types_vetements_nav %}
-                    <a href="">{{ categorie.libelle_type_vetement }}</a>
-                    {% endfor %}
+            <div class="burger-menu-button-container">
+                <a class="validate-button-white" href="/login">Se connecter</a>
+                <a class="validate-button-black-outline" href="/signup">S'inscrire</a>
+            </div>
+            {% endif %}
+            <div class="divider-fancy"></div>
+            <div class="burger-content">
+                <div class="burger-boutique-category">
+                    <a href="">
+                        <h2 class="no-margin">Boutique</h2>
+                    </a>
+                    <div class="category-item-container">
+                        {% for categorie in types_vetements_nav %}
+                        <a href="">{{ categorie.libelle_type_vetement }}</a>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
+
             <div class="curger-boutique-categorie">
                 <a href="">
                     <h2>Nouveautés</h2>
                 </a>
             </div>
+
+            {% if session['role'] == 'ROLE_admin' %}
+            <div class="divider-fancy"></div>
+            <div class="burger-boutique-category">
+                <span>test</span>
+                <span>test</span>
+                <span>test</span>
+                <span>test</span>
+                <span>test</span>
+                <span>test</span>
+                <span>test</span>
+                <span>test</span>
+                <span>test</span>
+                <span>test</span>
+                <span>test</span>
+                <span>test</span>
+                <span>test</span>
+                <span>test</span>
+            </div>
+            {% endif %}
+
         </div>
     </div>
     <div tabindex="0" class="nav-burger-button-container" id="nav-burger-menu">
@@ -47,14 +72,14 @@
         <div class="nav-misc-wrapper">
             <div class="nav-misc-container">
                 <form class="nav-search-container" id="nav-search-container" action="/">
-                    <input class="nav-searchbar" id="nav-searchbar" type="text" required placeholder="Recherche...">
-                    <button type="submit validate-button-white">Rechercher</button>
+                    <input class="nav-searchbar" id="nav-searchbar" type="text" name="nom-vetement" required placeholder="Recherche...">
+                    <button class="search-button-research" type="submit">Rechercher</button>
                 </form>
                 <button class="button-search-bar material-symbols-outlined no-padding" id="nav-search-button">search</button>
                 <a class="material-symbols-outlined nav-link" href="/vetements">shopping_bag</a>
                 {% if session['login'] %}
                 <a class="nav-link account-icon-wletter" href="/logout">
-                    <span class="material-symbols-outlined">circle</span>
+                    <span class="material-symbols-outlined account-icon-circle">circle</span>
                     <span class="account-icon-letter">{{ session['login'][0] | upper }}</span>
                 </a>
                 {% else %}
