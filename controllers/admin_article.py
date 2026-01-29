@@ -11,14 +11,27 @@ admin_article = Blueprint('admin_article', __name__,
                           template_folder='templates')
 
 
-@admin_article.route('/admin/article/show')
-def show_article():
+@admin_article.route('/admin/vetement/show')
+def show_vetement():
+    print("amogus")
     mycursor = get_db().cursor()
-    sql = '''  requête admin_article_1
+    sql = '''  
+    SELECT id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement
+    FROM vetement
+    JOIN matiere
+        ON matiere.id_matiere = vetement.matiere_id
+    JOIN fournisseur
+        ON fournisseur.id_fournisseur = vetement.fournisseur_id
+    JOIN marque
+        ON marque.id_marque = vetement.marque_id
+    JOIN taille
+        ON taille.id_taille = vetement.taille_id
+    JOIN type_vetement
+        ON type_vetement.id_type_vetement = vetement.type_vetement_id;
     '''
     mycursor.execute(sql)
-    articles = mycursor.fetchall()
-    return render_template('admin/article/show_article.html', articles=articles)
+    vetements = mycursor.fetchall()
+    return render_template('admin/vetement/show_vetement.html', vetements=vetements)
 
 
 @admin_article.route('/admin/article/add', methods=['GET'])

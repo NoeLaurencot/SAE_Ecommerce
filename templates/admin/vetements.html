@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+<title>afficher les articles</title>
+{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles-navbar.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles-footer.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles-home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles-login.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles-utilities.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles-vetement.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<main class="main-container">
+    {% for ligne in vetements %}
+    <div class="clothe-container">
+        <h2>{{ ligne.nom_vetement }}</h2>
+        <span>{{ ligne.matiere }}</span>
+        <span>{{ ligne.type_vetement}}</span>
+        <span><img src="/static/assets/images/clothes/{{ ligne.photo }}"></span>
+        <span>{{ ligne.description }}</span>
+        <span>{{ ligne.taille }}</span>
+        <span>{{ ligne.fournisseur }}</span>
+        <span>{{ ligne.marque }}</span>
+        <span style="color:rgb(178, 164, 56);">{{ ligne.prix_vetement }}</span>
+    </div>
+    {% endfor %}
+</main>
+{% endblock %}

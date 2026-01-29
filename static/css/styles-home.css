@@ -118,11 +118,3 @@
     width: 100%;
     height: auto;
 }
-
-.tile-new .new-collection-img-container {
-    position: relative;
-}
-
-.tile-new .new-collection-img-container img {
-    display: flex;
-}

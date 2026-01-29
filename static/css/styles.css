@@ -62,61 +62,6 @@ body {
 	color: var(--gold);
 }
 
-.validate-button-black {
-    display: flex;
-    justify-content: center;
-    text-decoration: none;
-    align-items: center;
-    color: var(--white);
-    border : none;
-    background-color: var(--black);
-	padding: 10px 40px;
-	font-weight: 500;
-	font-family: "Playfair", sans-serif;
-	transition: 0.5s color;
-}
-
-.validate-button-black:hover {
-    color: var(--gold);
-	cursor: pointer;
-}
-
-.validate-button-white {
-    display: flex;
-    justify-content: center;
-    text-decoration: none;
-    align-items: center;
-    color: var(--black);
-    border : none;
-    background-color: var(--white);
-	padding: 10px 40px;
-	font-weight: 500;
-	font-family: "Playfair", sans-serif;
-	transition: 0.5s;
-}
-
-.validate-button-white:hover {
-    color: var(--gold);
-}
-
-.validate-button-black-outline {
-    display: flex;
-    justify-content: center;
-    text-decoration: none;
-    align-items: center;
-    color: var(--white);
-    border : solid 1px var(--white);
-	padding: 10px 40px;
-	font-weight: 500;
-	font-family: "Playfair", sans-serif;
-	transition: 0.5s;
-}
-
-.validate-button-black-outline:hover {
-    background-color: var(--white);
-    color: var(--gold);
-	cursor: pointer;
-}
 
 .main-container {
     padding: 20px;
@@ -194,27 +139,6 @@ body {
 h1, h2, h3 {
     font-weight: 500;
     font-family: 'Playfair';
-}
-
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: 0.3s;
-}
-
-.overlay:hover {
-    opacity: 50%;
-}
-
-.overlay-dimmer {
-    opacity: 50%;
-    width: 100%;
-    height: 100%;
-    background-color: black;
 }
 
 .text-box h1, .text-box h2, .text-box h3 {
