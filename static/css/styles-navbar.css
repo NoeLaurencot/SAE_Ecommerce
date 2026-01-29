@@ -78,6 +78,10 @@ nav {
     display: flex;
 }
 
+.account-icon-circle {
+    font-size: 2rem !important;
+}
+
 .horizontal-nav .nav-misc-container .account-icon-letter {
     position: absolute;
     top: 50%;
@@ -157,9 +161,24 @@ nav {
 
 .nav-search-container {
     display: flex;
-    align-items: center;
-    gap: 20px;
-}   
+    align-items: stretch;
+    gap: 10px;
+    margin-left: 20px;
+    height: 40px;
+}
+
+.search-button-research {
+    border: none;
+    border-radius: 0;
+    padding: 2px 8px;
+    background-color: var(--white);
+    height: 100%;
+}
+
+.search-button-research:hover {
+    cursor: pointer;
+}
+
 
 .nav-searchbar {
     padding: 5px 10px;
@@ -169,32 +188,51 @@ nav {
 }
 
 .nav-search-container {
-    visibility: hidden;
+    display: none;
 }
 
 .nav-search-active {
-    visibility: visible;
+    display: flex;
 }
 
 /* burger menu */
 
 .burger-menu-container {
     position: fixed;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
     align-items: center;
-    left: calc(-18% - 41px);
-    /* 41px pour le padding + border */
+    left: calc(-18% - 41px); /* 41px pour le padding + border */
     top: 0;
-    width: 18%;
+    width: calc(18% + 41px);
     height: 100dvh;
     z-index: var(--hamburger-zindex);
-    padding: 80px 20px 20px 20px;
     background-color: var(--burger-background);
     border-right: solid 1px var(--burger-border);
     transition: 0.5s;
 }
+
+.burger-menu-scroll-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 80px 20px 20px 20px;
+    overflow-y: scroll;
+}
+
+
+.burger-top-spacer {
+    position: absolute;
+    flex-shrink: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    z-index: 1000;
+    background-color: red;
+}
+
 
 .burger-menu-container h1 {
     color: var(--white);
@@ -214,7 +252,7 @@ nav {
 .burger-content {
     color: var(--white);
     padding-left: 30px;
-    width: 100%;
+    width: calc(100% - 30px);
 }
 
 .burger-content a {
@@ -240,7 +278,6 @@ nav {
     gap: 10px;
     padding-left: 20px;
 }
-
 /* misc */
 
 #nav-offset {
