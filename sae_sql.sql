@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS ligne_panier;
 DROP TABLE IF EXISTS ligne_commande;
 DROP TABLE IF EXISTS vetement;
 DROP TABLE IF EXISTS commande;
+DROP TABLE IF EXISTS matiere;
 DROP TABLE IF EXISTS taille;
 DROP TABLE IF EXISTS collection;
 DROP TABLE IF EXISTS type_vetement;
@@ -207,7 +208,7 @@ VALUES ('Manteau vert', 1320, 'tmp', 1, 6, 'coat_designer.avif', 6, 3, 3),
 
        ('dress_blue', 570, 'tmp', 1, 5, 'dress_blue.avif', 2, 1, 3),
        ('dress_designer', 1880, 'tmp', 5, 5, 'dress_designer.avif', 1, 1, 3),
-       ('dress_dots', 120, 'tmp', 1, 5, 'dress_dots.avif', 2, 23, 3),
+       ('dress_dots', 120, 'tmp', 1, 5, 'dress_dots.avif', 2, 3, 3),
        ('dress_pencil_white', 1900, 'tmp', 5, 5, 'dress_pencil_white.avif', 5, 3, 3),
        ('dress_red', 380, 'tmp', 1, 5, 'dress_red.avif', 1, 2, 3),
        ('dress_rose', 1560, 'tmp', 1, 5, 'dress_rose.avif', 1, 3, 3),
