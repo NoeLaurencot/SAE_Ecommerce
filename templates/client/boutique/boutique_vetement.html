@@ -1,0 +1,35 @@
+{% extends('layout.html') %}
+
+{% block title %}
+    <title>Boutique | Gaullois</title>
+{% endblock %}
+
+{% block body %}
+    <main class="main-container-row">
+        {% for vetement in vetements %}
+            <div class="card-vetement">
+                {% if vetement.photo is not none %}
+                    <img class="card-img"
+                         src="{{ url_for('static', filename = 'assets/images/clothes/') }}{{ vetement.photo }}"
+                         alt="image  de {{ vetement.nom_vetement }}">
+                {% else %}<img class="card-img"
+                               src="{{ url_for('static', filename='assets/images/placeholder.svg') }}"
+                               alt="image  de {{ vetement.nom_vetement }}">
+                {% endif %}
+                <div class="text-box">
+                    <h2>{{ vetement.nom_vetement }}</h2>
+                    <div class="card-price-button">
+                        <div><strong>€{{ vetement.prix }}</strong></div>
+                        <form action="/client/panier/add" method="post">
+                            <input type="hidden" name="id_vetement" id="id_vetement" value="{{ vetement.id_vetement }}">
+                            <div class="input-vetement"><label for="quantite"><button class="material-symbols-outlined card-button" type="submit">shopping_cart</button></label>
+                            <input class="card-input" type="number" name="quantite" id="quantite" value="1" min="1" max="{{ vetement.stock }}"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+
+    </main>
+{% endblock %}

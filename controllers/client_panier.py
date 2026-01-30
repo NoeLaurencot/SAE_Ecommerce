@@ -1,27 +1,45 @@
-#! /usr/bin/python
-# -*- coding:utf-8 -*-
 from flask import Blueprint
 from flask import request, render_template, redirect, abort, flash, session
 
 from connexion_db import get_db
+import datetime
 
 client_panier = Blueprint('client_panier', __name__,
                         template_folder='templates')
+
+@client_panier.route('/client/panier',methods=['GET'])
+def client_panier_show():
+    mycursor = get_db().cursor()
+    if 'id_user' not in session:
+        return redirect('/login')
+    id_utilisateur = session['id_user']
+    sql = """
+    SELECT id_vetement, nom_vetement, prix_vetement, libelle_taille, libelle_marque, ligne_panier.quantite, ligne_panier.date_ajout
+    FROM ligne_panier
+    INNER JOIN vetement ON ligne_panier.vetement_id = vetement.id_vetement
+    INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
+    INNER JOIN taille ON vetement.taille_id = taille.id_taille
+    INNER JOIN marque ON vetement.marque_id = marque.id_marque;
+    """
+    mycursor.execute(sql)
+    lignes_panier = mycursor.fetchall()
+    return render_template('client/panier/panier.html', lignes_panier = lignes_panier)
 
 
 @client_panier.route('/client/panier/add', methods=['POST'])
 def client_panier_add():
     mycursor = get_db().cursor()
     id_client = session['id_user']
-    id_article = request.form.get('id_article')
+    id_vetement = request.form.get('id_vetement')
     quantite = request.form.get('quantite')
+
     # ---------
     #id_declinaison_article=request.form.get('id_declinaison_article',None)
     id_declinaison_article = 1
 
 # ajout dans le panier d'une déclinaison d'un article (si 1 declinaison : immédiat sinon => vu pour faire un choix
-    # sql = '''    '''
-    # mycursor.execute(sql, (id_article))
+#     sql = '''SELECT '''
+#     mycursor.execute(sql, (id_vetement))
     # declinaisons = mycursor.fetchall()
     # if len(declinaisons) == 1:
     #     id_declinaison_article = declinaisons[0]['id_declinaison_article']
@@ -37,9 +55,28 @@ def client_panier_add():
     #                                , article=article)
 
 # ajout dans le panier d'un article
+    sql = '''SELECT utilisateur_id,vetement_id,quantite
+    FROM ligne_panier
+    WHERE utilisateur_id = %s AND vetement_id = %s'''
+    mycursor.execute(sql, (id_client, id_vetement))
+    tmp = mycursor.fetchall()
+    if tmp != []:
+        sql = '''UPDATE ligne_panier SET quantite = (quantite + %s)
+              WHERE vetement_id = %s AND utilisateur_id = %s'''
+        mycursor.execute(sql, (quantite,id_vetement,id_client))
+        get_db().commit()
+    else:
+        sql = '''INSERT INTO ligne_panier (utilisateur_id, vetement_id, date_ajout, quantite) 
+                 VALUES (%s, %s, %s, %s) '''
+        mycursor.execute(sql, (id_client, id_vetement, datetime.datetime.now(), quantite))
+        get_db().commit()
 
+    sql = '''UPDATE vetement SET stock = (stock - %s)
+              WHERE id_vetement = %s'''
+    mycursor.execute(sql, (quantite, id_vetement))
 
-    return redirect('/client/article/show')
+    get_db().commit()
+    return redirect('/client/vetement/show')
 
 @client_panier.route('/client/panier/delete', methods=['POST'])
 def client_panier_delete():
