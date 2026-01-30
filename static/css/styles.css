@@ -125,6 +125,7 @@ body {
     justify-content: center;
     align-items: center;
 }
+
 .main-container-row {
     padding: 20px;
     display: flex;
@@ -139,6 +140,11 @@ body {
     align-items: center;
     justify-content: center;
     width: calc(100% - 160px);
+}
+
+.main-tile-col {
+    display: flex;
+    flex-direction: column;
 }
 
 .form-title {

@@ -1,5 +1,3 @@
-#! /usr/bin/python
-# -*- coding:utf-8 -*-
 from flask import Blueprint
 from flask import request, render_template, redirect, abort, flash, session
 
@@ -7,6 +5,24 @@ from connexion_db import get_db
 
 client_panier = Blueprint('client_panier', __name__,
                         template_folder='templates')
+
+@client_panier.route('/client/panier',methods=['GET'])
+def client_panier_show():
+    mycursor = get_db().cursor()
+    if 'id_user' not in session:
+        return redirect('/login')
+    id_utilisateur = session['id_user']
+    sql = """
+    SELECT id_vetement, nom_vetement, prix_vetement, libelle_taille, libelle_marque, ligne_panier.quantite, ligne_panier.date_ajout
+    FROM ligne_panier
+    INNER JOIN vetement ON ligne_panier.vetement_id = vetement.id_vetement
+    INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
+    INNER JOIN taille ON vetement.taille_id = taille.id_taille
+    INNER JOIN marque ON vetement.marque_id = marque.id_marque;
+    """
+    mycursor.execute(sql)
+    lignes_panier = mycursor.fetchall()
+    return render_template('client/panier/panier.html', lignes_panier = lignes_panier)
 
 
 @client_panier.route('/client/panier/add', methods=['POST'])

@@ -1,4 +1,4 @@
-{% extends layout.html %}
+{% extends 'layout.html' %}
 
 {% block title %}
 <title>Panier | Gaullois</title>
@@ -7,7 +7,20 @@
 {% block body %}
     <main>
         <div class="main-container-row">
-            
+            <div class="main-tile-col">
+                <h1 class="tile-title no-margin">Panier</h1>
+                {% if lignes_panier %}
+					{% for ligne_panier in lignes_panier %}
+					    <div class="divider-fancy"></div>
+
+					{% endfor %}
+				{% else %}
+					panier vide
+				{% endif %}
+            </div>
+            <div class="main-tile-col">
+
+            </div>
         </div>
     </main>
 {% endblock %}
