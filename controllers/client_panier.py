@@ -60,22 +60,20 @@ def client_panier_add():
 # ajout dans le panier d'un article
     sql = '''SELECT utilisateur_id,vetement_id,quantite
     FROM ligne_panier
-    WHERE utilisateur_id = %s AND vetement_id = %s'''
+    WHERE utilisateur_id = %s AND vetement_id = %s;'''
     mycursor.execute(sql, (id_client, id_vetement))
     tmp = mycursor.fetchall()
-    if tmp != []:
+    if len(tmp) == 1:
         sql = '''UPDATE ligne_panier SET quantite = (quantite + %s)
-              WHERE vetement_id = %s AND utilisateur_id = %s'''
+              WHERE vetement_id = %s AND utilisateur_id = %s;'''
         mycursor.execute(sql, (quantite,id_vetement,id_client))
-        get_db().commit()
     else:
-        sql = '''INSERT INTO ligne_panier (utilisateur_id, vetement_id, date_ajout, quantite) 
-                 VALUES (%s, %s, %s, %s) '''
-        mycursor.execute(sql, (id_client, id_vetement, datetime.datetime.now(), quantite))
-        get_db().commit()
+        sql = '''INSERT INTO ligne_panier 
+                 VALUES (%s, %s, %s, %s); '''
+        mycursor.execute(sql, (id_client, id_vetement, '2022-05-05', quantite))
 
     sql = '''UPDATE vetement SET stock = (stock - %s)
-              WHERE id_vetement = %s'''
+              WHERE id_vetement = %s;'''
     mycursor.execute(sql, (quantite, id_vetement))
 
     get_db().commit()

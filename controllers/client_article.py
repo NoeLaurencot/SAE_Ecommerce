@@ -32,6 +32,8 @@ def client_article_show():                                 # remplace client_ind
     condition_and = ""
     # utilisation du filtre
     mycursor.execute(sql)
+    get_db().commit()
+
     vetements = mycursor.fetchall()
 
 
@@ -42,12 +44,15 @@ def client_article_show():                                 # remplace client_ind
 
     # pour le filtre
     mycursor.execute(sql3)
-    types_article = mycursor.fetchall()
+    get_db().commit()
 
+    types_article = mycursor.fetchall()
     sql = '''SELECT *
     FROM ligne_panier
           WHERE utilisateur_id = %s;'''
     mycursor.execute(sql, id_client)
+    get_db().commit()
+
     articles_panier = mycursor.fetchall()
 
     if len(articles_panier) >= 1:
@@ -56,9 +61,12 @@ FROM vetement
 JOIN ligne_panier on vetement.id_vetement = ligne_panier.vetement_id
 WHERE utilisateur_id = %s; '''
         mycursor.execute(sql, id_client)
+        get_db().commit()
+
         prix_total = mycursor.fetchone()
     else:
         prix_total = []
+
     return render_template('client/boutique/boutique_vetement.html'
                            , vetements=vetements
                            , prix_total=prix_total
