@@ -125,6 +125,13 @@ body {
     justify-content: center;
     align-items: center;
 }
+.main-container-row {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 
 .main-tile {
     display: flex;
