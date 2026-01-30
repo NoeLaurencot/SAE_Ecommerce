@@ -9,8 +9,13 @@
 <main>
     <div class="video-player-container">
         <video id="test" src="{{ url_for('static', filename='assets/videos/home_background_video.mp4') }}" autoplay muted loop disablePictureInPicture></video>
-        <a class="main-button" href="/admin/vetement/show">Visitez la boutique</a>
-    </div>
+        {% if session.get('role') == 'ROLE_admin' %}
+            <a class="main-button" href="/admin/vetement/show">Visitez la boutique</a>
+        {% else %}
+            <a class="main-button" href="/client/vetement/show">Visitez la boutique</a>
+        {% endif %}
+        </div>
+        
     <div class="main-container">
         <div class="text-box">
             <h1>La mode française</h1>
