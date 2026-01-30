@@ -1,0 +1,17 @@
+.panier-tile {
+    display: flex;
+    gap: 10px;
+}
+.panier-img-container {
+    width: 30%;
+    display: flex;
+}
+
+.panier-img-container img {
+    width: 100%;
+}
+
+.panier-info-container {
+    display: flex;
+    flex-direction: column;
+}

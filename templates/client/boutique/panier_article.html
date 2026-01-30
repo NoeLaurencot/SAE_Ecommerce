@@ -1,19 +1,5 @@
-{#  articles_panier  : tableau de dictionnaires
-        * dictionnaire : nom quantite prix article_id [stock]
-        *
-#}
-
 {% extends "client/layout_client.html" %}
 {% block body %}
-    <div class="container">
-        <div class="row align-self-right">
-        {% include('client/boutique/_panier.html') %}
-            <div class="col">
-              <h3>Les filtres</h3>
-              Articles dont le nom est composé par :<br>
-                 {% include('client/boutique/_filtre.html') %}
-            </div>
-        </div>
 
         <div class="bg-light p-3">
             <h1>Les articles</h1>

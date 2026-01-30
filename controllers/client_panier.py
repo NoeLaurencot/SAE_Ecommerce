@@ -7,14 +7,15 @@ import datetime
 client_panier = Blueprint('client_panier', __name__,
                         template_folder='templates')
 
-@client_panier.route('/client/panier',methods=['GET'])
+@client_panier.route('/client/panier', methods=['GET'])
 def client_panier_show():
     mycursor = get_db().cursor()
     if 'id_user' not in session:
+        flash(u'Veuillez vous conntecter pour accéder au panier','alert-warning')
         return redirect('/login')
     id_utilisateur = session['id_user']
     sql = """
-    SELECT id_vetement, nom_vetement, prix_vetement, libelle_taille, libelle_marque, ligne_panier.quantite, ligne_panier.date_ajout
+    SELECT id_vetement, nom_vetement, vetement.photo, stock, prix_vetement, libelle_taille, libelle_marque, ligne_panier.quantite, ligne_panier.date_ajout
     FROM ligne_panier
     INNER JOIN vetement ON ligne_panier.vetement_id = vetement.id_vetement
     INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur

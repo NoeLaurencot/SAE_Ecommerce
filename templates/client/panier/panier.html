@@ -6,20 +6,31 @@
 
 {% block body %}
     <main>
-        <div class="main-container-row">
-            <div class="main-tile-col">
+        <div class="main-container-row align-normal gap10">
+            <div class="main-tile-col gap10 width60p">
                 <h1 class="tile-title no-margin">Panier</h1>
                 {% if lignes_panier %}
 					{% for ligne_panier in lignes_panier %}
 					    <div class="divider-fancy"></div>
-
+                        <div class="panier-tile">
+                            <div class="panier-img-container">
+                                <img src="{{ url_for('static', filename='assets/images/clothes/') }}{{ ligne_panier.photo }}" alt="Chemise"> 
+                            </div>
+                            <div class="panier-info-container">
+                                <h3 class="no-margin">{{ ligne_panier.nom_vetement }}</h3>
+                                <span>{{ ligne_panier.libelle_marque }}</span>
+                                <span>Taille {{ ligne_panier.libelle_taille }}</span>
+                                <span>Quantité: {{ ligne_panier.quantite }}</span>
+                            </div>
+                        </div>
 					{% endfor %}
 				{% else %}
+                    <div class="divider-fancy"></div>
 					panier vide
 				{% endif %}
             </div>
-            <div class="main-tile-col">
-
+            <div class="main-tile-col width40p">
+                <span>Récapitulatif du panier</span>
             </div>
         </div>
     </main>

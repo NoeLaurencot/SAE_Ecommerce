@@ -132,7 +132,6 @@ body {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
     width: calc(100% - 40px);
 
 }
