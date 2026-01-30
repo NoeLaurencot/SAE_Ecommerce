@@ -195,14 +195,14 @@ nav {
     display: flex;
 }
 
-/* burger menu */
+/* intérieur burger menu */
 
 .burger-menu-container {
     position: fixed;
     align-items: center;
-    left: calc(-18% - 41px); /* 41px pour le padding + border */
+    left: -30%; 
     top: 0;
-    width: calc(18% + 41px);
+    width: 30%;
     height: 100dvh;
     z-index: var(--hamburger-zindex);
     background-color: var(--burger-background);
@@ -215,12 +215,11 @@ nav {
     flex-direction: column;
     gap: 20px;
     align-items: center;
-    width: 100%;
+    width: calc(100% - 41px);
     height: 100%;
     padding: 80px 20px 20px 20px;
     overflow-y: scroll;
 }
-
 
 .burger-top-spacer {
     position: absolute;
@@ -230,12 +229,7 @@ nav {
     width: 100%;
     height: 80px;
     z-index: 1000;
-    background-color: red;
-}
-
-
-.burger-menu-container h1 {
-    color: var(--white);
+    background-color: var(--burger-background);
 }
 
 .burger-menu-active {
@@ -257,6 +251,10 @@ nav {
 
 .burger-content a {
     text-decoration: none;
+    color: var(--white);
+}
+
+.burger-menu-container h1 {
     color: var(--white);
 }
 

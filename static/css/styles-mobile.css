@@ -1,0 +1,47 @@
+    /**###################
+    ####### NAVBAR #######
+    ####################*/
+
+    @media (max-width: 1200px) {
+
+    }
+
+    @media (max-width: 800px) {
+        .burger-menu-container {
+            left: -50%;
+            width: 50%;
+        }
+
+        .burger-menu-scroll-wrapper {
+            width: calc(100% - 21px);
+            padding: 80px 10px 20px 10px;
+        }
+
+        .burger-menu-active {
+            left: 0;
+        }
+    }
+
+    /**#################
+    ####### HOME #######
+    ##################*/
+
+    @media (max-width: 800px) {
+        .main-tile {
+            flex-direction: column;
+        }
+
+        .main-tile .collection-info .collection-title {
+            font-size: 5vw;
+        }
+
+        .main-tile .collection-info .collection-desc {
+            font-size: 3vw;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .tile-collection {
+            width: 90%;
+        }
+    }

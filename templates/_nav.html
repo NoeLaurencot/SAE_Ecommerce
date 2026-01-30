@@ -27,33 +27,21 @@
                         {% endfor %}
                     </div>
                 </div>
+                <div class="burger-boutique-categorie">
+                    <a href="">
+                        <h2>Nouveautés</h2>
+                    </a>
+                </div>
+
+                {% if session['role'] == 'ROLE_admin' %}
+                <div class="divider-fancy"></div>
+                <div class="burger-boutique-category">
+                    
+                </div>
+                {% endif %}
             </div>
 
-            <div class="curger-boutique-categorie">
-                <a href="">
-                    <h2>Nouveautés</h2>
-                </a>
-            </div>
 
-            {% if session['role'] == 'ROLE_admin' %}
-            <div class="divider-fancy"></div>
-            <div class="burger-boutique-category">
-                <span>test</span>
-                <span>test</span>
-                <span>test</span>
-                <span>test</span>
-                <span>test</span>
-                <span>test</span>
-                <span>test</span>
-                <span>test</span>
-                <span>test</span>
-                <span>test</span>
-                <span>test</span>
-                <span>test</span>
-                <span>test</span>
-                <span>test</span>
-            </div>
-            {% endif %}
 
         </div>
     </div>
@@ -72,10 +60,12 @@
         <div class="nav-misc-wrapper">
             <div class="nav-misc-container">
                 <form class="nav-search-container" id="nav-search-container" action="/">
-                    <input class="nav-searchbar" id="nav-searchbar" type="text" name="nom-vetement" required placeholder="Recherche...">
+                    <input class="nav-searchbar" id="nav-searchbar" type="text" name="nom-vetement" required
+                        placeholder="Recherche...">
                     <button class="search-button-research" type="submit">Rechercher</button>
                 </form>
-                <button class="button-search-bar material-symbols-outlined no-padding" id="nav-search-button">search</button>
+                <button class="button-search-bar material-symbols-outlined no-padding"
+                    id="nav-search-button">search</button>
                 <a class="material-symbols-outlined nav-link" href="/vetements">shopping_bag</a>
                 {% if session['login'] %}
                 <a class="nav-link account-icon-wletter" href="/logout">
