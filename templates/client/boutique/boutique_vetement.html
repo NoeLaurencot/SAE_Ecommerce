@@ -20,11 +20,16 @@
                     <h2>{{ vetement.nom_vetement }}</h2>
                     <div class="card-price-button">
                         <div><strong>€{{ vetement.prix }}</strong></div>
+                        {% if session['user_id'] %}
                         <form action="/client/panier/add" method="post">
                             <input type="hidden" name="id_vetement" id="id_vetement" value="{{ vetement.id_vetement }}">
                             <div class="input-vetement"><label for="quantite"><button class="material-symbols-outlined card-button" type="submit">shopping_cart</button></label>
                             <input class="card-input" type="number" name="quantite" id="quantite" value="1" min="1" max="{{ vetement.stock }}"></div>
                         </form>
+                        {% else %}
+                            <div class="input-vetement"><label for="quantite"><a class="material-symbols-outlined card-button" href="/login">shopping_cart</a></label>
+                            <input class="card-input" type="number" name="quantite" id="quantite" value="1" min="1" max="{{ vetement.stock }}"></div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

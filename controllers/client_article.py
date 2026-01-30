@@ -12,7 +12,10 @@ client_article = Blueprint('client_article', __name__,
 @client_article.route('/client/vetement/show')              # remplace /client
 def client_article_show():                                 # remplace client_index
     mycursor = get_db().cursor()
-    id_client = session['id_user']
+    if 'id_user' in session:
+        id_client = session['id_user']
+    else:
+        id_client = None
 
     sql = '''  
     SELECT id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement,prix_vetement as prix
@@ -47,26 +50,28 @@ def client_article_show():                                 # remplace client_ind
     get_db().commit()
 
     types_article = mycursor.fetchall()
-    sql = '''SELECT *
-    FROM ligne_panier
-          WHERE utilisateur_id = %s;'''
-    mycursor.execute(sql, id_client)
-    get_db().commit()
-
-    articles_panier = mycursor.fetchall()
-
-    if len(articles_panier) >= 1:
-        sql = ''' SELECT sum(vetement.prix_vetement*quantite) as prix_total
-FROM vetement
-JOIN ligne_panier on vetement.id_vetement = ligne_panier.vetement_id
-WHERE utilisateur_id = %s; '''
+    if 'role' in session:
+        sql = '''SELECT *
+        FROM ligne_panier
+              WHERE utilisateur_id = %s;'''
         mycursor.execute(sql, id_client)
         get_db().commit()
 
-        prix_total = mycursor.fetchone()
+        articles_panier = mycursor.fetchall()
+
+        if len(articles_panier) >= 1:
+            sql = ''' SELECT sum(vetement.prix_vetement*quantite) as prix_total
+    FROM vetement
+    JOIN ligne_panier on vetement.id_vetement = ligne_panier.vetement_id
+    WHERE utilisateur_id = %s; '''
+            mycursor.execute(sql, id_client)
+            get_db().commit()
+
+            prix_total = mycursor.fetchone()
+        else:
+            prix_total = []
     else:
         prix_total = []
-
     return render_template('client/boutique/boutique_vetement.html'
                            , vetements=vetements
                            , prix_total=prix_total
