@@ -1,0 +1,44 @@
+.card-vetement {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20%;
+    margin: 10px;
+}
+
+.card-img {
+    width: 100%;
+
+}
+
+.card-price-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.card-button {
+    color: var(--gold);
+    background: var(--black);
+    border: none;
+    border-radius: 10px;
+    padding: 5px 15px;
+    cursor: pointer;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.card-input {
+    border-radius: 10px;
+    margin-left: -1px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.input-vetement {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+}

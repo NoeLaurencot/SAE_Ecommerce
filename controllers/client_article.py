@@ -9,33 +9,58 @@ client_article = Blueprint('client_article', __name__,
                         template_folder='templates')
 
 @client_article.route('/client/index')
-@client_article.route('/client/article/show')              # remplace /client
+@client_article.route('/client/vetement/show')              # remplace /client
 def client_article_show():                                 # remplace client_index
     mycursor = get_db().cursor()
     id_client = session['id_user']
 
-    sql = '''   selection des articles   '''
+    sql = '''  
+    SELECT id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement,prix_vetement as prix
+    FROM vetement
+    JOIN matiere
+        ON matiere.id_matiere = vetement.matiere_id
+    JOIN fournisseur
+        ON fournisseur.id_fournisseur = vetement.fournisseur_id
+    JOIN marque
+        ON marque.id_marque = vetement.marque_id
+    JOIN taille
+        ON taille.id_taille = vetement.taille_id
+    JOIN type_vetement
+        ON type_vetement.id_type_vetement = vetement.type_vetement_id;
+    '''
     list_param = []
     condition_and = ""
     # utilisation du filtre
-    sql3=''' prise en compte des commentaires et des notes dans le SQL    '''
-    articles =[]
+    mycursor.execute(sql)
+    vetements = mycursor.fetchall()
+
+
+    sql3='''SELECT *
+    FROM type_vetement;
+    '''
 
 
     # pour le filtre
-    types_article = []
+    mycursor.execute(sql3)
+    types_article = mycursor.fetchall()
 
-
-    articles_panier = []
+    sql = '''SELECT *
+    FROM ligne_panier
+          WHERE utilisateur_id = %s;'''
+    mycursor.execute(sql, id_client)
+    articles_panier = mycursor.fetchall()
 
     if len(articles_panier) >= 1:
-        sql = ''' calcul du prix total du panier '''
-        prix_total = None
+        sql = ''' SELECT sum(vetement.prix_vetement*quantite) as prix_total
+FROM vetement
+JOIN ligne_panier on vetement.id_vetement = ligne_panier.vetement_id
+WHERE utilisateur_id = %s; '''
+        mycursor.execute(sql, id_client)
+        prix_total = mycursor.fetchone()
     else:
-        prix_total = None
-    return render_template('client/boutique/panier_article.html'
-                           , articles=articles
-                           , articles_panier=articles_panier
-                           #, prix_total=prix_total
+        prix_total = []
+    return render_template('client/boutique/boutique_vetement.html'
+                           , vetements=vetements
+                           , prix_total=prix_total
                            , items_filtre=types_article
                            )
