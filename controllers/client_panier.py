@@ -14,15 +14,17 @@ def client_panier_show():
         flash(u'Veuillez vous conntecter pour accéder au panier','alert-warning')
         return redirect('/login')
     id_utilisateur = session['id_user']
+    param = (id_utilisateur)
     sql = """
     SELECT id_vetement, nom_vetement, vetement.photo, stock, prix_vetement, libelle_taille, libelle_marque, ligne_panier.quantite, ligne_panier.date_ajout
     FROM ligne_panier
     INNER JOIN vetement ON ligne_panier.vetement_id = vetement.id_vetement
     INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
     INNER JOIN taille ON vetement.taille_id = taille.id_taille
-    INNER JOIN marque ON vetement.marque_id = marque.id_marque;
+    INNER JOIN marque ON vetement.marque_id = marque.id_marque
+    WHERE id_utilisateur = %s;
     """
-    mycursor.execute(sql)
+    mycursor.execute(sql, param)
     lignes_panier = mycursor.fetchall()
     return render_template('client/panier/panier.html', lignes_panier = lignes_panier)
 
