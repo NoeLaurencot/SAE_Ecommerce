@@ -50,8 +50,8 @@ def client_article_show():                                 # remplace client_ind
     get_db().commit()
 
     types_article = mycursor.fetchall()
-    if 'role' in session:
-        sql = '''SELECT *
+    if 'login' in session:
+        sql ='''SELECT *
         FROM ligne_panier
               WHERE utilisateur_id = %s;'''
         mycursor.execute(sql, id_client)
