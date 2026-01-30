@@ -13,7 +13,6 @@ admin_article = Blueprint('admin_article', __name__,
 
 @admin_article.route('/admin/vetement/show')
 def show_vetement():
-    print("amogus")
     mycursor = get_db().cursor()
     sql = '''  
     SELECT id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement
