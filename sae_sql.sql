@@ -199,7 +199,7 @@ VALUES ('Global Fabric'),
 
 
 INSERT INTO vetement (nom_vetement, prix_vetement, description, matiere_id, type_vetement_id, photo, marque_id,
-                      fournisseur_id, taille_id)
+                      fournisseur_id, taille_id, stock)
 VALUES ('shirt_classy', 370, 'tmp', 1, 1, 'shirt_classy.avif', 2, 1, 3, 5),
        ('shirt_diamonds', 7000, 'tmp', 5, 1, 'shirt_diamonds.avif', 2, 1, 3, 5),
        ('shirt_feathers', 2850, 'tmp', 5, 1, 'shirt_feathers.avif', 2, 3, 3, 5),
@@ -232,7 +232,7 @@ VALUES ('shirt_classy', 370, 'tmp', 1, 1, 'shirt_classy.avif', 2, 1, 3, 5),
        ('Manteau New York', 750, 'tmp', 1, 5, 'coat_jacket_classic.avif', 2, 2, 3, 5),
        ('Veste en cuir', 4360, 'tmp', 2, 5, 'coat_jacket_leather.avif', 3, 2, 3, 5),
        ('Doudoune verte', 365, 'tmp', 3, 5, 'coat_jacket_puffer.avif', 3, 1, 3, 5),
-       ('Meanteau gris', 2300, 'tmp', 4, 5, 'coat_jacket_straight.avif', 4, 3, 3), 5,
+       ('Meanteau gris', 2300, 'tmp', 4, 5, 'coat_jacket_straight.avif', 4, 3, 3, 5),
        ('Veste de costume', 8630, 'tmp', 4, 5, 'coat_suit.avif', 6, 1, 3, 5),
 
        ('shoes_boots', 3700, 'tmp', 2, 6, 'shoes_boots.avif', 6, 3, 3, 5),
@@ -306,3 +306,18 @@ LIMIT 4;
 SELECT libelle_type_vetement
 FROM type_vetement
 ORDER BY id_type_vetement;
+
+-- R3
+
+SELECT id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement
+FROM vetement
+         JOIN matiere
+              ON matiere.id_matiere = vetement.matiere_id
+         JOIN fournisseur
+              ON fournisseur.id_fournisseur = vetement.fournisseur_id
+         JOIN marque
+              ON marque.id_marque = vetement.marque_id
+         JOIN taille
+              ON taille.id_taille = vetement.taille_id
+         JOIN type_vetement
+              ON type_vetement.id_type_vetement = vetement.type_vetement_id;
