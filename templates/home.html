@@ -9,11 +9,7 @@
 <main>
     <div class="video-player-container">
         <video id="test" src="{{ url_for('static', filename='assets/videos/home_background_video.mp4') }}" autoplay muted loop disablePictureInPicture></video>
-        {% if session.get('role') == 'ROLE_admin' %}
-            <a class="main-button" href="/admin/vetement/show">Visitez la boutique</a>
-        {% else %}
             <a class="main-button" href="/client/vetement/show">Visitez la boutique</a>
-        {% endif %}
         </div>
         
     <div class="main-container">
@@ -22,7 +18,7 @@
             <p>Nos articles inutilement trop chers ne sauront vous résister</p>
         </div>
         <div class="main-tile tile-collection">
-            <a class="collection-container no-link-style" href="/">
+            <a class="collection-container no-link-style" href="/client/vetement/show">
                 <img class="collection-img" src="../static/assets/images/collection-homme.avif" alt="collection homme">
                 <div class="collection-overlay">
                     <div class="collection-info">
@@ -38,7 +34,7 @@
                 </div>
             </a>
 
-            <a class="collection-container no-link-style" href="/">
+            <a class="collection-container no-link-style" href="/client/vetement/show">
                 <img class="collection-img" src="../static/assets/images/collection-femme.avif" alt="collection femme">
                 <div class="collection-overlay">
                     <div class="collection-info">
@@ -63,11 +59,11 @@
             <div class="new-collection-info">
                 <h1>Nouveautés</h1>
                 <p>Les dernières tendances, fraîchement sorties des usines du Bangladesh</p>
-                <a class="validate-button-black" href="">Découvrire les nouveautés</a>
+                <a class="validate-button-black" href="/client/vetement/show">Découvrire les nouveautés</a>
             </div>
             <div class="new-collection-container">
                 {% for nouveaute in nouveautes %}
-                <a class="new-collection-img-container" href="#">
+                <a class="new-collection-img-container" href="/client/vetement/show">
                     <img src="../static/assets/images/clothes/{{ nouveaute.photo }}" alt="{{ nouveaute.nom_vetement }}">
                     <div class="overlay">
                         <div class="overlay-dimmer"></div>

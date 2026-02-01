@@ -3,7 +3,8 @@
         <div class="burger-top-spacer"></div>
         <div class="burger-menu-scroll-wrapper">
             {% if session['login'] %}
-            <h1 class="no-margin">Bienvenue, {% if session['nom'] %}
+            <h1 class="no-margin">Bienvenue,
+                {% if session['nom'] %}
                 {{ session['nom'] }}
                 {% else %}
                 {{ session['login'] }}
@@ -18,17 +19,17 @@
             <div class="divider-fancy"></div>
             <div class="burger-content">
                 <div class="burger-boutique-category">
-                    <a href="">
-                        <h2 class="no-margin">Boutique</h2>
+                    <a href="/client/vetement/show">
+                        <h2>Boutique</h2>
                     </a>
                     <div class="category-item-container">
                         {% for categorie in types_vetements_nav %}
-                        <a href="">{{ categorie.libelle_type_vetement }}</a>
+                        <a href="/client/vetement/show">{{ categorie.libelle_type_vetement }}</a>
                         {% endfor %}
                     </div>
                 </div>
                 <div class="burger-boutique-categorie">
-                    <a href="">
+                    <a href="/client/vetement/show">
                         <h2>Nouveautés</h2>
                     </a>
                 </div>
@@ -36,13 +37,12 @@
                 {% if session['role'] == 'ROLE_admin' %}
                 <div class="divider-fancy"></div>
                 <div class="burger-boutique-category">
-                    
+                    <a href="/admin/vetement/show">
+                        <h2>Gestion vêtements</h2>
+                    </a>
                 </div>
                 {% endif %}
             </div>
-
-
-
         </div>
     </div>
     <div tabindex="0" class="nav-burger-button-container" id="nav-burger-menu">
@@ -50,6 +50,15 @@
         <span id="nav-burger-mid"></span>
         <span id="nav-burger-bot"></span>
     </div>
+
+    <form class="nav-search-container" id="nav-search-container" action="/client/vetement/show">
+        <button class="material-symbols-outlined nav-search-icons" id="nav-search-close-button"
+            type="button">close</button>
+        <input class="nav-searchbar" id="nav-searchbar" type="text" required
+            placeholder="Rechercher dans la boutique...">
+        <button class="material-symbols-outlined nav-search-icons" type="submit">search</button>
+    </form>
+
     <div class="horizontal-nav">
         <div class="nav-burger-spacer"></div> <!-- Pour que le logo soit au centre -->
         <div class="nav-logo-container">
@@ -59,21 +68,29 @@
         </div>
         <div class="nav-misc-wrapper">
             <div class="nav-misc-container">
-                <form class="nav-search-container" id="nav-search-container" action="/">
-                    <input class="nav-searchbar" id="nav-searchbar" type="text" name="nom-vetement" required
-                        placeholder="Recherche...">
-                    <button class="search-button-research" type="submit">Rechercher</button>
-                </form>
                 <button class="button-search-bar material-symbols-outlined no-padding"
-                    id="nav-search-button">search</button>
-                <a class="material-symbols-outlined nav-link" href="/client/panier">shopping_bag</a>
+                    id="nav-search-open-button">search</button>
+
+                <a class="nav-panier-container" href="/client/panier">
+                    <div class="material-symbols-outlined nav-panier-icon nav-link">shopping_bag</div>
+                    {% if session['login'] and total_panier.total is not none %}
+                    <div class="nav-panier-notif">
+                        {% if total_panier.total > 9 %}
+                            <span>9+</span>
+                        {% else %}
+                            <span>{{ total_panier.total }}</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </a>
+
                 {% if session['login'] %}
-                <a class="nav-link account-icon-wletter" href="/logout">
+                <a class="nav-link account-icon-wletter account-icon" href="/logout">
                     <span class="material-symbols-outlined account-icon-circle">circle</span>
                     <span class="account-icon-letter">{{ session['login'][0] | upper }}</span>
                 </a>
                 {% else %}
-                <a class="material-symbols-outlined nav-link" href="/login">account_circle</a>
+                <a class="material-symbols-outlined nav-link account-icon" href="/login">account_circle</a>
                 {% endif %}
             </div>
         </div>
