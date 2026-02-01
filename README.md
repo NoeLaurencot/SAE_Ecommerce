@@ -8,10 +8,12 @@ Boutique fictive
 
 Boutique de vêtements de luxe
 
-> ## Fait part
->
-> - Jules JEANROT
->
-> - Pierre LAMOUR
->
-> - Noé LAURENÇOT
+ ## Fait part
+
+ - Jules JEANROT
+
+ - Pierre LAMOUR
+
+ - Noé LAURENÇOT
+
+https://gaullois-sae.up.railway.app/
