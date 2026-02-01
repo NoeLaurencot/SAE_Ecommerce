@@ -96,6 +96,8 @@
     @media (max-width: 500px) {
         .tile-collection {
             width: 90%;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         .tile-new {

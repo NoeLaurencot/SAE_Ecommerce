@@ -4,7 +4,9 @@ nav {
     position: fixed;
     z-index: var(--nav-zindex);
     top: 0;
-    width: 100%;
+    left: 0;
+    right: 0;
+    overflow: hidden;
 }
 
 .horizontal-nav {
