@@ -43,6 +43,27 @@
             padding-left: 0;
             width: 100%;
         }
+
+        .burger-menu-container {
+            left: -65%;
+            width: 65%;
+        }
+
+        .burger-menu-active {
+            left: 0;
+        }
+
+    }
+
+    @media (max-width: 350px) {
+
+        .horizontal-nav .nav-logo {
+            width: clamp(50px, calc(80px + 2rem), 200px);
+        }
+
+        #nav-search-open-button, .nav-panier-icon, .account-icon {
+            font-size: 1.5rem !important;
+        }
     }
 
     /**#################
@@ -61,11 +82,54 @@
         .main-tile .collection-info .collection-desc {
             font-size: 3vw;
         }
+
+        .tile-new {
+            padding: 0;
+            width: 80%;
+        }
+
+        .main-tile .collection-info .collection-title h2 {
+            font-size: 3.3rem;
+        }
     }
 
     @media (max-width: 500px) {
         .tile-collection {
             width: 90%;
+        }
+
+        .tile-new {
+            padding: 0;
+            width: 100%;
+            gap: 20px;
+        }
+
+        .main-button {
+            padding: 15px 40px;
+            font-size: 1rem;
+        }
+
+        .main-tile .collection-info .collection-title {
+            top: 0;
+        }
+
+        .tile-new .new-collection-container {
+            gap: 6px;
+        }
+
+        .tile-new .validate-button-black {
+            font-size: 0.8rem;
+        }
+    }
+
+    @media (max-width: 350px) {
+
+        .main-tile .collection-info .collection-title {
+            top: -2%;
+        }
+
+        .main-tile .collection-info .collection-title h2 {
+            font-size: 2.3rem;
         }
     }
 
@@ -115,7 +179,19 @@
             padding: 3px 5px;
         }
 
-        td, th {
+        td,
+        th {
             padding: 4px;
+        }
+    }
+
+    /**###################
+    ####### FOOTER #######
+    ####################*/
+
+    @media (max-width: 800px) {
+        footer .validate-button-white {
+            font-size: 0.8rem !important;
+            padding: 8px 16px;
         }
     }

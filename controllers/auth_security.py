@@ -40,10 +40,8 @@ def auth_login_post():
             session['nom'] = user['nom']
             print(user['login'], user['role'])
             if user['role'] == 'ROLE_admin':
-                # return redirect('/admin/commande/index')
-                return redirect('/')
+                return redirect('/admin/vetement/show')                
             else:
-                # return redirect('/client/article/show')
                 return redirect('/')
     else:
         flash(u'Nom d\'utilisateur ou mot de passe invalide.', 'alert-warning')

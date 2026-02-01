@@ -12,7 +12,8 @@ nav {
     align-items: center;
     position: relative;
     z-index: var(--nav-zindex);
-    width: calc(100% - 40px);
+    width: 100%;
+    box-sizing: border-box;
     background-color: var(--black);
     padding: 0px 20px;
     height: var(--nav-height);
