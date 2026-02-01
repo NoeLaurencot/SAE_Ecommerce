@@ -1,5 +1,3 @@
-#! /usr/bin/python
-# -*- coding:utf-8 -*-
 from flask import Blueprint
 from flask import Flask, request, render_template, redirect, abort, flash, session
 
@@ -18,7 +16,7 @@ def client_article_show():                                 # remplace client_ind
         id_client = None
 
     sql = '''  
-    SELECT id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement,prix_vetement as prix
+    SELECT id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement ,prix_vetement as prix
     FROM vetement
     JOIN matiere
         ON matiere.id_matiere = vetement.matiere_id
@@ -35,7 +33,7 @@ def client_article_show():                                 # remplace client_ind
     condition_and = ""
     # utilisation du filtre
     mycursor.execute(sql)
-    get_db().commit()
+    # get_db().commit()
 
     vetements = mycursor.fetchall()
 

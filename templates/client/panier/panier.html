@@ -5,33 +5,84 @@
 {% endblock %}
 
 {% block body %}
-    <main>
-        <div class="main-container-row align-normal gap10">
-            <div class="main-tile-col gap10 width60p">
-                <h1 class="tile-title no-margin">Panier</h1>
+<main>
+    <div class="panier-main-container">
+        <h1 class="tile-title no-margin">Panier</h1>
+        <div class="panier-section-container">
+            <div class="panier-section panier-articles">
                 {% if lignes_panier %}
-					{% for ligne_panier in lignes_panier %}
-					    <div class="divider-fancy"></div>
-                        <div class="panier-tile">
-                            <div class="panier-img-container">
-                                <img src="{{ url_for('static', filename='assets/images/clothes/') }}{{ ligne_panier.photo }}" alt="Chemise"> 
-                            </div>
-                            <div class="panier-info-container">
-                                <h3 class="no-margin">{{ ligne_panier.nom_vetement }}</h3>
-                                <span>{{ ligne_panier.libelle_marque }}</span>
-                                <span>Taille {{ ligne_panier.libelle_taille }}</span>
-                                <span>Quantité: {{ ligne_panier.quantite }}</span>
-                            </div>
-                        </div>
-					{% endfor %}
-				{% else %}
-                    <div class="divider-fancy"></div>
-					panier vide
-				{% endif %}
+                {% for ligne_panier in lignes_panier %}
+                <div class="divider"></div>
+                <div class="panier-tile">
+                    <div class="panier-img-container">
+                        <img src="{{ url_for('static', filename='assets/images/clothes/') }}{{ ligne_panier.photo }}"
+                            alt="Chemise">
+                    </div>
+                    <div class="panier-info-container">
+                        <h3 class="no-margin">{{ ligne_panier.nom_vetement }}</h3>
+                        <span>{{ ligne_panier.libelle_marque }}</span>
+                        <span>Taille {{ ligne_panier.libelle_taille }}</span>
+                        <span>Quantité: {{ ligne_panier.quantite }}</span>
+                        <span><b>{{ ligne_panier.prix_vetement }}€</b></span>
+                    </div>
+                    <form action="/client/panier/delete/line" method="post">
+                        <input hidden type="text" value="{{ ligne_panier.id_vetement }}" name="id-ligne">
+                        <button class="material-symbols-outlined panier-item-delete" type="submit">delete</button>
+                    </form>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="divider"></div>
+                <span>panier vide</span>
+                {% endif %}
             </div>
-            <div class="main-tile-col width40p">
-                <span>Récapitulatif du panier</span>
+
+            <div class="panier-section panier-paiement">
+                <h2 class="no-margin">Paiement</h2>
+                <div class="divider"></div>
+                <div class="panier-paiement-line">
+                    <span>Sous-total</span>
+                    <span class="panier-paiement-link"></span>
+                    {% if lignes_panier %}
+                    <span>{{ panier_prix.prix_HT | round(2) }} €</span>
+                    {% else %}
+                    <span>0.00 €</span>
+                    {% endif %}
+                </div>
+                <div class="divider"></div>
+                <div class="panier-paiement-line">
+                    <span>Taxes</span>
+                    <span class="panier-paiement-link"></span>
+                    {% if lignes_panier %}
+                    <span>{{ panier_prix.prix_taxe | round(2) }} €</span>
+                    {% else %}
+                    <span>0.00 €</span>
+                    {% endif %}
+                </div>
+                <div class="divider"></div>
+                <div class="panier-paiement-line paiement-total">
+                    <span>Total</span>
+                    <span class="panier-paiement-link"></span>
+                    {% if lignes_panier %}
+                    <span>{{ panier_prix.prix_TTC | round(2) }} €</span>
+                    {% else %}
+                    <span>0.00 €</span>
+                    {% endif %}
+                </div>
+                <div class="panier-paiement-promo">
+                    <span>Ajouter code promotionnel</span>
+                    <div class="panier-promo-container">
+                        <input type="text" placeholder="Code promo...">
+                        <button class="validate-button-white-outline">Valider</button>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <form action="/client/panier" method=""> <!-- TODO changer la route pour passer commande -->
+                    <button class="validate-button-black" type="submit">
+                        <span class="material-symbols-outlined">lock</span>Passer au paiement</button>
+                </form>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 {% endblock %}

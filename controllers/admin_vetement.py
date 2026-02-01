@@ -3,7 +3,7 @@ import os.path
 from random import random
 
 from flask import Blueprint
-from flask import request, render_template, redirect, flash
+from flask import request, render_template, redirect, flash, session
 
 from connexion_db import get_db
 
@@ -13,9 +13,12 @@ admin_article = Blueprint('admin_article', __name__,
 
 @admin_article.route('/admin/vetement/show')
 def show_vetement():
+    if 'login' not in session or session['role'] != 'ROLE_admin':
+        flash(u'Vous n\'avez pas les droits pour accéder à cette page','alert-danger')
+        return redirect('/')
     mycursor = get_db().cursor()
     sql = '''  
-    SELECT id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement
+    SELECT id_vetement, prix_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement, id_type_vetement
     FROM vetement
     JOIN matiere
         ON matiere.id_matiere = vetement.matiere_id
@@ -26,7 +29,8 @@ def show_vetement():
     JOIN taille
         ON taille.id_taille = vetement.taille_id
     JOIN type_vetement
-        ON type_vetement.id_type_vetement = vetement.type_vetement_id;
+        ON type_vetement.id_type_vetement = vetement.type_vetement_id
+    ORDER BY id_type_vetement;
     '''
     mycursor.execute(sql)
     vetements = mycursor.fetchall()

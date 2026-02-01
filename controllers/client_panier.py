@@ -11,7 +11,7 @@ client_panier = Blueprint('client_panier', __name__,
 def client_panier_show():
     mycursor = get_db().cursor()
     if 'id_user' not in session:
-        flash(u'Veuillez vous conntecter pour accéder au panier','alert-warning')
+        flash(u'Veuillez vous connecter pour accéder au panier','alert-warning')
         return redirect('/login')
     id_utilisateur = session['id_user']
     param = (id_utilisateur)
@@ -26,11 +26,25 @@ def client_panier_show():
     """
     mycursor.execute(sql, param)
     lignes_panier = mycursor.fetchall()
-    return render_template('client/panier/panier.html', lignes_panier = lignes_panier)
+
+    sql = """
+    SELECT SUM(prix_vetement * quantite) as prix_TTC, SUM(prix_vetement * 0.2 * quantite) AS prix_taxe, SUM(prix_vetement * quantite - prix_vetement * 0.2 * quantite) AS prix_HT
+    FROM ligne_panier
+    INNER JOIN vetement ON ligne_panier.vetement_id = vetement.id_vetement
+    INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
+    WHERE id_utilisateur = %s;
+    """
+    mycursor.execute(sql, param)
+    panier_prix = mycursor.fetchone()
+    return render_template('client/panier/panier.html',
+                            lignes_panier = lignes_panier,
+                            panier_prix = panier_prix)
 
 
 @client_panier.route('/client/panier/add', methods=['POST'])
 def client_panier_add():
+    if 'login' not in session:
+        return redirect('/login')
     mycursor = get_db().cursor()
     id_client = session['id_user']
     id_vetement = request.form.get('id_vetement')
@@ -125,14 +139,35 @@ def client_panier_delete_line():
     mycursor = get_db().cursor()
     id_client = session['id_user']
     #id_declinaison_article = request.form.get('id_declinaison_article')
+    id_vetement = request.form.get("id-ligne")
 
-    sql = ''' selection de ligne du panier '''
+    param = (id_client, id_vetement)
 
-    sql = ''' suppression de la ligne du panier '''
-    sql2=''' mise à jour du stock de l'article : stock = stock + qté de la ligne pour l'article'''
+    sql = """
+    SELECT vetement_id, utilisateur_id, quantite, date_ajout
+    FROM ligne_panier
+    WHERE utilisateur_id = %s AND vetement_id = %s;
+    """
+    mycursor.execute(sql, param)
+    ligne_to_delete = mycursor.fetchone()
 
+    sql = """
+    DELETE FROM ligne_panier
+    WHERE utilisateur_id = %s AND vetement_id = %s;
+    """
+    mycursor.execute(sql, param)
     get_db().commit()
-    return redirect('/client/article/show')
+
+    param_quantite = (ligne_to_delete['quantite'], id_vetement)
+
+    sql = """
+    UPDATE vetement SET stock = (stock + %s)
+    WHERE id_vetement = %s;
+    """
+    mycursor.execute(sql, param_quantite)
+    get_db().commit()
+
+    return redirect('/client/panier')
 
 
 @client_panier.route('/client/panier/filtre', methods=['POST'])

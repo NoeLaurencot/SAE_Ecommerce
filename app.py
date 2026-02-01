@@ -8,13 +8,13 @@ import datetime
 from controllers.auth_security import *
 from controllers.fixtures_load import *
 
-from controllers.client_article import *
+from controllers.client_vetement import *
 from controllers.client_panier import *
 from controllers.client_commande import *
 from controllers.client_commentaire import *
 from controllers.client_coordonnee import *
 
-from controllers.admin_article import *
+from controllers.admin_vetement import *
 from controllers.admin_declinaison_article import *
 from controllers.admin_commande import *
 from controllers.admin_type_article import *
@@ -48,7 +48,20 @@ def inject_types_vetements():
     """
     mycursor.execute(sql)
     types_vetements_nav = mycursor.fetchall()
-    return dict(types_vetements_nav = types_vetements_nav)
+
+    total_panier = 0;
+    if 'login' in session:
+        id_user = session['id_user']
+        param = (id_user)
+        sql = """
+        SELECT SUM(quantite) AS total
+        FROM ligne_panier
+        WHERE utilisateur_id = %s;
+        """
+        mycursor.execute(sql, param)
+        total_panier = mycursor.fetchone()
+
+    return dict(types_vetements_nav = types_vetements_nav, total_panier = total_panier)
 
 ### Home ###
 
