@@ -1,13 +1,18 @@
-let searchbarButton = document.getElementById("nav-search-button");
+let searchbarOpenButton = document.getElementById("nav-search-open-button");
+let searchbarCloseButton = document.getElementById("nav-search-close-button");
 let search = document.getElementById("nav-search-container");
-let isActive = false;
+let input = document.getElementById('nav-searchbar');
 
-searchbarButton.addEventListener("click", function() {
-    if (!isActive) {
-        search.classList.add('nav-search-active');
-        isActive = true;
-    } else {
-        search.classList.remove('nav-search-active');
-        isActive = false;
+searchbarOpenButton.addEventListener("click", function () {
+    if (menuContainer.classList.contains("burger-menu-active")) {
+        closeMenu();
     }
+    search.classList.add("nav-search-active")
+    setTimeout(function () {
+        input.focus();
+    }, 50);
+});
+
+searchbarCloseButton.addEventListener("click", function () {
+    search.classList.remove("nav-search-active")
 });
