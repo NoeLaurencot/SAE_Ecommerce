@@ -28,7 +28,7 @@ def client_article_show():                                 # remplace client_ind
         ON taille.id_taille = vetement.taille_id
     JOIN type_vetement
         ON type_vetement.id_type_vetement = vetement.type_vetement_id
-    ORDER BY id_type_vetement;
+    ORDER BY id_vetement;
     '''
     list_param = []
     condition_and = ""
