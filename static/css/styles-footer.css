@@ -10,6 +10,14 @@ footer {
 footer .footer-tile {
 	display: flex;
 	padding: 20px;
+	justify-content: space-between;
+}
+
+footer .footer-init {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: 2%;
 }
 
 footer .footer-socials {

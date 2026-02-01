@@ -37,6 +37,7 @@ nav {
     display: flex;
     align-items: center;
     gap: 15px;
+    margin-left: 10px;
 }
 
 .horizontal-nav .nav-misc-container .button-search-bar {
@@ -49,21 +50,20 @@ nav {
     cursor: pointer;
 }
 
-.horizontal-nav .nav-misc-container > a,
-.horizontal-nav .nav-misc-container > button {
-    font-size: 2rem;
+#nav-search-open-button,
+.nav-panier-icon,
+.account-icon {
+    font-size: 2rem !important;
     transition: 0.5s color;
     line-height: 1;
     height: fit-content;
     width: fit-content;
 }
 
-.horizontal-nav .nav-misc-container button:hover {
-    color: var(--gold);
-}
-
-.horizontal-nav .nav-misc-container > a:hover {
-    color: var(--gold);
+#nav-search-open-button:hover,
+.nav-panier-container:hover .nav-panier-icon,
+.account-icon:hover {
+    color: var(--gold) !important;
 }
 
 .horizontal-nav .nav-misc-container .nav-link {
@@ -76,6 +76,27 @@ nav {
     height: fit-content;
     width: fit-content;
     display: flex;
+}
+
+.nav-panier-container {
+    position: relative;
+}
+
+.nav-panier-notif {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 0;
+    right: 0;
+    background-color: var(--gold);
+    color: var(--white);
+    font-size: 0.7rem;
+    font-weight: bold;
+    line-height: 1;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
 }
 
 .account-icon-circle {
@@ -160,18 +181,23 @@ nav {
 /* searchbar */
 
 .nav-search-container {
+    position: absolute;
+    top: 0;
+    left: 0;
     display: flex;
     align-items: stretch;
-    gap: 10px;
-    margin-left: 20px;
-    height: 40px;
+    background-color: var(--black);
+    z-index: var(--search-zindex);
+    height: var(--nav-height);
+    width: 100%;
 }
 
 .search-button-research {
     border: none;
     border-radius: 0;
     padding: 2px 8px;
-    background-color: var(--white);
+    background-color: var(--black);
+    color: var(--white);
     height: 100%;
 }
 
@@ -179,20 +205,38 @@ nav {
     cursor: pointer;
 }
 
-
 .nav-searchbar {
-    padding: 5px 10px;
+    padding: 10px 20px;
+    width: 100%;
     border-radius: 0;
+    color: var(--white);
+    background-color: var(--black);
     border: none;
-    font-size: 1rem;
+    font-size: 1.2rem;
 }
 
 .nav-search-container {
-    display: none;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s;
+}
+
+.nav-search-icons {
+    background-color: var(--black);
+    border: none;
+    color: var(--white);
+    width: var(--nav-height);
+    font-size: 2rem !important;
+}
+
+.nav-search-icons:hover {
+    cursor: pointer;
+    color: var(--gold);
 }
 
 .nav-search-active {
-    display: flex;
+    visibility: visible;
+    opacity: 1;
 }
 
 /* intérieur burger menu */
@@ -244,6 +288,9 @@ nav {
 }
 
 .burger-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     color: var(--white);
     padding-left: 30px;
     width: calc(100% - 30px);
@@ -256,6 +303,11 @@ nav {
 
 .burger-menu-container h1 {
     color: var(--white);
+}
+
+.burger-content h2 {
+    margin: 0;
+    line-height: 1;
 }
 
 .burger-content a:hover {

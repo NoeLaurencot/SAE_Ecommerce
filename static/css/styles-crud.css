@@ -1,0 +1,64 @@
+.crud-container {
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.crud-add-button {
+    position: fixed;
+    right: 20px;
+    z-index: 100;
+}
+
+.crud-img {
+    position: relative;
+    display: flex;
+}
+
+.crud-img img {
+    width: 80px;
+}
+
+.crud-img-name {
+    position: absolute;
+    top: -42px;
+    left: 0;
+    background-color: var(--black);
+    color: var(--white);
+    padding: 10px;
+    visibility: hidden;
+}
+
+.crud-img img:hover + .crud-img-name {
+    visibility: visible;
+}
+
+.crud-button-container {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}
+
+.crud-button-container a {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+}
+
+td, th {
+    padding: 8px;
+}
+
+th {
+    text-align: left;
+    border-bottom: solid 1px var(--black);
+}
+
+tr {
+    border-bottom: solid 1px rgb(156, 156, 156);
+}
+
+table {
+    overflow-x: scroll;
+    border-collapse: collapse;
+}

@@ -5,6 +5,8 @@
 	--gold: rgb(178, 164, 56);
     --burger-background: rgb(13, 13, 13);
     --burger-border: rgb(46, 46, 46);
+    --delete: rgb(192, 14, 14);
+    --gray: gray;
 
 	--nav-height: 90px;
 
@@ -14,6 +16,7 @@
     --nav-zindex: 500;
     --hamburger-zindex: 600;
     --hamburger-button-zindex: 700;
+    --search-zindex: 8000;
 }
 
 @font-face {
@@ -114,6 +117,26 @@ body {
 
 .validate-button-black-outline:hover {
     background-color: var(--white);
+    color: var(--gold);
+	cursor: pointer;
+}
+
+.validate-button-white-outline {
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+    align-items: center;
+    background-color: var(--white);
+    color: var(--black);
+    border : solid 1px var(--black);
+	padding: 10px 40px;
+	font-weight: 500;
+	font-family: "Playfair", sans-serif;
+	transition: 0.5s;
+}
+
+.validate-button-white-outline:hover {
+    background-color: var(--black);
     color: var(--gold);
 	cursor: pointer;
 }
@@ -234,14 +257,26 @@ h1, h2, h3 {
 
 .text-box h1, .text-box h2, .text-box h3 {
     font-family: 'Playfair';
+    font-weight: bold;
 }
 
 .text-box p {
-    font-family: 'GB Gamarond';
+    font-family: 'EB Garamond';
 }
 
 .divider-fancy {
     height: 1px;
-    width: calc(80% - 20px);
+    width: 100%;
     background-image: linear-gradient(to right, transparent, rgb(48,49,51), transparent)
+}
+
+.divider {
+    width: 100%;
+    border-top: solid 1px rgb(167, 167, 167);
+}
+
+.material-symbols-outlined {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }

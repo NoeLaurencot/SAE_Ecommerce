@@ -2,23 +2,46 @@
     ####### NAVBAR #######
     ####################*/
 
-    @media (max-width: 1200px) {
-
-    }
-
     @media (max-width: 800px) {
         .burger-menu-container {
             left: -50%;
             width: 50%;
         }
 
-        .burger-menu-scroll-wrapper {
-            width: calc(100% - 21px);
-            padding: 80px 10px 20px 10px;
-        }
-
         .burger-menu-active {
             left: 0;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .horizontal-nav .nav-misc-container .account-icon {
+            display: none;
+        }
+
+        .horizontal-nav .nav-logo {
+            width: clamp(50px, calc(100px + 3rem), 300px);
+        }
+
+        .burger-menu-scroll-wrapper {
+            padding: 80px 20px 20px 20px;
+            width: calc(100% - 41px);
+        }
+
+        .burger-menu-container h1 {
+            font-size: 1.7rem;
+        }
+
+        .burger-content h2 {
+            font-size: 1.3rem;
+        }
+
+        .nav-searchbar {
+            font-size: 1rem;
+        }
+
+        .burger-content {
+            padding-left: 0;
+            width: 100%;
         }
     }
 
@@ -43,5 +66,56 @@
     @media (max-width: 500px) {
         .tile-collection {
             width: 90%;
+        }
+    }
+
+    /**#####################
+    ####### BOUTIQUE #######
+    ######################*/
+
+    @media (min-width: 4000px) {
+        .card-vetement {
+            width: 11%;
+        }
+    }
+
+    @media (max-width: 800px) {
+        .card-vetement {
+            width: 40%;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .card-vetement {
+            width: 80%;
+        }
+    }
+
+    /**###################
+    ####### PANIER #######
+    ####################*/
+
+    @media (max-width: 800px) {
+        .panier-section-container {
+            flex-direction: column;
+        }
+
+        .panier-img-container {
+            width: 125px;
+            height: 125px;
+        }
+    }
+
+    /**###########################
+    ####### VETEMENT ADMIN #######
+    ############################*/
+
+    @media (max-width: 1000px) {
+        .crud-button-container a {
+            padding: 3px 5px;
+        }
+
+        td, th {
+            padding: 4px;
         }
     }
