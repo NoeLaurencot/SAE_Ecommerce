@@ -44,11 +44,24 @@ def client_panier_show():
 @client_panier.route('/client/panier/add', methods=['POST'])
 def client_panier_add():
     if 'login' not in session:
+        flash(u'Veuillez vous connecter pour ajouter au panier','alert-warning')
         return redirect('/login')
     mycursor = get_db().cursor()
     id_client = session['id_user']
     id_vetement = request.form.get('id_vetement')
     quantite = request.form.get('quantite')
+
+    param = (id_vetement)
+    sql = """
+    SELECT stock
+    FROM vetement
+    WHERE id_vetement = %s;
+    """
+    mycursor.execute(sql, param)
+    tmp = mycursor.fetchone()
+    if tmp['stock'] < int(quantite):
+        flash(u'Pas assez de stock','alert-warning')
+        return redirect('/client/vetement/show')
 
     # ---------
     #id_declinaison_article=request.form.get('id_declinaison_article',None)
@@ -72,9 +85,11 @@ def client_panier_add():
     #                                , article=article)
 
 # ajout dans le panier d'un article
-    sql = '''SELECT utilisateur_id,vetement_id,quantite
+    sql = """
+    SELECT utilisateur_id, vetement_id, quantite
     FROM ligne_panier
-    WHERE utilisateur_id = %s AND vetement_id = %s;'''
+    WHERE utilisateur_id = %s AND vetement_id = %s;
+    """
     mycursor.execute(sql, (id_client, id_vetement))
     tmp = mycursor.fetchall()
     if len(tmp) == 1:
