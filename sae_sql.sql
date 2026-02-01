@@ -144,7 +144,10 @@ VALUES ('admin',
         'admin@email.com', 'ROLE_admin', true, 'admin'),
        ('client',
         'pbkdf2:sha256:600000$Tn78W35fe8hsMj5v$ea2c5ec88c61fb4fb6853e7956af7bbcab0068e03381551e8d3b178446e4d30b',
-        'client@test.com', 'ROLE_client', true, 'client');
+        'client@test.com', 'ROLE_client', true, 'client'),
+        ('client2',
+        'pbkdf2:sha256:1000000$HtVbpNrVHXUJJDMe$38f7b87771d76e2d7d7f1cda32ba3b5e3defc7631b394e4ea55b47e6802c8a15',
+        'client2@test.com', 'ROLE_client', true, 'client');
 
 INSERT INTO taille (libelle_taille)
 VALUES ('XXS'),
@@ -241,7 +244,6 @@ VALUES ('Chemise de bureau bleue', 370, 'Chemise d''élégance intemporelle pour
     ('Chaussures de ville', 980, 'Chaussures de ville à patine artisanale sur cuir de veau.', 2, 6, 'shoes_leather.avif', 2, 2, 3, 5),
     ('Chaussure sneakers', 710, 'Sneakers à conception moderne alliant confort et style.', 8, 6, 'shoes_sneaker.avif', 3, 3, 3, 5),
     ('Chaussures baskets', 1200, 'Baskets de performance technique habillées de luxe.', 8, 6, 'shoes_sport.avif', 3, 3, 3, 5);
-"""
 
 INSERT INTO vetement_collection (vetement_id, collection_id)
 VALUES (1, 2),
@@ -291,39 +293,3 @@ VALUES (1, 2),
        (35, 2),
        (36, 1),
        (36, 3);
-
--- R1
-
-SELECT photo, id_vetement
-FROM vetement
-         INNER JOIN vetement_collection ON vetement.id_vetement = vetement_collection.vetement_id
-         INNER JOIN collection ON vetement_collection.collection_id = collection.id_collection
-WHERE id_collection = 3
-ORDER BY id_vetement DESC
-LIMIT 4;
-
--- R2
-
-SELECT libelle_type_vetement
-FROM type_vetement
-ORDER BY id_type_vetement;
-
--- R3
-
-SELECT id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement
-FROM vetement
-         JOIN matiere
-              ON matiere.id_matiere = vetement.matiere_id
-         JOIN fournisseur
-              ON fournisseur.id_fournisseur = vetement.fournisseur_id
-         JOIN marque
-              ON marque.id_marque = vetement.marque_id
-         JOIN taille
-              ON taille.id_taille = vetement.taille_id
-         JOIN type_vetement
-              ON type_vetement.id_type_vetement = vetement.type_vetement_id;
-
-
-SELECT SUM(quantite)
-FROM ligne_panier
-WHERE utilisateur_id = 1;

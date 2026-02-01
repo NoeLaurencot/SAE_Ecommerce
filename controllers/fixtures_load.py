@@ -248,7 +248,9 @@ def fct_fixtures_load():
           'admin@email.com', 'ROLE_admin', true, 'admin'),
           ('client',
           'pbkdf2:sha256:600000$Tn78W35fe8hsMj5v$ea2c5ec88c61fb4fb6853e7956af7bbcab0068e03381551e8d3b178446e4d30b',
-          'client@test.com', 'ROLE_client', true, 'client');
+          'client@test.com', 'ROLE_client', true, 'client'),
+          ('client2','pbkdf2:sha256:1000000$HtVbpNrVHXUJJDMe$38f7b87771d76e2d7d7f1cda32ba3b5e3defc7631b394e4ea55b47e6802c8a15',
+          'client2@test.com', 'ROLE_client', true, 'client');
      """
      mycursor.execute(sql)
      get_db().commit()
