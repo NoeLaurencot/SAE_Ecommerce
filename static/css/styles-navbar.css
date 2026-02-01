@@ -252,7 +252,7 @@ nav {
     z-index: var(--hamburger-zindex);
     background-color: var(--burger-background);
     border-right: solid 1px var(--burger-border);
-    transition: 0.5s;
+    transition: 0.5s left;
 }
 
 .burger-menu-scroll-wrapper {
