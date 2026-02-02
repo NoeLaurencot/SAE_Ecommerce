@@ -5,50 +5,54 @@
 {% endblock %}
 
 {% block body %}
-<main class="main-container-row wrap container-boutique">
-    {% for vetement in vetements %}
-    <div class="card-vetement">
-        <div class="card-img-container">
-            {% if vetement.photo is not none %}
-            <img class="card-img 
+<main class="boutique-container">
+    <div>
+        
+    </div>
+    <div class="main-container-row wrap container-boutique">
+        {% for vetement in vetements %}
+        <div class="card-vetement">
+            <div class="card-img-container">
+                {% if vetement.photo is not none %}
+                <img class="card-img 
                     {% if vetement.stock == 0 %}
                     grayscale
-                    {% endif %}" 
-                    src="{{ url_for('static', filename = 'assets/images/clothes/') }}{{ vetement.photo }}"
-                alt="image de {{ vetement.nom_vetement }}">
-            {% else %}<img class="card-img" src="{{ url_for('static', filename='assets/images/placeholder.svg') }}"
-                alt="image de {{ vetement.nom_vetement }}">
-            {% endif %}
-        </div>
-        <div class="text-box card-info">
-            <h3 class="no-margin">{{ vetement.marque | upper }}</h3>
-            <p class="no-margin">{{ vetement.nom_vetement }}</p>
-            <p class="no-margin">{{ vetement.libelle_type_vetement }}</p>
-            <div class="divider"></div>
-            <div class="card-price-button">
-                <div class="card-price">{{ vetement.prix }} €</div>
-                <form class="input-vetement-container" action="/client/panier/add" method="post">
-                    <input type="hidden" name="id_vetement" id="id_vetement" value="{{ vetement.id_vetement }}">
-                    <div class="input-vetement">
-                        <button class="material-symbols-outlined card-button" type="submit">shopping_cart</button>
-                        <div class="input-vetement-wrapper">
-                            <input class="card-input" type="number" name="quantite" id="quantite" value="1" min="1"
-                                max="{{ vetement.stock }}">
-                            <span class="material-symbols-outlined input-vetement-up">arrow_drop_up</span>
-                            <span class="material-symbols-outlined input-vetement-down">arrow_drop_down</span>
+                    {% endif %}" src="{{ url_for('static', filename = 'assets/images/clothes/') }}{{ vetement.photo }}"
+                    alt="image de {{ vetement.nom_vetement }}">
+                {% else %}<img class="card-img" src="{{ url_for('static', filename='assets/images/placeholder.svg') }}"
+                    alt="image de {{ vetement.nom_vetement }}">
+                {% endif %}
+            </div>
+            <div class="text-box card-info">
+                <h3 class="no-margin">{{ vetement.marque | upper }}</h3>
+                <p class="no-margin">{{ vetement.nom_vetement }}</p>
+                <p class="no-margin">{{ vetement.libelle_type_vetement }}</p>
+                <div class="divider"></div>
+                <div class="card-price-button">
+                    <div class="card-price">{{ vetement.prix }} €</div>
+                    <form class="input-vetement-container" action="/client/panier/add" method="post">
+                        <input type="hidden" name="id_vetement" id="id_vetement" value="{{ vetement.id_vetement }}">
+                        <div class="input-vetement">
+                            <button class="material-symbols-outlined card-button" type="submit">shopping_cart</button>
+                            <div class="input-vetement-wrapper">
+                                <input class="card-input" type="number" name="quantite" id="quantite" value="1" min="1"
+                                    max="{{ vetement.stock }}">
+                                <span class="material-symbols-outlined input-vetement-up">arrow_drop_up</span>
+                                <span class="material-symbols-outlined input-vetement-down">arrow_drop_down</span>
+                            </div>
                         </div>
-                    </div>
-                    {% if vetement.stock == 0 %}
-                    <span class="vetement-stock-warning">Rupture de stock</span>
-                    {% elif vetement.stock <= 4 %}
-                    <span class="vetement-stock-warning">Plus que {{ vetement.stock }} articles</span>
-                    {% endif %}
-                </form>
+                        {% if vetement.stock == 0 %}
+                        <span class="vetement-stock-warning">Rupture de stock</span>
+                        {% elif vetement.stock <= 4 %} <span class="vetement-stock-warning">Plus que {{ vetement.stock
+                            }} articles</span>
+                            {% endif %}
+                    </form>
+                </div>
             </div>
         </div>
+
+        {% endfor %}
+
     </div>
-
-    {% endfor %}
-
 </main>
 {% endblock %}
