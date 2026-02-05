@@ -7,7 +7,7 @@
 {% block body %}
 <main class="crud-container">
     <h3>Gestion vêtements</h3>
-    <a class="validate-button-black crud-add-button" href="#">ajouter un article</a>
+    <a class="validate-button-black crud-add-button" href="/admin/vetement/add">ajouter un article</a>
     <table>
         <thead>
             <tr>
@@ -43,7 +43,7 @@
                         <img src="{{ url_for('static', filename = 'assets/images/clothes/' + ligne.photo) }}"
                             alt="image de {{ ligne.nom_vetement }}">
                         {% else %}
-                        <img src="{{ url_for('static', filename='assets/images/clothes/placeholder.svg')}}"
+                        <img src="{{ url_for('static', filename='assets/images/placeholder.svg')}}"
                             alt="Pas d'image">
                         {% endif %}
                         <span class="crud-img-name">{{ ligne.photo }}</span>
