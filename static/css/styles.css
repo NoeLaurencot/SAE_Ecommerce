@@ -47,6 +47,8 @@ body {
 }
 
 #page-loader {
+    filter: brightness(0);
+    background-color: var(--black);
     filter: blur(100px);
 }
 
