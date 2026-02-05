@@ -23,7 +23,7 @@
                     <select name="matiere_id" required class="">
                         <option value="">Sélectionner une matière</option>
                         {% for matiere in matieres %}
-                             <option value="{{ matiere.id_matiere }}"> {{ matiere.id_matiere }}</option>
+                             <option value="{{ matiere.id_matiere }}"> {{ matiere.libelle_matiere }}</option>
                         {% endfor %}
                     </select>
                 </label>
