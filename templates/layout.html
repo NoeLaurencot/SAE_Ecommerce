@@ -19,12 +19,13 @@
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles-crud.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles-mobile.css') }}">
     {% endblock %}
+    <script src="{{ url_for('static', filename='js/pageLoading.js') }}"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/logo/favicon.avif')}}">
 </head>
 
 
-<body>
+<body id="page-loader">
 {% include('_nav.html') %}
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}

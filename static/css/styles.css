@@ -46,6 +46,10 @@ body {
 	min-height: 100vh;
 }
 
+#page-loader {
+
+}
+
 .main-button {
 	display: flex;
 	align-items: center;
