@@ -1,5 +1,21 @@
+.container-boutique-param {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.boutique-param-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px 9.4% 0 9.4%;
+    box-sizing: border-box;
+    width: 100%;
+}
+
 .container-boutique {
     align-items: flex-start;
+    padding-top: 10px;
 }
 
 .card-vetement {
@@ -131,4 +147,52 @@
 /* Firefox */
 .input-vetement input[type=number] {
     appearance: textfield;
+}
+
+/* Menu filtre */
+
+.filtre-menu-container {
+    visibility: hidden;
+    opacity: 0;
+    padding: 0 9.4% 0 9.4%;
+    height: 0;
+    transition: 0.5s padding;
+}
+
+.filtre-menu-active {
+    visibility: visible;
+    opacity: 1;
+    height: fit-content;
+    padding: 20px 9.4% 0 9.4%;
+}
+
+.filtre-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+}
+
+.filtre-form button,
+.filtre-form a {
+    width: 100px;
+    box-sizing: border-box;
+    font-size: 0.7rem;
+}
+
+.filtre-tile-container {
+    display: flex;
+    gap: 10px;
+}
+
+.filtre-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.filtre-tile input{
+    border: solid 1px var(--gray);
+    border-radius: none;
+    padding: 5px 10px;
 }

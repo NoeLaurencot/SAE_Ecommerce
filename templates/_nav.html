@@ -25,7 +25,7 @@
                     <div class="category-item-container">
                         {% for categorie in types_vetements_nav %}
                         <form action="/client/vetement/show" method="post">
-                            <input type="text" hidden name="filter_types" value="{{ categorie.libelle_type_vetement }}">
+                            <input type="text" hidden name="filter_types" value="{{ categorie.id_type_vetement }}">
                             <button type="submit">{{ categorie.libelle_type_vetement }}</button>
                         </form>
                         {% endfor %}

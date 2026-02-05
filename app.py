@@ -42,7 +42,7 @@ def teardown_db(exception):
 def inject_types_vetements():
     mycursor = get_db().cursor()
     sql = """
-    SELECT libelle_type_vetement
+    SELECT libelle_type_vetement, id_type_vetement
     FROM type_vetement
     ORDER BY id_type_vetement;
     """

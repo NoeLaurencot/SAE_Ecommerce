@@ -100,3 +100,172 @@
     cursor: pointer;
     color: var(--delete);
 }
+
+.panier-boutique-wrapper {
+    position: fixed;
+    top: 120px;
+    right: 20px;
+    z-index: 200;
+    box-sizing: border-box;
+}
+
+.panier-boutique-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border: none;
+    background-color: var(--black);
+    color: var(--white);
+    cursor: pointer;
+    transition: 0.3s color;
+}
+
+.panier-boutique-button:hover {
+    color: var(--gold);
+}
+
+.panier-boutique-container {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 350px;
+    max-height: 500px;
+    background-color: var(--white);
+    border: solid 1px var(--black);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: 0.3s all;
+}
+
+.panier-boutique-active .panier-boutique-container {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.panier-boutique-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: solid 1px var(--black);
+}
+
+.panier-boutique-header h3 {
+    font-family: 'Playfair', serif;
+}
+
+.panier-boutique-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--black);
+    transition: 0.3s color;
+}
+
+.panier-boutique-close:hover {
+    color: var(--delete);
+}
+
+.panier-boutique-items {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 300px;
+    padding: 10px;
+    gap: 10px;
+}
+
+.panier-boutique-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: solid 1px rgb(220, 220, 220);
+}
+
+.panier-boutique-item:last-child {
+    border-bottom: none;
+}
+
+.panier-boutique-item-img {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+}
+
+.panier-boutique-item-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.panier-boutique-item-info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 2px;
+    font-size: 0.85rem;
+}
+
+.panier-boutique-item-name {
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.panier-boutique-item-details {
+    color: var(--gray);
+    font-size: 0.75rem;
+}
+
+.panier-boutique-item-qty {
+    color: var(--gray);
+    font-size: 0.75rem;
+}
+
+.panier-boutique-item-price {
+    font-weight: bold;
+    color: var(--black);
+}
+
+.panier-boutique-item-delete {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--gray);
+    transition: 0.3s color;
+    align-self: center;
+}
+
+.panier-boutique-item-delete:hover {
+    color: var(--delete);
+}
+
+.panier-boutique-footer {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    gap: 15px;
+}
+
+.panier-boutique-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.panier-boutique-link {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}

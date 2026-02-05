@@ -304,6 +304,14 @@ nav {
     color: var(--white);
 }
 
+.burger-content button {
+    border: none;
+    background: none;
+    font-family: 'Nunito', sans-serif;
+    color: var(--white);
+    font-size: 1rem;
+}
+
 .burger-menu-container h1 {
     color: var(--white);
 }
@@ -315,6 +323,11 @@ nav {
 
 .burger-content a:hover {
     color: var(--gold);
+}
+
+.burger-content button:hover {
+    color: var(--gold);
+    cursor: pointer;
 }
 
 .burger-content .burger-boutique-category {

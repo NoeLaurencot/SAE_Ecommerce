@@ -1,10 +1,57 @@
 {% if session['login'] %}
-    <div>
-        <button id="panier-boutique-button">Panier</button>
-        <div>
-        {% if lignes_panier | length >= 1 %}
-            
-        {% endif %}
+<div class="panier-boutique-wrapper">
+    <button class="panier-boutique-button" id="panier-boutique-button">
+        <span class="material-symbols-outlined">shopping_cart</span>
+    </button>
+
+    <div class="panier-boutique-container" id="panier-boutique-container">
+        <div class="panier-boutique-header">
+            <h3 class="no-margin">Panier</h3>
+            <button class="panier-boutique-close" id="panier-boutique-close">
+                <span class="material-symbols-outlined">close</span>
+            </button>
         </div>
+
+        {% if lignes_panier | length > 0 %}
+        <div class="panier-boutique-items">
+            {% for ligne in lignes_panier %}
+            <div class="panier-boutique-item">
+                <div class="panier-boutique-item-img">
+                    <img src="{{ url_for('static', filename='assets/images/clothes/') }}{{ ligne.photo }}"
+                        alt="{{ ligne.nom_vetement }}">
+                </div>
+                <div class="panier-boutique-item-info">
+                    <span class="panier-boutique-item-name">{{ ligne.nom_vetement }}</span>
+                    <span class="panier-boutique-item-details">{{ ligne.libelle_marque }} - Taille {{
+                        ligne.libelle_taille }}</span>
+                    <span class="panier-boutique-item-qty">Qté: {{ ligne.quantite }}</span>
+                    <span class="panier-boutique-item-price">{{ ligne.prix_vetement }} €</span>
+                </div>
+                <form action="/client/panier/delete/line" method="post">
+                    <input hidden type="text" value="{{ ligne.id_vetement }}" name="id-ligne">
+                    <button class="panier-boutique-item-delete" type="submit">
+                        <span class="material-symbols-outlined">delete</span>
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="panier-boutique-footer">
+            <div class="divider"></div>
+            <div class="panier-boutique-total">
+                <span>Total</span>
+                <span class="panier-boutique-total-price">{{ panier_prix.prix_TTC | round(2) }} €</span>
+            </div>
+            <a href="/client/panier" class="validate-button-black panier-boutique-link">
+                Voir le panier
+            </a>
+        </div>
+        {% else %}
+        <div class="panier-boutique-items">
+            Le panier est vide
+        </div>
+        {% endif %}
     </div>
+</div>
 {% endif %}

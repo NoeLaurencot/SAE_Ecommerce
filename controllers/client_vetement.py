@@ -28,47 +28,53 @@ def client_vetement_show():
         ON taille.id_taille = vetement.taille_id
     JOIN type_vetement
         ON type_vetement.id_type_vetement = vetement.type_vetement_id
-    ORDER BY id_vetement;
     """
 
-    liste_param = []
+    list_param = []
 
     if "filter_word" in session or "filter_value_min" in session or "filter_value_max" in session or "filter_types" in session:
         sql = sql + " WHERE "
+        and_condition = ""
 
-    if "filter_word" in session:
-        sql = sql + " nom_vetement LIKE %s "
-        recherche = "%" + session["filter_word"] + "%"
-        list_param.append(recherche)
+        if "filter_word" in session:
+            sql = sql + " nom_vetement LIKE %s "
+            recherche = "%" + session["filter_word"] + "%"
+            list_param.append(recherche)
+            and_condition = " AND "
 
-    if "filter_value_min" in session and session['filter_value_min'] != '' and "filter_value_max" in session and session['filter_value_max'] != '':
-        sql = sql + " AND prix_vetement BETWEEN %s AND %s "
-        list_param.append(session['filter_value_min'])
-        list_param.append(session['filter_value_max'])
+        if "filter_value_min" in session and session['filter_value_min'] != '' and "filter_value_max" in session and session['filter_value_max'] != '':
+            sql = sql + and_condition + "prix_vetement BETWEEN %s AND %s "
+            list_param.append(session['filter_value_min'])
+            list_param.append(session['filter_value_max'])
+            and_condition = " AND "
 
-    elif "filter_value_min" in session and session['filter_value_min'] != '':
-        sql = sql + " AND prix_vetement >= %s "
-        list_param.append(session['filter_value_min'])
+        elif "filter_value_min" in session and session['filter_value_min'] != '':
+            sql = sql + and_condition + "prix_vetement >= %s "
+            list_param.append(session['filter_value_min'])
+            and_condition = " AND "
 
-    elif "filter_value_max" in session and session['filter_value_max'] != '':
-        sql = sql + " AND prix_vetement <= %s"
-        list_param.append(session['filter_value_max'])
-        
-    if "filter_types" in session and len(session['filter_types']) > 0:
-        sql = sql + " AND ("
-        last_item = session["filter_types"][-1]
+        elif "filter_value_max" in session and session['filter_value_max'] != '':
+            sql = sql + and_condition + "prix_vetement <= %s"
+            list_param.append(session['filter_value_max'])
+            and_condition = " AND "
+            
+        if "filter_types" in session and len(session['filter_types']) > 0:
+            sql = sql + and_condition + "("
+            last_item = session["filter_types"][-1]
 
-        for item in session["filter_types"]:
-            sql = sql + " id_type_com = %s "
-            if item != last_item:
-                sql = sql + " OR "
-            list_param.append(item)
+            for item in session["filter_types"]:
+                sql = sql + " id_type_vetement = %s "
+                if item != last_item:
+                    sql = sql + " OR "
+                list_param.append(int(item))
 
-        sql = sql + ")"
-    sql = sql + ";"
-
-    list_param = []
-    mycursor.execute(sql)
+            sql = sql + ")"
+            and_condition = " AND "
+        sql = sql + "ORDER BY id_vetement;"
+        mycursor.execute(sql, list_param)
+    else:
+        sql = sql + ";"
+        mycursor.execute(sql)
 
     vetements = mycursor.fetchall()
     
@@ -101,14 +107,26 @@ def client_vetement_show():
         lignes_panier = []
         panier_prix = []
 
+    sql = """
+    SELECT *
+    FROM type_vetement;
+    """
+    mycursor.execute(sql)
+    types_vetement = mycursor.fetchall()
+
     return render_template('client/boutique/boutique_vetement.html'
-                           , vetements=vetements
+                           , vetements = vetements
                            , panier_prix = panier_prix
-                           , lignes_panier = lignes_panier)
+                           , lignes_panier = lignes_panier
+                           , types_vetement = types_vetement)
 
 
 @client_vetement.route('/client/vetement/show', methods=['POST'])
 def client_vetement_filtre():
+    session.pop('filter_word','')
+    session.pop('filter_prix_min','')
+    session.pop('filter_prix_max','')
+    session.pop('filter_types','')
     filter_word = request.form.get('filter_word', None)
     filter_prix_min = request.form.get('filter_prix_min', None)
     filter_prix_max = request.form.get('filter_prix_max', None)
@@ -140,22 +158,38 @@ def client_vetement_filtre():
         flash(message, 'alert-success')
         session['filter_prix_max'] = filter_prix_max
     if filter_types and filter_types != []:
+        mycursor = get_db().cursor()
+        sql = """
+        SELECT libelle_type_vetement
+        FROM type_vetement
+        WHERE id_type_vetement = %s;
+        """
         if len(filter_types) == 1:
             message = u'Type de vêtement sélectionné: '
         else:
             message = u'Types de vêtement sélectionnés: '
-        for i in range(len(filter_types) - 2):
-            message += filter_types[i] + ", "
-        message += filter_types[len(filter_types) - 1]
+            for i in range(len(filter_types) - 1):
+                param = (filter_types[i])
+                mycursor.execute(sql, param)
+                nom_type_vetement = mycursor.fetchone()
+                message += nom_type_vetement['libelle_type_vetement'] + ", "
+        param = (filter_types[len(filter_types) - 1])
+        mycursor.execute(sql, param)
+        nom_type_vetement = mycursor.fetchone()
+        message += nom_type_vetement['libelle_type_vetement']
         flash(message, 'alert-success')
         session['filter_types'] = filter_types
+        print(filter_types)
 
-    print(filter_types)
     return redirect('/client/vetement/show')
 
 
-@client_vetement.route('/client/panier/filtre/suppr', methods=['POST'])
+@client_vetement.route('/client/vetement/filtre/suppr', methods=['GET'])
+@client_vetement.route('/client/vetement/filtre/suppr', methods=['POST'])
 def client_panier_filtre_suppr():
-    # suppression  des variables en session
+    session.pop('filter_word','')
+    session.pop('filter_prix_min','')
+    session.pop('filter_prix_max','')
+    session.pop('filter_types','')
     print("suppr filtre")
     return redirect('/client/vetement/show')

@@ -170,6 +170,37 @@
             width: 125px;
             height: 125px;
         }
+
+        .panier-boutique-container {
+            width: 300px;
+            max-height: 400px;
+        }
+
+        .panier-boutique-wrapper {
+            top: 100px;
+            right: 15px;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .panier-boutique-wrapper {
+            top: 90px;
+            right: 10px;
+        }
+
+        .panier-boutique-button {
+            width: 45px;
+            height: 45px;
+        }
+
+        .panier-boutique-container {
+            width: calc(100vw - 30px);
+            right: -5px;
+        }
+
+        .panier-boutique-item-name {
+            max-width: 140px;
+        }
     }
 
     /**###########################
