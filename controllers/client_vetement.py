@@ -192,4 +192,5 @@ def client_panier_filtre_suppr():
     session.pop('filter_prix_max','')
     session.pop('filter_types','')
     print("suppr filtre")
+    flash(u"Filtres réinitialisés","alert-warning")
     return redirect('/client/vetement/show')
