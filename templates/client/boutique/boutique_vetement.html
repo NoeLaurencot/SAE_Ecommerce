@@ -6,9 +6,7 @@
 
 {% block body %}
 <main class="boutique-container">
-    <div>
-        
-    </div>
+    {% include('client/boutique/_panier.html') %}
     <div class="main-container-row wrap container-boutique">
         {% for vetement in vetements %}
         <div class="card-vetement">

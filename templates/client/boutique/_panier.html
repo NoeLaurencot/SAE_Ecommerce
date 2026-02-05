@@ -1,19 +1,10 @@
-<div>
-{% if articles_panier | length >= 1 %}
-    <h3>Liste des articles dans mon panier</h3>
-        {% if validation is defined and validation == 1 %}
-            <a href="/client/article/show">Continuer ma commande</a>
-        {% else %}
-        <form action="/client/panier/vider" method="post" >
-            <button>Vider le panier</button>
-        </form>
-        <form action="/client/commande/valide" method="post" >
-            <button>Passer ma commande</button>
-        </form>
+{% if session['login'] %}
+    <div>
+        <button id="panier-boutique-button">Panier</button>
+        <div>
+        {% if lignes_panier | length >= 1 %}
+            
         {% endif %}
-        {% if prix_total %}
-        Total à payer : {{}}
-        {% endif %}
-
+        </div>
+    </div>
 {% endif %}
-</div>

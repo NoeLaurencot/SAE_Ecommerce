@@ -15,7 +15,7 @@ def client_article_show():                                 # remplace client_ind
     else:
         id_client = None
 
-    sql = '''  
+    sql = """ 
     SELECT id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement ,prix_vetement as prix
     FROM vetement
     JOIN matiere
@@ -29,7 +29,7 @@ def client_article_show():                                 # remplace client_ind
     JOIN type_vetement
         ON type_vetement.id_type_vetement = vetement.type_vetement_id
     ORDER BY id_vetement;
-    '''
+    """
     list_param = []
     condition_and = ""
     # utilisation du filtre
@@ -39,9 +39,10 @@ def client_article_show():                                 # remplace client_ind
     vetements = mycursor.fetchall()
 
 
-    sql3='''SELECT *
+    sql3 = """
+    SELECT *
     FROM type_vetement;
-    '''
+    """
 
 
     # pour le filtre
@@ -49,30 +50,38 @@ def client_article_show():                                 # remplace client_ind
     get_db().commit()
 
     types_article = mycursor.fetchall()
+    
+    mycursor = get_db().cursor()
     if 'login' in session:
-        sql ='''SELECT *
+        id_utilisateur = session['id_user']
+        param = (id_utilisateur)
+        sql = """
+        SELECT id_vetement, nom_vetement, vetement.photo, stock, prix_vetement, libelle_taille, libelle_marque, ligne_panier.quantite, ligne_panier.date_ajout
         FROM ligne_panier
-              WHERE utilisateur_id = %s;'''
-        mycursor.execute(sql, id_client)
-        get_db().commit()
+        INNER JOIN vetement ON ligne_panier.vetement_id = vetement.id_vetement
+        INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
+        INNER JOIN taille ON vetement.taille_id = taille.id_taille
+        INNER JOIN marque ON vetement.marque_id = marque.id_marque
+        WHERE id_utilisateur = %s;
+        """
+        mycursor.execute(sql, param)
+        lignes_panier = mycursor.fetchall()
 
-        articles_panier = mycursor.fetchall()
-
-        if len(articles_panier) >= 1:
-            sql = ''' SELECT sum(vetement.prix_vetement*quantite) as prix_total
-    FROM vetement
-    JOIN ligne_panier on vetement.id_vetement = ligne_panier.vetement_id
-    WHERE utilisateur_id = %s; '''
-            mycursor.execute(sql, id_client)
-            get_db().commit()
-
-            prix_total = mycursor.fetchone()
-        else:
-            prix_total = []
+        sql = """
+        SELECT SUM(prix_vetement * quantite) as prix_TTC, SUM(prix_vetement * 0.2 * quantite) AS prix_taxe, SUM(prix_vetement * quantite - prix_vetement * 0.2 * quantite) AS prix_HT
+        FROM ligne_panier
+        INNER JOIN vetement ON ligne_panier.vetement_id = vetement.id_vetement
+        INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
+        WHERE id_utilisateur = %s;
+        """
+        mycursor.execute(sql, param)
+        panier_prix = mycursor.fetchone()
     else:
-        prix_total = []
+        lignes_panier = []
+        panier_prix = []
+
     return render_template('client/boutique/boutique_vetement.html'
                            , vetements=vetements
-                           , prix_total=prix_total
-                           , items_filtre=types_article
+                           , panier_prix = panier_prix
+                           , lignes_panier = lignes_panier
                            )
