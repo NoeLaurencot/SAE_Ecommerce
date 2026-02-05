@@ -1,0 +1,75 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>ajouter un vetement</title>
+{% endblock %}
+
+{% block body %}
+    <h2>ajouter un vetement</h2>
+    <div class="">
+        <img class=""  style="width:200px; height:200px; border: 1px solid black; padding: 5px;" id="img_output" src="{{ url_for('static', filename = 'assets/images/clothes/')}}no_photo.jpeg" alt="">
+        <div class="">
+            <form class="" method="post" action="/admin/vetement/add" enctype="multipart/form-data">
+                <label for="nom">Nom :
+                    <input name="nom" type="text" value=""  class="" required>
+                </label>
+                <label for="prix">Prix (€) :
+                    <input name="prix" type="number" min="0.0" step="0.01" max="2147483647" value=""  class="" required>
+                </label>
+                <label for="description">Description :
+                    <input name="description" type="text" value=""  class="" required>
+                </label>
+                <label for="matiere_id">Matiere :
+                    <select name="matiere_id" required class="">
+                        <option value="">Sélectionner une matière</option>
+                        {% for matiere in matieres %}
+                             <option value="{{ matiere.id_matiere }}"> {{ matiere.id_matiere }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label for="type_vetement_id">Type de vetement :
+                    <select name="type_vetement_id" required class="">
+                        <option value="">Sélectionner un type de vetement</option>
+                        {% for type in types_vetement %}
+                             <option value="{{ type.id_type_vetement }}"> {{ type.libelle_type_vetement }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label for="photo"> Image :
+                    <input name="photo" type="file" onchange="loadFile(event)" class="">
+                </label>
+                <label for="marque_id">Marque :
+                    <select name="marque_id" required class="">
+                        <option value="">Sélectionner une marque de vetement</option>
+                        {% for marque in marques %}
+                             <option value="{{ marque.id_marque }}"> {{ marque.libelle_marque }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label for="fournisseur_id">Fournisseur :
+                    <select name="fournisseur_id" required class="">
+                        <option value="">Sélectionner un fournisseur</option>
+                        {% for fournisseur in fournisseurs %}
+                             <option value="{{ fournisseur.id_fournisseur }}"> {{ fournisseur.libelle_fournisseur }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label for="taille_id">Taille :
+                    <select name="taille_id" required class="">
+                        <option value="">Sélectionner une taille</option>
+                        {% for taille in tailles %}
+                             <option value="{{ taille.id_taille }}"> {{ taille.libelle_taille }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label for="stock">stock :
+                    <input name="stock" type="number" min="0" step="1" max="2147483647" value=""  class="" required>
+                </label>
+                <label for="submit">
+                    <input name="submit" type="submit" value="Ajouter" class="">
+                </label>
+            </form>
+        <a href="/admin/vetement/show"><button class="btn btn-secondary mt-2">annuler</button></a>
+        </div>
+    </div>
+{% endblock %}

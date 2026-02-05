@@ -37,47 +37,90 @@ def show_vetement():
     return render_template('admin/vetement/show_vetement.html', vetements=vetements)
 
 
-@admin_article.route('/admin/article/add', methods=['GET'])
-def add_article():
+@admin_article.route('/admin/vetement/add', methods=['GET'])
+def add_vetement():
     mycursor = get_db().cursor()
+    sql = '''  
+    SELECT *
+    FROM matiere;
+    '''
+    mycursor.execute(sql)
+    matieres = mycursor.fetchall()
 
-    return render_template('admin/article/add_article.html'
-                           #,types_article=type_article,
-                           #,couleurs=colors
-                           #,tailles=tailles
+    sql = '''  
+    SELECT *
+    FROM type_vetement;
+    '''
+    mycursor.execute(sql)
+    types_vetement = mycursor.fetchall()
+
+    sql = '''  
+    SELECT *
+    FROM marque;
+    '''
+    mycursor.execute(sql)
+    marques = mycursor.fetchall()
+
+    sql = '''  
+    SELECT *
+    FROM fournisseur;
+    '''
+    mycursor.execute(sql)
+    fournisseurs = mycursor.fetchall()
+
+    sql = '''  
+    SELECT *
+    FROM taille;
+    '''
+    mycursor.execute(sql)
+    tailles = mycursor.fetchall()
+
+    return render_template('admin/vetement/add_vetement.html'
+                           ,matieres=matieres
+                           ,types_vetement=types_vetement
+                           ,marques=marques
+                           ,fournisseurs=fournisseurs
+                           ,tailles=tailles
                             )
 
 
-@admin_article.route('/admin/article/add', methods=['POST'])
+@admin_article.route('/admin/vetement/add', methods=['POST'])
 def valid_add_article():
     mycursor = get_db().cursor()
 
     nom = request.form.get('nom', '')
-    type_article_id = request.form.get('type_article_id', '')
-    prix = request.form.get('prix', '')
     description = request.form.get('description', '')
-    image = request.files.get('image', '')
+    prix = request.form.get('prix', '')
+    matiere_id = request.form.get('matiere_id', '')
+    type_vetement_id = request.form.get('type_vetement_id', '')
+    photo = request.files.get('photo', '')
+    marque_id = request.form.get('marque_id', '')
+    fournisseur_id = request.form.get('fournisseur_id', '')
+    taille_id = request.form.get('fournisseur_id', '')
+    stock = request.form.get('stock', '')
 
-    if image:
+
+    if photo:
         filename = 'img_upload'+ str(int(2147483647 * random())) + '.png'
-        image.save(os.path.join('static/images/', filename))
+        photo.save(os.path.join('static/assets/images/clothes/', filename))
     else:
-        print("erreur")
-        filename=None
+        filename = 'img_upload'+ str(int(2147483647 * random())) + '.png'
+        photo.save(os.path.join('static/assets/images/placeholder.svg'))
 
-    sql = '''  requête admin_article_2 '''
+    sql = '''  
+    INSERT INTO vetement(nom_vetement, prix_vetement, description, matiere_id, type_vetement_id, photo, marque_id, fournisseur_id, taille_id, stock)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); 
+    '''
 
-    tuple_add = (nom, filename, prix, type_article_id, description)
+    tuple_add = (nom, prix, description, matiere_id, type_vetement_id, filename, marque_id, fournisseur_id, taille_id, stock)
     print(tuple_add)
     mycursor.execute(sql, tuple_add)
     get_db().commit()
 
-    print(u'article ajouté , nom: ', nom, ' - type_article:', type_article_id, ' - prix:', prix,
-          ' - description:', description, ' - image:', image)
-    message = u'article ajouté , nom:' + nom + '- type_article:' + type_article_id + ' - prix:' + prix + ' - description:' + description + ' - image:' + str(
-        image)
+    message = u'vetement ajouté , nom:' + nom + ' - description:' + description + ' - prix:' + prix + ' - matiere_id:' + matiere_id + ' - type_vetement:' + type_vetement_id + ' - photo:' + str(photo) + ' - marque_id:' + marque_id + ' - id_fournisseur:' + fournisseur_id + ' - taille_id:' + taille_id + ' - stock:' + stock 
+    print(message)
     flash(message, 'alert-success')
-    return redirect('/admin/article/show')
+    return redirect('/admin/vetement/show')
 
 
 @admin_article.route('/admin/article/delete', methods=['GET'])
