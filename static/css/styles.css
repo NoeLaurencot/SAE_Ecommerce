@@ -47,7 +47,7 @@ body {
 }
 
 #page-loader {
-
+    filter: blur(100px);
 }
 
 .main-button {
