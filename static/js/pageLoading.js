@@ -1,3 +1,12 @@
+let startTime = new Date();
+
 window.addEventListener("load", function() {
-    document.getElementById("page-loader").removeAttribute("id");
+    let body = document.getElementById("page-loader")
+    let finishTime = new Date() - startTime;
+    console.log(finishTime)
+    if (finishTime > 1000) {
+        body.style.transition = "0.4s filter";
+    }
+
+    body.removeAttribute("id");
 });

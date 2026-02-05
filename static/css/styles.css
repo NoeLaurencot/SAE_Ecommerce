@@ -47,9 +47,10 @@ body {
 }
 
 #page-loader {
-    filter: brightness(0);
     background-color: var(--black);
-    filter: blur(100px);
+    filter: brightness(0);
+    filter: opacity(0);
+    filter: blur(70px);
 }
 
 .main-button {
