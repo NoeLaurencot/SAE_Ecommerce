@@ -91,7 +91,7 @@ def not_found(e):
 app.register_blueprint(auth_security)
 app.register_blueprint(fixtures_load)
 
-app.register_blueprint(client_article)
+app.register_blueprint(client_vetement)
 app.register_blueprint(client_commande)
 app.register_blueprint(client_commentaire)
 app.register_blueprint(client_panier)

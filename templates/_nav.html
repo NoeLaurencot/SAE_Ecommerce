@@ -24,7 +24,10 @@
                     </a>
                     <div class="category-item-container">
                         {% for categorie in types_vetements_nav %}
-                        <a href="/client/vetement/show">{{ categorie.libelle_type_vetement }}</a>
+                        <form action="/client/vetement/show" method="post">
+                            <input type="text" hidden name="filter_types" value="{{ categorie.libelle_type_vetement }}">
+                            <button type="submit">{{ categorie.libelle_type_vetement }}</button>
+                        </form>
                         {% endfor %}
                     </div>
                 </div>
@@ -51,10 +54,10 @@
         <span id="nav-burger-bot"></span>
     </div>
 
-    <form class="nav-search-container" id="nav-search-container" action="/client/vetement/show">
+    <form class="nav-search-container" id="nav-search-container" action="/client/vetement/show" method="post">
         <button class="material-symbols-outlined nav-search-icons" id="nav-search-close-button"
             type="button">close</button>
-        <input class="nav-searchbar" id="nav-searchbar" type="text" required
+        <input class="nav-searchbar" id="nav-searchbar" type="text" required name="filter_word"
             placeholder="Rechercher dans la boutique...">
         <button class="material-symbols-outlined nav-search-icons" type="submit">search</button>
     </form>

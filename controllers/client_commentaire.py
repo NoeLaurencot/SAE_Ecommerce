@@ -12,7 +12,7 @@ client_commentaire = Blueprint('client_commentaire', __name__,
 
 
 @client_commentaire.route('/client/article/details', methods=['GET'])
-def client_article_details():
+def client_vetement_details():
     mycursor = get_db().cursor()
     id_article =  request.args.get('id_article', None)
     id_client = session['id_user']
