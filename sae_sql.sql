@@ -1,4 +1,4 @@
-USE sae_ecommerce;
+USE BDD_nlaurenc_sae;
 
 DROP TABLE IF EXISTS vetement_taille;
 DROP TABLE IF EXISTS vetement_collection;
@@ -293,3 +293,24 @@ VALUES (1, 2),
        (35, 2),
        (36, 1),
        (36, 3);
+
+
+-- R1
+
+SELECT id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement, prix_vetement AS prix      AÉ
+FROM vetement
+JOIN matiere
+    ON matiere.id_matiere = vetement.matiere_id
+JOIN fournisseur
+    ON fournisseur.id_fournisseur = vetement.fournisseur_id
+JOIN marque
+    ON marque.id_marque = vetement.marque_id
+JOIN taille
+    ON taille.id_taille = vetement.taille_id
+JOIN type_vetement
+    ON type_vetement.id_type_vetement = vetement.type_vetement_id
+JOIN vetement_collection
+    ON vetement.id_vetement = vetement_collection.vetement_id
+JOIN collection
+    ON collection.id_collection = vetement_collection.collection_id
+ORDER BY id_vetement;

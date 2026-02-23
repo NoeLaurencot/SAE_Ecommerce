@@ -28,17 +28,27 @@ def client_vetement_show():
         ON taille.id_taille = vetement.taille_id
     JOIN type_vetement
         ON type_vetement.id_type_vetement = vetement.type_vetement_id
+    JOIN vetement_collection
+        ON vetement.id_vetement = vetement_collection.vetement_id
+    JOIN collection
+        ON collection.id_collection = vetement_collection.collection_id
     """
 
     list_param = []
 
-    if "filter_word" in session or "filter_value_min" in session or "filter_value_max" in session or "filter_types" in session:
+    if "filter_name" in session or "filter_brand" in session or "filter_value_min" in session or "filter_value_max" in session or "filter_types" in session or "filter_collections" in session or "filter_matieres" in session:
         sql = sql + " WHERE "
         and_condition = ""
 
-        if "filter_word" in session:
+        if "filter_name" in session:
             sql = sql + " nom_vetement LIKE %s "
-            recherche = "%" + session["filter_word"] + "%"
+            recherche = "%" + session["filter_name"] + "%"
+            list_param.append(recherche)
+            and_condition = " AND "
+
+        if "filter_brand" in session:
+            sql = sql + and_condition + " libelle_marque LIKE %s "
+            recherche = "%" + session["filter_brand"] + "%"
             list_param.append(recherche)
             and_condition = " AND "
 
@@ -70,10 +80,41 @@ def client_vetement_show():
 
             sql = sql + ")"
             and_condition = " AND "
-        sql = sql + "ORDER BY id_vetement;"
+        if "filter_collections" in session and len(session['filter_collections']) > 0:
+            sql = sql + and_condition + "("
+            last_item = session["filter_collections"][-1]
+
+            for item in session["filter_collections"]:
+                sql = sql + " id_collection = %s "
+                if item != last_item:
+                    sql = sql + " OR "
+                list_param.append(int(item))
+
+            sql = sql + ")"
+            and_condition = " AND "
+        if "filter_matieres" in session and len(session['filter_matieres']) > 0:
+            sql = sql + and_condition + "("
+            last_item = session["filter_matieres"][-1]
+
+            for item in session["filter_matieres"]:
+                sql = sql + " id_matiere = %s "
+                if item != last_item:
+                    sql = sql + " OR "
+                list_param.append(int(item))
+
+            sql = sql + ")"
+            and_condition = " AND "
+        sql = sql + """
+        GROUP BY id_vetement
+        ORDER BY id_vetement;
+        """
+        print(sql)
         mycursor.execute(sql, list_param)
     else:
-        sql = sql + ";"
+        sql = sql + """
+        GROUP BY id_vetement
+        ORDER BY id_vetement;
+        """
         mycursor.execute(sql)
 
     vetements = mycursor.fetchall()
@@ -114,28 +155,54 @@ def client_vetement_show():
     mycursor.execute(sql)
     types_vetement = mycursor.fetchall()
 
+    sql = """
+    SELECT *
+    FROM collection;
+    """
+    mycursor.execute(sql)
+    collections = mycursor.fetchall()
+
+    sql = """
+    SELECT *
+    FROM matiere;
+    """
+    mycursor.execute(sql)
+    matieres = mycursor.fetchall()
+
     return render_template('client/boutique/boutique_vetement.html'
                            , vetements = vetements
                            , panier_prix = panier_prix
                            , lignes_panier = lignes_panier
-                           , types_vetement = types_vetement)
+                           , types_vetement = types_vetement
+                           , collections = collections
+                           , matieres = matieres)
 
 
 @client_vetement.route('/client/vetement/show', methods=['POST'])
 def client_vetement_filtre():
-    session.pop('filter_word','')
+    session.pop('filter_name','')
+    session.pop('filter_brand','')
+    session.pop('filter_matieres','')
     session.pop('filter_prix_min','')
     session.pop('filter_prix_max','')
     session.pop('filter_types','')
-    filter_word = request.form.get('filter_word', None)
+    session.pop('filter_collections','')
+    filter_name = request.form.get('filter_name', None)
+    filter_brand = request.form.get('filter_brand', None)
     filter_prix_min = request.form.get('filter_prix_min', None)
     filter_prix_max = request.form.get('filter_prix_max', None)
     filter_types = request.form.getlist('filter_types', None)
+    filter_collections = request.form.getlist('filter_collections', None)
+    filter_matieres = request.form.getlist('filter_matieres', None)
     
-    if filter_word and filter_word != '':
-        message = u'Filtre sur le nom: ' + filter_word
+    if filter_name and filter_name != '':
+        message = u'Filtre sur le nom: ' + filter_name
         flash(message, 'alert-success')
-        session['filter_word'] = filter_word
+        session['filter_name'] = filter_name
+    if filter_brand and filter_brand != '':
+        message = u'Filtre sur la marque: ' + filter_brand
+        flash(message, 'alert-success')
+        session['filter_brand'] = filter_brand
     if filter_prix_min and filter_prix_max:
         min = str(filter_prix_min).replace(' ', '').replace(',', '.')
         max = str(filter_prix_max).replace(' ', '').replace(',', '.')
@@ -179,7 +246,50 @@ def client_vetement_filtre():
         message += nom_type_vetement['libelle_type_vetement']
         flash(message, 'alert-success')
         session['filter_types'] = filter_types
-        print(filter_types)
+    if filter_collections and filter_collections != []:
+        mycursor = get_db().cursor()
+        sql = """
+        SELECT libelle_collection
+        FROM collection
+        WHERE id_collection = %s;
+        """
+        if len(filter_collections) == 1:
+            message = u'Collection sélectionné: '
+        else:
+            message = u'Collections sélectionnés: '
+            for i in range(len(filter_collections) - 1):
+                param = (filter_collections[i])
+                mycursor.execute(sql, param)
+                nom_collection = mycursor.fetchone()
+                message += nom_collection['libelle_collection'] + ", "
+        param = (filter_collections[len(filter_collections) - 1])
+        mycursor.execute(sql, param)
+        nom_collection = mycursor.fetchone()
+        message += nom_collection['libelle_collection']
+        flash(message, 'alert-success')
+        session['filter_collections'] = filter_collections
+    if filter_matieres and filter_matieres != []:
+        mycursor = get_db().cursor()
+        sql = """
+        SELECT libelle_matiere
+        FROM matiere
+        WHERE id_matiere = %s;
+        """
+        if len(filter_matieres) == 1:
+            message = u'Matière sélectionnée: '
+        else:
+            message = u'Matières sélectionnées: '
+            for i in range(len(filter_matieres) - 1):
+                param = (filter_matieres[i])
+                mycursor.execute(sql, param)
+                nom_matiere = mycursor.fetchone()
+                message += nom_matiere['libelle_matiere'] + ", "
+        param = (filter_matieres[len(filter_matieres) - 1])
+        mycursor.execute(sql, param)
+        nom_matiere = mycursor.fetchone()
+        message += nom_matiere['libelle_matiere']
+        flash(message, 'alert-success')
+        session['filter_matieres'] = filter_matieres
 
     return redirect('/client/vetement/show')
 
@@ -187,10 +297,13 @@ def client_vetement_filtre():
 @client_vetement.route('/client/vetement/filtre/suppr', methods=['GET'])
 @client_vetement.route('/client/vetement/filtre/suppr', methods=['POST'])
 def client_panier_filtre_suppr():
-    session.pop('filter_word','')
+    session.pop('filter_name','')
+    session.pop('filter_brand','')
+    session.pop('filter_matieres','')
     session.pop('filter_prix_min','')
     session.pop('filter_prix_max','')
     session.pop('filter_types','')
+    session.pop('filter_collections','')
     print("suppr filtre")
     flash(u"Filtres réinitialisés","alert-warning")
     return redirect('/client/vetement/show')

@@ -14,7 +14,10 @@
             <div class="filtre-tile-container">
                 <div class="filtre-tile">
                     <label for="vetement-nom">Nom du vêtement</label>
-                    <input type="text" id="vetement-nom" name="filter_word" placeholder="Filtrer..." {% if session['filter_word'] %}value="{{session['filter_word']}}"{% endif %}>
+                    <input type="text" id="vetement-nom" name="filter_name" placeholder="Filtrer..." {% if session['filter_name'] %}value="{{session['filter_name']}}"{% endif %}>
+
+                    <label for="vetement-marque">Nom de marque</label>
+                    <input type="text" id="vetement-marque" name="filter_brand" placeholder="Filtrer..." {% if session['filter_brand'] %}value="{{session['filter_brand']}}"{% endif %}>
                </div>
                <div class="filtre-tile">
                     <label>Type de vêtement</label>
@@ -22,6 +25,24 @@
                         <div>
                             <label for="type-{{ type.id_type_vetement }}">{{ type.libelle_type_vetement }}</label>
                             <input type="checkbox" name="filter_types" value="{{ type.id_type_vetement }}" id="type-{{ type.id_type_vetement }}" {% if type.id_type_vetement | string in session['filter_types'] %}checked{% endif %}>
+                        </div>
+                    {% endfor %}
+               </div>
+               <div class="filtre-tile">
+                    <label>Collection</label>
+                    {% for collection in collections %}
+                        <div>
+                            <label for="collection-{{ collection.id_collection }}">{{ collection.libelle_collection }}</label>
+                            <input type="checkbox" name="filter_collections" value="{{ collection.id_collection }}" id="collection-{{ collection.id_collection }}" {% if collection.id_collection | string in session['filter_collections'] %}checked{% endif %}>
+                        </div>
+                    {% endfor %}
+               </div>
+               <div class="filtre-tile">
+                    <label>Matière</label>
+                    {% for matiere in matieres %}
+                        <div>
+                            <label for="matiere-{{ matiere.id_matiere }}">{{ matiere.libelle_matiere }}</label>
+                            <input type="checkbox" name="filter_matieres" value="{{ matiere.id_matiere }}" id="matiere-{{ matiere.id_matiere }}" {% if matiere.id_matiere | string in session['filter_matieres'] %}checked{% endif %}>
                         </div>
                     {% endfor %}
                </div>
