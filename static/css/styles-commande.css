@@ -1,0 +1,12 @@
+.command-container {
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.command-button-container {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}

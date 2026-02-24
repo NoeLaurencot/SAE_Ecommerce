@@ -39,6 +39,9 @@
 .width40p {
     width: 40% !important;
 }
+.width100p {
+    width: 100% !important;
+}
 
 .align-normal {
     align-items: normal !important;

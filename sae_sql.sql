@@ -1,4 +1,4 @@
-USE BDD_nlaurenc_sae;
+USE sae_commerce;
 
 DROP TABLE IF EXISTS vetement_taille;
 DROP TABLE IF EXISTS vetement_collection;
@@ -80,10 +80,12 @@ CREATE TABLE fournisseur
 CREATE TABLE commande
 (
     id_commande INT AUTO_INCREMENT,
+    utilisateur_id INT,
     date_achat  DATE,
     etat_id     INT NOT NULL,
     PRIMARY KEY (id_commande),
-    CONSTRAINT fk_commande_etat FOREIGN KEY (etat_id) REFERENCES etat (id_etat)
+    CONSTRAINT fk_commande_etat FOREIGN KEY (etat_id) REFERENCES etat (id_etat),
+    CONSTRAINT fk_commande_utilisateur FOREIGN KEY (utilisateur_id) REFERENCES utilisateur (id_utilisateur)
 );
 
 CREATE TABLE vetement
@@ -297,7 +299,7 @@ VALUES (1, 2),
 
 -- R1
 
-SELECT id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement, prix_vetement AS prix      AÉ
+SELECT id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement, prix_vetement AS prix
 FROM vetement
 JOIN matiere
     ON matiere.id_matiere = vetement.matiere_id
@@ -314,3 +316,42 @@ JOIN vetement_collection
 JOIN collection
     ON collection.id_collection = vetement_collection.collection_id
 ORDER BY id_vetement;
+
+
+INSERT INTO commande (utilisateur_id, date_achat, etat_id)
+VALUES
+    (2, '2026-02-20', 1),
+    (3, '2026-02-21', 2),
+    (2, '2026-02-22', 3);
+
+INSERT INTO ligne_commande (commande_id, vetement_id, prix, quantite)
+VALUES
+    (1, 1, 370, 2),   -- Chemise de bureau bleue
+    (1, 10, 410, 1);  -- Pantalon jean
+
+INSERT INTO ligne_commande (commande_id, vetement_id, prix, quantite)
+VALUES
+    (2, 14, 1640, 1),  -- Polo blanc avec logo
+    (2, 22, 1900, 2),  -- Robe pencil blanche
+    (2, 31, 3700, 1);  -- Bottes modernes
+
+
+INSERT INTO ligne_commande (commande_id, vetement_id, prix, quantite)
+VALUES
+    (3, 27, 4360, 1),  -- Veste en cuir
+    (3, 35, 710, 3);   -- Chaussure sneakers
+
+SELECT login,date_achat,sum(quantite) as quantite,sum(prix*quantite) as prix,libelle_etat
+FROM commande
+JOIN utilisateur on commande.utilisateur_id = utilisateur.id_utilisateur
+JOIN etat on commande.etat_id = etat.id_etat
+JOIN ligne_commande on commande.id_commande = ligne_commande.commande_id
+GROUP BY id_commande;
+
+
+SELECT nom_vetement,quantite,prix,prix*quantite as prix_total
+FROM ligne_commande
+JOIN vetement on ligne_commande.vetement_id = vetement.id_vetement
+WHERE commande_id = 2;
+
+

@@ -161,15 +161,16 @@ def fct_fixtures_load():
      get_db().commit()
 
      sql = """
-     CREATE TABLE commande
-     (
-     id_commande INT AUTO_INCREMENT,
-     date_achat  DATE,
-     etat_id     INT NOT NULL,
-     PRIMARY KEY (id_commande),
-     CONSTRAINT fk_commande_etat FOREIGN KEY (etat_id) REFERENCES etat (id_etat)
-     );
-     """
+           CREATE TABLE commande (
+                   id_commande INT AUTO_INCREMENT,
+                   utilisateur_id INT,
+                   date_achat  DATE,
+                   etat_id     INT NOT NULL,
+                   PRIMARY KEY (id_commande),
+                   CONSTRAINT fk_commande_etat FOREIGN KEY (etat_id) REFERENCES etat (id_etat),
+                   CONSTRAINT fk_commande_utilisateur FOREIGN KEY (utilisateur_id) REFERENCES utilisateur (id_utilisateur)
+              );
+           """
      mycursor.execute(sql)
      get_db().commit()
 
