@@ -14,7 +14,7 @@ client_commande = Blueprint('client_commande', __name__,
 def client_commande_valide():
     mycursor = get_db().cursor()
     id_client = session['id_user']
-    sql = ''' selection des articles d'un panier 
+    sql = '''
     '''
     articles_panier = []
     if len(articles_panier) >= 1:
@@ -39,25 +39,46 @@ def client_commande_add():
     # choix de(s) (l')adresse(s)
 
     id_client = session['id_user']
-    sql = ''' selection du contenu du panier de l'utilisateur '''
-    items_ligne_panier = []
-    # if items_ligne_panier is None or len(items_ligne_panier) < 1:
-    #     flash(u'Pas d\'articles dans le ligne_panier', 'alert-warning')
-    #     return redirect('/client/article/show')
+    sql = '''SELECT utilisateur_id ,vetement_id,vetement.prix_vetement as prix,quantite
+        FROM ligne_panier
+        JOIN vetement on vetement.id_vetement = ligne_panier.vetement_id
+        WHERE utilisateur_id = %s;
+'''
+    mycursor.execute(sql,id_client)
+    items_ligne_panier = mycursor.fetchall()
+    if items_ligne_panier is None or len(items_ligne_panier) < 1:
+        flash(u'Pas de vêtement dans le panier', 'alert-warning')
+        return redirect('/client/vetement/show')
                                            # https://pynative.com/python-mysql-transaction-management-using-commit-rollback/
-    #a = datetime.strptime('my date', "%b %d %Y %H:%M")
+    a = datetime.now()
 
-    sql = ''' creation de la commande '''
+    sql = ''' INSERT INTO commande (utilisateur_id,date_achat,etat_id) 
+              VALUES (%s,%s,%s)'''
+    param = (id_client,a,1)
+    mycursor.execute(sql,param)
+    get_db().commit()
 
-    sql = '''SELECT last_insert_id() as last_insert_id'''
+    sql = '''SELECT last_insert_id() as last_insert_id
+    FROM commande'''
+    mycursor.execute(sql)
+    id_commande = mycursor.fetchone()['last_insert_id']
+    print(id_commande)
+
     # numéro de la dernière commande
     for item in items_ligne_panier:
-        sql = ''' suppression d'une ligne de panier '''
-        sql = "  ajout d'une ligne de commande'"
+        sql = '''DELETE FROM ligne_panier
+                WHERE utilisateur_id = %s and vetement_id = %s'''
+        param = (item['utilisateur_id'],item['vetement_id'])
+        mycursor.execute(sql,param)
+        get_db().commit()
+        sql1 = '''INSERT INTO ligne_commande (commande_id,vetement_id,prix,quantite)
+                  VALUES (%s,%s,%s,%s)'''
+        param = (id_commande,item['vetement_id'],item['prix'],item['quantite'])
+        mycursor.execute(sql1,param)
+        get_db().commit()
 
-    get_db().commit()
     flash(u'Commande ajoutée','alert-success')
-    return redirect('/client/article/show')
+    return redirect('/client/vetement/show')
 
 
 

@@ -354,4 +354,3 @@ FROM ligne_commande
 JOIN vetement on ligne_commande.vetement_id = vetement.id_vetement
 WHERE commande_id = 2;
 
-
