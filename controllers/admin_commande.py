@@ -23,7 +23,7 @@ def admin_commande_show():
     mycursor.execute(sql)
     commandes=mycursor.fetchall()
 
-    vetement_commande = None
+    vetement_commandes = None
     commande_adresses = None
     id_commande = request.args.get('id_commande', None)
     if id_commande != None:
@@ -33,11 +33,11 @@ def admin_commande_show():
                  WHERE commande_id = %s;
               '''
         mycursor.execute(sql,id_commande)
-        vetement_commande = mycursor.fetchall()
+        vetement_commandes = mycursor.fetchall()
         commande_adresses = []
     return render_template('admin/commandes/show.html'
                            , commandes=commandes
-                           , vetement_commande=vetement_commande
+                           , vetement_commandes=vetement_commandes
                            , commande_adresses=commande_adresses
                            )
 

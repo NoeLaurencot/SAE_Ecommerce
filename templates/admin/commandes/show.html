@@ -7,7 +7,28 @@
 {% block body %}
     <main>
         <div class="command-container">
-            
+            {% if vetement_commandes != None %}
+                <table class="width60p align-self-center">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Quantite</th>
+                    <th>Prix</th>
+                    <th>Prix total</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for vetement_commande in vetement_commandes %}
+                    <tr>
+                        <td>{{ vetement_commande.nom_vetement }}</td>
+                        <td>{{ vetement_commande.quantite }}</td>
+                        <td>{{ vetement_commande.prix }}</td>
+                        <td>{{ vetement_commande.prix_total }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            {% endif %}
         </div>
         <div class="command-container">
             <table>
@@ -29,11 +50,11 @@
                         <td>{{ commande.quantite }}</td>
                         <td>{{ commande.prix }}</td>
                         <td>{{ commande.libelle_etat }}</td>
-                        <td class="command-button-container">
+                        <td class="command-button-container ">
                             <form class="command" action="/admin/commande/valider" method="post">
                                 <input type="hidden" name="id_commande" id="id_commande"
                                        value="{{ commande.commande_id }}">
-                                <button class="validate-button-white-outline width100p">Valider (Expédier)</button>
+                                <button class="validate-button-white-outline width100p font-1rem">Valider (Expédier)</button>
                             </form>
                             <a class="validate-button-white-outline"
                                href="/admin/commande/show?id_commande={{ commande.commande_id }}">Details</a>

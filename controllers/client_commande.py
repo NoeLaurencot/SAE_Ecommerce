@@ -66,22 +66,33 @@ def client_commande_add():
 def client_commande_show():
     mycursor = get_db().cursor()
     id_client = session['id_user']
-    sql = '''  selection des commandes ordonnées par état puis par date d'achat descendant '''
-    commandes = []
+    sql = '''SELECT login,date_achat,sum(quantite) as quantite,sum(prix*quantite) as prix,libelle_etat,commande_id
+             FROM commande
+                      JOIN utilisateur on commande.utilisateur_id = utilisateur.id_utilisateur
+                      JOIN etat on commande.etat_id = etat.id_etat
+                      JOIN ligne_commande on commande.id_commande = ligne_commande.commande_id
+             WHERE utilisateur_id = %s
+             GROUP BY id_commande
+             ORDER BY date_achat DESC;'''
+    mycursor.execute(sql,id_client)
+    commandes = mycursor.fetchall()
 
-    articles_commande = None
+    vetement_commandes = None
     commande_adresses = None
     id_commande = request.args.get('id_commande', None)
     if id_commande != None:
-        print(id_commande)
-        sql = ''' selection du détails d'une commande '''
+        sql = ''' SELECT nom_vetement,quantite,prix,prix*quantite as prix_total
+                 FROM ligne_commande
+                          JOIN vetement on ligne_commande.vetement_id = vetement.id_vetement
+                 WHERE commande_id = %s;'''
+        mycursor.execute(sql,id_commande)
+        vetement_commandes = mycursor.fetchall()
 
         # partie 2 : selection de l'adresse de livraison et de facturation de la commande selectionnée
         sql = ''' selection des adressses '''
 
     return render_template('client/commandes/show.html'
                            , commandes=commandes
-                           , articles_commande=articles_commande
+                           , vetement_commandes=vetement_commandes
                            , commande_adresses=commande_adresses
                            )
-

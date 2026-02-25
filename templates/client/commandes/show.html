@@ -1,15 +1,62 @@
 {% extends('layout.html') %}
 
 {% block title %}
-<title>Commandes | Gaullois</title>
+    <title>Commandes | Gaullois</title>
 {% endblock %}
 
 {% block body %}
-<main>
-    <div class="main-container">
-        <div class="log-container">
-
+    <main>
+        <div class="command-container">
+            {% if vetement_commandes != None %}
+                <table class="width60p align-self-center">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Quantite</th>
+                    <th>Prix</th>
+                    <th>Prix total</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for vetement_commande in vetement_commandes %}
+                    <tr>
+                        <td>{{ vetement_commande.nom_vetement }}</td>
+                        <td>{{ vetement_commande.quantite }}</td>
+                        <td>{{ vetement_commande.prix }}</td>
+                        <td>{{ vetement_commande.prix_total }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            {% endif %}
         </div>
-    </div>
-</main>
+        <div class="command-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>Date de commande</th>
+                    <th>Nombre d'articles</th>
+                    <th>Coût total</th>
+                    <th>Etat de la commande</th>
+                    <th>Option</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for commande in commandes %}
+                    <tr>
+                        <td>{{ commande.date_achat }}</td>
+                        <td>{{ commande.quantite }}</td>
+                        <td>{{ commande.prix }}</td>
+                        <td>{{ commande.libelle_etat }}</td>
+                        <td class="command-button-container">
+                            <a class="validate-button-white-outline"
+                               href="/client/commande/show?id_commande={{ commande.commande_id }}">Details</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </main>
 {% endblock %}

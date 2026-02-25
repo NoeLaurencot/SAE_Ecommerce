@@ -31,6 +31,11 @@
                     </form>
                 </div>
                 {% endfor %}
+                    <form action="/client/panier/vider" class="panier-boutique-footer" method="post">
+                    <div class="divider"></div>
+                        <button class="validate-button-black panier-boutique-link font-1rem" >
+                        Vider le panier </button>
+                </form>
                 {% else %}
                 <div class="divider"></div>
                 <span>Le panier est vide</span>

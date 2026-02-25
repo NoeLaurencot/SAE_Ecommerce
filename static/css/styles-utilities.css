@@ -46,6 +46,12 @@
 .align-normal {
     align-items: normal !important;
 }
+.align-self-center {
+    align-self: center; !important;
+}
+.font-1rem {
+    font-size: 1rem;
+}
 
 .grayscale {
     filter: grayscale(1) !important;
