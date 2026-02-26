@@ -36,19 +36,14 @@ def client_vetement_show():
 
     list_param = []
 
-    if "filter_name" in session or "filter_brand" in session or "filter_value_min" in session or "filter_value_max" in session or "filter_types" in session or "filter_collections" in session or "filter_matieres" in session:
+    if "filter_word" in session or "filter_brand" in session or "filter_value_min" in session or "filter_value_max" in session or "filter_types" in session or "filter_collections" in session or "filter_matieres" in session:
         sql = sql + " WHERE "
         and_condition = ""
 
-        if "filter_name" in session:
-            sql = sql + " nom_vetement LIKE %s "
-            recherche = "%" + session["filter_name"] + "%"
+        if "filter_word" in session:
+            sql = sql + " nom_vetement LIKE %s OR libelle_marque LIKE %s"
+            recherche = "%" + session["filter_word"] + "%"
             list_param.append(recherche)
-            and_condition = " AND "
-
-        if "filter_brand" in session:
-            sql = sql + and_condition + " libelle_marque LIKE %s "
-            recherche = "%" + session["filter_brand"] + "%"
             list_param.append(recherche)
             and_condition = " AND "
 
@@ -180,29 +175,23 @@ def client_vetement_show():
 
 @client_vetement.route('/client/vetement/show', methods=['POST'])
 def client_vetement_filtre():
-    session.pop('filter_name','')
-    session.pop('filter_brand','')
+    session.pop('filter_word','')
     session.pop('filter_matieres','')
     session.pop('filter_prix_min','')
     session.pop('filter_prix_max','')
     session.pop('filter_types','')
     session.pop('filter_collections','')
-    filter_name = request.form.get('filter_name', None)
-    filter_brand = request.form.get('filter_brand', None)
+    filter_word = request.form.get('filter_word', None)
     filter_prix_min = request.form.get('filter_prix_min', None)
     filter_prix_max = request.form.get('filter_prix_max', None)
     filter_types = request.form.getlist('filter_types', None)
     filter_collections = request.form.getlist('filter_collections', None)
     filter_matieres = request.form.getlist('filter_matieres', None)
     
-    if filter_name and filter_name != '':
-        message = u'Filtre sur le nom: ' + filter_name
+    if filter_word and filter_word != '':
+        message = u'Filtre par mot: ' + filter_word
         flash(message, 'alert-success')
-        session['filter_name'] = filter_name
-    if filter_brand and filter_brand != '':
-        message = u'Filtre sur la marque: ' + filter_brand
-        flash(message, 'alert-success')
-        session['filter_brand'] = filter_brand
+        session['filter_word'] = filter_word
     if filter_prix_min and filter_prix_max:
         min = str(filter_prix_min).replace(' ', '').replace(',', '.')
         max = str(filter_prix_max).replace(' ', '').replace(',', '.')
@@ -297,8 +286,7 @@ def client_vetement_filtre():
 @client_vetement.route('/client/vetement/filtre/suppr', methods=['GET'])
 @client_vetement.route('/client/vetement/filtre/suppr', methods=['POST'])
 def client_panier_filtre_suppr():
-    session.pop('filter_name','')
-    session.pop('filter_brand','')
+    session.pop('filter_word','')
     session.pop('filter_matieres','')
     session.pop('filter_prix_min','')
     session.pop('filter_prix_max','')

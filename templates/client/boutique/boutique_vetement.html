@@ -13,11 +13,8 @@
         <form class="filtre-form" action="/client/vetement/show" method="post">
             <div class="filtre-tile-container">
                 <div class="filtre-tile">
-                    <label for="vetement-nom">Nom du vêtement</label>
-                    <input type="text" id="vetement-nom" name="filter_name" placeholder="Filtrer..." {% if session['filter_name'] %}value="{{session['filter_name']}}"{% endif %}>
-
-                    <label for="vetement-marque">Nom de marque</label>
-                    <input type="text" id="vetement-marque" name="filter_brand" placeholder="Filtrer..." {% if session['filter_brand'] %}value="{{session['filter_brand']}}"{% endif %}>
+                    <label for="search-word">Recherche par mot</label>
+                    <input type="text" id="search-word" name="filter_word" placeholder="Filtrer..." {% if session['filter_word'] %}value="{{session['filter_word']}}"{% endif %}>
                </div>
                <div class="filtre-tile">
                     <label>Type de vêtement</label>
