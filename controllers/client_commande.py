@@ -12,6 +12,7 @@ client_commande = Blueprint('client_commande', __name__,
 # validation de la commande : partie 2 -- vue pour choisir les adresses (livraision et facturation)
 @client_commande.route('/client/commande/valide', methods=['POST'])
 def client_commande_valide():
+
     mycursor = get_db().cursor()
     id_client = session['id_user']
     sql = '''
@@ -34,6 +35,9 @@ def client_commande_valide():
 
 @client_commande.route('/client/commande/add', methods=['POST'])
 def client_commande_add():
+    if 'login' not in session or session['role'] != 'ROLE_client':
+        flash(u'Un admin ne peut pas commander', 'alert-danger')
+        return redirect('/')
     mycursor = get_db().cursor()
 
     # choix de(s) (l')adresse(s)
@@ -62,9 +66,8 @@ def client_commande_add():
     FROM commande'''
     mycursor.execute(sql)
     id_commande = mycursor.fetchone()['last_insert_id']
-    print(id_commande)
 
-    # numéro de la dernière commande
+
     for item in items_ligne_panier:
         sql = '''DELETE FROM ligne_panier
                 WHERE utilisateur_id = %s and vetement_id = %s'''
@@ -85,6 +88,9 @@ def client_commande_add():
 
 @client_commande.route('/client/commande/show', methods=['get','post'])
 def client_commande_show():
+    if 'login' not in session or session['role'] != 'ROLE_client':
+        flash(u'Un admin ne peut pas commander', 'alert-danger')
+        return redirect('/')
     mycursor = get_db().cursor()
     id_client = session['id_user']
     sql = '''SELECT login,date_achat,sum(quantite) as quantite,sum(prix*quantite) as prix,libelle_etat,commande_id

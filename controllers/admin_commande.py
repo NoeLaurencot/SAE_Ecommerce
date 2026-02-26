@@ -11,6 +11,9 @@ admin_commande = Blueprint('admin_commande', __name__,
 
 @admin_commande.route('/admin/commande/show', methods=['get','post'])
 def admin_commande_show():
+    if 'login' not in session or session['role'] != 'ROLE_admin':
+        flash(u'Vous n\'avez pas les droits pour accéder à cette page', 'alert-danger')
+        return redirect('/')
     mycursor = get_db().cursor()
     admin_id = session['id_user']
     sql = '''SELECT login,date_achat,sum(quantite) as quantite,sum(prix*quantite) as prix,libelle_etat,commande_id
@@ -44,6 +47,9 @@ def admin_commande_show():
 
 @admin_commande.route('/admin/commande/valider', methods=['get','post'])
 def admin_commande_valider():
+    if 'login' not in session or session['role'] != 'ROLE_admin':
+        flash(u'Vous n\'avez pas les droits pour accéder à cette page', 'alert-danger')
+        return redirect('/')
     mycursor = get_db().cursor()
     commande_id = request.form.get('id_commande', None)
     print(commande_id)
