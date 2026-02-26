@@ -46,6 +46,9 @@ def client_panier_add():
     if 'login' not in session:
         flash(u'Veuillez vous connecter pour ajouter au panier','alert-warning')
         return redirect('/login')
+    if session['login'] == 'ROLE_admin':
+        flash(u'Un admin ne peut pas acheter', 'alert-warning')
+        return redirect('/')
     mycursor = get_db().cursor()
     id_client = session['id_user']
     id_vetement = request.form.get('id_vetement')
