@@ -19,6 +19,7 @@
                 <th>Fournisseur</th>
                 <th>Matiere</th>
                 <th>Taille</th>
+                <th>Collection</th>
                 <th>Stock</th>
                 <th>Image</th>
                 <th>Opérations</th>
@@ -36,6 +37,7 @@
                 <td>{{ ligne.fournisseur }}</td>
                 <td>{{ ligne.matiere }}</td>
                 <td>{{ ligne.taille }}</td>
+                <td>{{ ligne.collection }}</td>
                 <td><strong>{{ ligne.stock }}</strong></td>
                 <td>
                     <div class="crud-img">
@@ -51,9 +53,9 @@
                 </td>
                 <td class="crud-button-container">
                     <a class="validate-button-white-outline"
-                        href="#">supprimer</a>
+                        href="/admin/vetement/delete?id={{ ligne.id_vetement }}">supprimer</a>
                     <a class="validate-button-white-outline"
-                        href="#">editer</a>
+                        href="/admin/vetement/edit?id={{ ligne.id_vetement }}">editer</a>
                     <a class="validate-button-white-outline"
                         href="#">commentaires</a>
                 </td>

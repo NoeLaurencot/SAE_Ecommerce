@@ -18,7 +18,7 @@ def show_vetement():
         return redirect('/')
     mycursor = get_db().cursor()
     sql = '''  
-    SELECT id_vetement, prix_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement, id_type_vetement
+    SELECT id_vetement, prix_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement, id_type_vetement, libelle_collection AS collection
     FROM vetement
     JOIN matiere
         ON matiere.id_matiere = vetement.matiere_id
@@ -30,10 +30,15 @@ def show_vetement():
         ON taille.id_taille = vetement.taille_id
     JOIN type_vetement
         ON type_vetement.id_type_vetement = vetement.type_vetement_id
+    JOIN vetement_collection
+        ON vetement.id_vetement = vetement_collection.vetement_id
+    JOIN collection
+        ON collection.id_collection = vetement_collection.collection_id
     ORDER BY id_type_vetement;
     '''
     mycursor.execute(sql)
     vetements = mycursor.fetchall()
+    print(vetements)
     return render_template('admin/vetement/show_vetement.html', vetements=vetements)
 
 
@@ -75,12 +80,20 @@ def add_vetement():
     mycursor.execute(sql)
     tailles = mycursor.fetchall()
 
+    sql = '''  
+    SELECT *
+    FROM collection;
+    '''
+    mycursor.execute(sql)
+    collections = mycursor.fetchall()
+
     return render_template('admin/vetement/add_vetement.html'
                            ,matieres=matieres
                            ,types_vetement=types_vetement
                            ,marques=marques
                            ,fournisseurs=fournisseurs
                            ,tailles=tailles
+                           ,collections=collections
                             )
 
 
@@ -97,15 +110,14 @@ def valid_add_article():
     marque_id = request.form.get('marque_id', '')
     fournisseur_id = request.form.get('fournisseur_id', '')
     taille_id = request.form.get('fournisseur_id', '')
+    collection_id = request.form.get('collection_id', '')
     stock = request.form.get('stock', '')
-
-
+    
     if photo:
         filename = 'img_upload'+ str(int(2147483647 * random())) + '.png'
-        photo.save(os.path.join('static/assets/images/clothes/', filename))
+        photo.save(os.path.join('static/images/', filename))
     else:
-        filename = 'img_upload'+ str(int(2147483647 * random())) + '.png'
-        photo.save(os.path.join('static/assets/images/placeholder.svg'))
+        filename = "placeholder"
 
     sql = '''  
     INSERT INTO vetement(nom_vetement, prix_vetement, description, matiere_id, type_vetement_id, photo, marque_id, fournisseur_id, taille_id, stock)
@@ -115,59 +127,160 @@ def valid_add_article():
     tuple_add = (nom, prix, description, matiere_id, type_vetement_id, filename, marque_id, fournisseur_id, taille_id, stock)
     print(tuple_add)
     mycursor.execute(sql, tuple_add)
+
+    sql = '''SELECT last_insert_id() as last_insert_id
+    FROM vetement'''
+    mycursor.execute(sql)
+    id_vetement = mycursor.fetchone()['last_insert_id']
+
+    sql = '''
+    INSERT INTO vetement_collection(vetement_id, collection_id)
+    VALUES (%s, %s);
+    '''
+
+    tuple_add = (id_vetement, collection_id)
+    print(tuple_add)
+    mycursor.execute(sql, tuple_add)
+
     get_db().commit()
 
-    message = u'vetement ajouté , nom:' + nom + ' - description:' + description + ' - prix:' + prix + ' - matiere_id:' + matiere_id + ' - type_vetement:' + type_vetement_id + ' - photo:' + str(photo) + ' - marque_id:' + marque_id + ' - id_fournisseur:' + fournisseur_id + ' - taille_id:' + taille_id + ' - stock:' + stock 
+    message = u'vetement ajouté , nom:' + nom + ' - description:' + description + ' - prix:' + prix + ' - matiere_id:' + matiere_id + ' - type_vetement:' + type_vetement_id + ' - photo:' + str(photo) + ' - marque_id:' + marque_id + ' - id_fournisseur:' + fournisseur_id + ' - taille_id:' + taille_id + ' - collection_id:' + collection_id + ' - stock:' + stock 
     print(message)
     flash(message, 'alert-success')
     return redirect('/admin/vetement/show')
 
 
-@admin_article.route('/admin/article/delete', methods=['GET'])
-def delete_article():
-    id_article=request.args.get('id_article')
+@admin_article.route('/admin/vetement/delete', methods=['GET'])
+def delete_vetement():
+    id_vetement = request.args.get('id')
     mycursor = get_db().cursor()
-    sql = ''' requête admin_article_3 '''
-    mycursor.execute(sql, id_article)
+    """
+   
+    sql = ''' 
+        DELETE FROM vetement
+        WHERE id_vetement = %s
+    '''
+    mycursor.execute(sql, id_vetement)
     nb_declinaison = mycursor.fetchone()
+    """
+
+    """
     if nb_declinaison['nb_declinaison'] > 0:
         message= u'il y a des declinaisons dans cet article : vous ne pouvez pas le supprimer'
         flash(message, 'alert-warning')
+    """
+    if (False):
+        pass
     else:
-        sql = ''' requête admin_article_4 '''
-        mycursor.execute(sql, id_article)
-        article = mycursor.fetchone()
-        print(article)
-        image = article['image']
+        sql = '''
+        SELECT photo
+        FROM vetement
+        WHERE vetement.id_vetement = %s;
+        '''
+        print("aaaaaaaaaaaaaaaaaaaa", id_vetement)
+        mycursor.execute(sql, id_vetement)
+        vetement = mycursor.fetchone()
+        print(vetement)
 
-        sql = ''' requête admin_article_5  '''
-        mycursor.execute(sql, id_article)
+        if (vetement):
+            image = vetement['photo']
+        else:
+            image = ''
+        print(image)
+
+        sql = ''' 
+        DELETE FROM vetement_collection
+        WHERE vetement_id = %s;
+          '''
+        mycursor.execute(sql, id_vetement)
+
+        sql = ''' 
+        DELETE FROM ligne_panier
+        WHERE vetement_id = %s;
+          '''
+        mycursor.execute(sql, id_vetement)
+
+        sql = ''' 
+        DELETE FROM ligne_commande
+        WHERE vetement_id = %s;
+          '''
+        mycursor.execute(sql, id_vetement)
+
+        sql = ''' 
+        DELETE FROM vetement
+        WHERE id_vetement = %s;
+          '''
+        mycursor.execute(sql, id_vetement)
         get_db().commit()
         if image != None:
-            os.remove('static/images/' + image)
+            #os.remove('static/images/' + image)
+            pass
 
-        print("un article supprimé, id :", id_article)
-        message = u'un article supprimé, id : ' + id_article
+        print("un vetement supprimé, id : ", id_vetement)
+        message = u'un vetement supprimé, id : ' + id_vetement
         flash(message, 'alert-success')
 
-    return redirect('/admin/article/show')
+    return redirect('/admin/vetement/show')
 
 
-@admin_article.route('/admin/article/edit', methods=['GET'])
-def edit_article():
-    id_article=request.args.get('id_article')
+@admin_article.route('/admin/vetement/edit', methods=['GET'])
+def edit_vetement():
+    id_vetement = request.args.get('id')
+
     mycursor = get_db().cursor()
     sql = '''
-    requête admin_article_6    
+    SELECT *
+    FROM vetement
+    JOIN vetement_collection
+        ON vetement.id_vetement = vetement_collection.vetement_id
+    JOIN collection
+        ON collection.id_collection = vetement_collection.collection_id
+    WHERE id_vetement = %s 
     '''
-    mycursor.execute(sql, id_article)
-    article = mycursor.fetchone()
-    print(article)
-    sql = '''
-    requête admin_article_7
+    mycursor.execute(sql, id_vetement)
+    vetement = mycursor.fetchone()
+
+    sql = '''  
+    SELECT *
+    FROM matiere;
     '''
     mycursor.execute(sql)
-    types_article = mycursor.fetchall()
+    matieres = mycursor.fetchall()
+
+    sql = '''  
+    SELECT *
+    FROM type_vetement;
+    '''
+    mycursor.execute(sql)
+    types_vetement = mycursor.fetchall()
+
+    sql = '''  
+    SELECT *
+    FROM marque;
+    '''
+    mycursor.execute(sql)
+    marques = mycursor.fetchall()
+
+    sql = '''  
+    SELECT *
+    FROM fournisseur;
+    '''
+    mycursor.execute(sql)
+    fournisseurs = mycursor.fetchall()
+
+    sql = '''  
+    SELECT *
+    FROM taille;
+    '''
+    mycursor.execute(sql)
+    tailles = mycursor.fetchall()
+
+    sql = '''  
+    SELECT *
+    FROM collection;
+    '''
+    mycursor.execute(sql)
+    collections = mycursor.fetchall()
 
     # sql = '''
     # requête admin_article_6
@@ -175,28 +288,45 @@ def edit_article():
     # mycursor.execute(sql, id_article)
     # declinaisons_article = mycursor.fetchall()
 
-    return render_template('admin/article/edit_article.html'
-                           ,article=article
-                           ,types_article=types_article
-                         #  ,declinaisons_article=declinaisons_article
-                           )
+    return render_template('admin/vetement/edit_vetement.html'
+                           ,vetement=vetement
+                           ,matieres=matieres
+                           ,types_vetement=types_vetement
+                           ,marques=marques
+                           ,fournisseurs=fournisseurs
+                           ,tailles=tailles
+                           ,collections=collections
+                            )
 
 
-@admin_article.route('/admin/article/edit', methods=['POST'])
-def valid_edit_article():
-    mycursor = get_db().cursor()
-    nom = request.form.get('nom')
-    id_article = request.form.get('id_article')
-    image = request.files.get('image', '')
-    type_article_id = request.form.get('type_article_id', '')
+@admin_article.route('/admin/vetement/edit', methods=['POST'])
+def valid_edit_vetement():
+    id_vetement = request.form.get('id_vetement', '')
+    nom = request.form.get('nom', '')
+    description = request.form.get('description', '')
     prix = request.form.get('prix', '')
-    description = request.form.get('description')
+    matiere_id = request.form.get('matiere_id', '')
+    type_vetement_id = request.form.get('type_vetement_id', '')
+    photo = request.files.get('photo', '')
+    marque_id = request.form.get('marque_id', '')
+    fournisseur_id = request.form.get('fournisseur_id', '')
+    taille_id = request.form.get('fournisseur_id', '')
+    collection_id = request.form.get('collection_id', '')
+    stock = request.form.get('stock', '')
+
+    print(photo)
+
+    mycursor = get_db().cursor()
+    #mycursor.execute(sql, id_vetement)
+
+    """
     sql = '''
-       requête admin_article_8
+
        '''
-    mycursor.execute(sql, id_article)
     image_nom = mycursor.fetchone()
     image_nom = image_nom['image']
+    """
+    """
     if image:
         if image_nom != "" and image_nom is not None and os.path.exists(
                 os.path.join(os.getcwd() + "/static/images/", image_nom)):
@@ -206,19 +336,35 @@ def valid_edit_article():
             filename = 'img_upload_' + str(int(2147483647 * random())) + '.png'
             image.save(os.path.join('static/images/', filename))
             image_nom = filename
+    """
 
-    sql = '''  requête admin_article_9 '''
-    mycursor.execute(sql, (nom, image_nom, prix, type_article_id, description, id_article))
+    sql = '''  
+    UPDATE vetement
+    SET nom_vetement = %s, prix_vetement = %s, description = %s,
+    matiere_id = %s, type_vetement_id = %s, marque_id = %s,
+    fournisseur_id = %s, taille_id = %s, stock = %s
+    WHERE id_vetement = %s; 
+    '''
+    mycursor.execute(sql, (nom, prix, description, matiere_id, type_vetement_id, marque_id, fournisseur_id, taille_id, stock, id_vetement))
+
+    sql = '''
+    DELETE FROM vetement_collection
+    WHERE vetement_id = %s;
+    '''
+    mycursor.execute(sql, id_vetement)
+
+    sql = '''
+    INSERT INTO vetement_collection(vetement_id, collection_id)
+    VALUES (%s, %s)
+    '''
+    mycursor.execute(sql, (id_vetement, collection_id))
 
     get_db().commit()
-    if image_nom is None:
-        image_nom = ''
-    message = u'article modifié , nom:' + nom + '- type_article :' + type_article_id + ' - prix:' + prix  + ' - image:' + image_nom + ' - description: ' + description
+    #if image_nom is None:
+    #    image_nom = ''
+    message = u'article modifié , nom:' + nom + ' - description:' + description + ' - prix:' + prix + ' - matiere_id:' + matiere_id + ' - type_vetement:' + type_vetement_id + ' - photo:' + str(photo) + ' - marque_id:' + marque_id + ' - id_fournisseur:' + fournisseur_id + ' - taille_id:' + taille_id + ' - collection_id:' + collection_id + ' - stock:' + stock 
     flash(message, 'alert-success')
-    return redirect('/admin/article/show')
-
-
-
+    return redirect('/admin/vetement/show')
 
 
 
