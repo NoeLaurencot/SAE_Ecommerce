@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+<title>Suppression impossible</title>
+{% endblock %}
+
+{% block body %}
+<main class="crud-container">
+    <h3>Suppression impossible</h3>
+    <p>{{ type_element }} <strong>« {{ libelle_element }} »</strong> que vous voulez supprimer est utilisé(e) par les vêtements suivants :</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Nom</th>
+                <th>Prix</th>
+                <th>Opérations</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vetement in vetements %}
+            <tr>
+                <td class="crud-img">
+                    <img src="/static/assets/images/clothes/{{ vetement.photo }}" alt="{{ vetement.nom_vetement }}">
+                </td>
+                <td>{{ vetement.nom_vetement }}</td>
+                <td>{{ vetement.prix_vetement }} €</td>
+                <td>
+                    <div class="crud-button-container">
+                        <a class="validate-button-white-outline" href="/admin/vetement/edit?id={{ vetement.id_vetement }}">Éditer</a>
+                        <a class="validate-button-white-outline" href="/admin/vetement/delete?id={{ vetement.id_vetement }}">Supprimer</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="crud-field-actions">
+        <a class="validate-button-black" href="{{ back_url }}">Retour</a>
+    </div>
+</main>
+{% endblock %}

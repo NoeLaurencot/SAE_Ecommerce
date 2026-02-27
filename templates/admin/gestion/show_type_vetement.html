@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+<title>Gestion types vêtements</title>
+{% endblock %}
+
+{% block body %}
+<main class="crud-container">
+    <h3>Gestion types vêtements</h3>
+    <a class="validate-button-black crud-add-button" href="/admin/type-vetement/add">Ajouter un type</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Libellé</th>
+                <th>Opérations</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if types_vetement | length >= 1 %}
+            {% for ligne in types_vetement %}
+            <tr>
+                <td>{{ ligne.id_type_vetement }}</td>
+                <td>{{ ligne.libelle_type_vetement }}</td>
+                <td class="crud-button-container">
+                    <a class="validate-button-white-outline" href="/admin/type-vetement/edit?id={{ ligne.id_type_vetement }}">Editer</a>
+                    <a class="validate-button-white-outline" href="/admin/type-vetement/delete?id={{ ligne.id_type_vetement }}">Supprimer</a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td>Aucun type de vêtement</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</main>
+{% endblock %}

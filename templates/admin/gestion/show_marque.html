@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+<title>Gestion marques</title>
+{% endblock %}
+
+{% block body %}
+<main class="crud-container">
+    <h3>Gestion marques</h3>
+    <a class="validate-button-black crud-add-button" href="/admin/marque/add">Ajouter une marque</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Libellé</th>
+                <th>Opérations</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if marques | length >= 1 %}
+            {% for ligne in marques %}
+            <tr>
+                <td>{{ ligne.id_marque }}</td>
+                <td>{{ ligne.libelle_marque }}</td>
+                <td class="crud-button-container">
+                    <a class="validate-button-white-outline" href="/admin/marque/edit?id={{ ligne.id_marque }}">Editer</a>
+                    <a class="validate-button-white-outline" href="/admin/marque/delete?id={{ ligne.id_marque }}">Supprimer</a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td>Aucune marque</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</main>
+{% endblock %}

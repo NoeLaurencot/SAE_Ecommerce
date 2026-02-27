@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+<title>Gestion matières</title>
+{% endblock %}
+
+{% block body %}
+<main class="crud-container">
+    <h3>Gestion matières</h3>
+    <a class="validate-button-black crud-add-button" href="/admin/matiere/add">Ajouter une matière</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Libellé</th>
+                <th>Opérations</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if matieres | length >= 1 %}
+            {% for ligne in matieres %}
+            <tr>
+                <td>{{ ligne.id_matiere }}</td>
+                <td>{{ ligne.libelle_matiere }}</td>
+                <td class="crud-button-container">
+                    <a class="validate-button-white-outline" href="/admin/matiere/edit?id={{ ligne.id_matiere }}">Editer</a>
+                    <a class="validate-button-white-outline" href="/admin/matiere/delete?id={{ ligne.id_matiere }}">Supprimer</a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td>Aucune matière</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</main>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+<title>Gestion tailles</title>
+{% endblock %}
+
+{% block body %}
+<main class="crud-container">
+    <h3>Gestion tailles</h3>
+    <a class="validate-button-black crud-add-button" href="/admin/taille/add">Ajouter une taille</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Libellé</th>
+                <th>Opérations</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if tailles | length >= 1 %}
+            {% for ligne in tailles %}
+            <tr>
+                <td>{{ ligne.id_taille }}</td>
+                <td>{{ ligne.libelle_taille }}</td>
+                <td class="crud-button-container">
+                    <a class="validate-button-white-outline" href="/admin/taille/edit?id={{ ligne.id_taille }}">Editer</a>
+                    <a class="validate-button-white-outline" href="/admin/taille/delete?id={{ ligne.id_taille }}">Supprimer</a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td>Aucune taille</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</main>
+{% endblock %}

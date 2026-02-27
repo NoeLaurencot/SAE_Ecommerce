@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+<title>Ajouter une marque</title>
+{% endblock %}
+
+{% block body %}
+<main class="crud-container">
+    <h2>Ajouter une marque</h2>
+    <form class="crud-input-list" method="post" action="/admin/marque/add">
+        <div class="crud-field">
+            <label for="libelle">Libellé</label>
+            <input id="libelle" name="libelle" type="text" value="" required>
+        </div>
+        <div class="crud-field-actions">
+            <button class="validate-button-black" type="submit">Ajouter</button>
+            <a class="validate-button-white-outline" href="/admin/marque/show" role="button">Annuler</a>
+        </div>
+    </form>
+</main>
+{% endblock %}
