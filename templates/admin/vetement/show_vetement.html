@@ -1,13 +1,13 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-<title>afficher les articles</title>
+<title>afficher les vetements</title>
 {% endblock %}
 
 {% block body %}
 <main class="crud-container">
     <h3>Gestion vêtements</h3>
-    <a class="validate-button-black crud-add-button" href="/admin/vetement/add">ajouter un article</a>
+    <a class="validate-button-black crud-add-button" href="/admin/vetement/add">ajouter un vetement</a>
     <table>
         <thead>
             <tr>
@@ -64,7 +64,7 @@
             {% else %}
             <tr>
                 <td>
-                    Pas d'article
+                    Pas d'vetement
                 </td>
             </tr>
             {% endif %}

@@ -17,8 +17,8 @@ def client_commande_valide():
     id_client = session['id_user']
     sql = '''
     '''
-    articles_panier = []
-    if len(articles_panier) >= 1:
+    vetements_panier = []
+    if len(vetements_panier) >= 1:
         sql = ''' calcul du prix total du panier '''
         prix_total = None
     else:
@@ -26,7 +26,7 @@ def client_commande_valide():
     # etape 2 : selection des adresses
     return render_template('client/boutique/panier_validation_adresses.html'
                            #, adresses=adresses
-                           , articles_panier=articles_panier
+                           , vetements_panier=vetements_panier
                            , prix_total= prix_total
                            , validation=1
                            #, id_adresse_fav=id_adresse_fav

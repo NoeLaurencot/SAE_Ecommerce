@@ -9,7 +9,7 @@
     <div class="panier-main-container">
         <h1 class="tile-title no-margin">Panier</h1>
         <div class="panier-section-container">
-            <div class="panier-section panier-articles">
+            <div class="panier-section panier-vetements">
                 {% if lignes_panier %}
                 {% for ligne_panier in lignes_panier %}
                 <div class="divider"></div>
@@ -21,8 +21,8 @@
                     <div class="panier-info-container">
                         <h3 class="no-margin">{{ ligne_panier.nom_vetement }}</h3>
                         <span>{{ ligne_panier.libelle_marque }}</span>
-                        <span>Taille {{ ligne_panier.libelle_taille }}</span>
-                        <span>Quantité: {{ ligne_panier.quantite }}</span>
+                        <span class="panier-info-gray">Taille {{ ligne_panier.libelle_taille }}</span>
+                        <span class="panier-info-gray">Quantité: {{ ligne_panier.quantite }}</span>
                         <span><b>{{ ligne_panier.prix_vetement }}€</b></span>
                     </div>
                     <form action="/client/panier/delete/line" method="post">
