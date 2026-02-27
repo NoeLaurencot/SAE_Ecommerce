@@ -56,10 +56,10 @@
     gap: 20px;
 }
 
-.crud-add-button {
-    position: fixed;
-    right: 20px;
-    z-index: 100;
+.crud-top-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 
 .crud-img {
@@ -94,6 +94,7 @@
 .crud-button-container a {
     padding: 5px 10px;
     font-size: 0.8rem;
+    max-width: 250px;
 }
 
 td, th {
