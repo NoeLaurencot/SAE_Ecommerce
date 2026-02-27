@@ -39,6 +39,7 @@
 .width40p {
     width: 40% !important;
 }
+
 .width100p {
     width: 100% !important;
 }
@@ -46,9 +47,11 @@
 .align-normal {
     align-items: normal !important;
 }
+
 .align-self-center {
-    align-self: center; !important;
+    align-self: center !important;
 }
+
 .font-1rem {
     font-size: 1rem;
 }

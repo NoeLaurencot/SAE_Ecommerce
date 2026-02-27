@@ -34,6 +34,7 @@ def show_vetement():
         ON vetement.id_vetement = vetement_collection.vetement_id
     JOIN collection
         ON collection.id_collection = vetement_collection.collection_id
+    GROUP BY id_vetement
     ORDER BY id_type_vetement;
     '''
     mycursor.execute(sql)

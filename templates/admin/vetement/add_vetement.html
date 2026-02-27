@@ -1,83 +1,118 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-    <title>ajouter un vetement</title>
+    <title>Ajouter un vetement</title>
 {% endblock %}
 
 {% block body %}
-    <h2>ajouter un vetement</h2>
-    <div class="">
-        <img class=""  style="width:200px; height:200px; border: 1px solid black; padding: 5px;" id="img_output" src="{{ url_for('static', filename = 'assets/images/clothes/')}}no_photo.jpeg" alt="">
-        <div class="">
-            <form class="" method="post" action="/admin/vetement/add" enctype="multipart/form-data">
-                <label for="nom">Nom :
-                    <input name="nom" type="text" value=""  class="" required>
-                </label>
-                <label for="prix">Prix (€) :
-                    <input name="prix" type="number" min="0.0" step="0.01" max="2147483647" value=""  class="" required>
-                </label>
-                <label for="description">Description :
-                    <input name="description" type="text" value=""  class="" required>
-                </label>
-                <label for="matiere_id">Matiere :
-                    <select name="matiere_id" required class="">
+<main class="crud-container">
+    <h2>Ajouter un vêtement</h2>
+    <div class="crud-update-container">
+        <img class="crud-update-img" id="img_output"
+            src="{{ url_for('static', filename = 'assets/images/clothes/') }}no_photo.jpeg" alt="">
+        <form class="crud-input-list" method="post" action="/admin/vetement/add" enctype="multipart/form-data">
+
+            <div class="crud-input-container">
+                <div class="crud-field">
+                    <label for="nom">Nom</label>
+                    <input id="nom" name="nom" type="text" value="" required>
+                </div>
+
+                <div class="crud-field">
+                    <label for="prix">Prix (€)</label>
+                    <input id="prix" name="prix" type="number" min="0.0" step="0.01" max="2147483647" value=""
+                        required>
+                </div>
+            </div>
+
+            <div class="crud-field">
+                <label for="description">Description</label>
+                <textarea id="description" class="item-description-crud" name="description" type="text" required></textarea>
+            </div>
+
+            <div class="crud-input-container">
+                <div class="crud-field">
+                    <label for="matiere_id">Matière</label>
+                    <select id="matiere_id" name="matiere_id" required>
                         <option value="">Sélectionner une matière</option>
                         {% for matiere in matieres %}
-                             <option value="{{ matiere.id_matiere }}"> {{ matiere.libelle_matiere }}</option>
+                        <option value="{{ matiere.id_matiere }}">{{ matiere.libelle_matiere }}</option>
                         {% endfor %}
                     </select>
-                </label>
-                <label for="type_vetement_id">Type de vetement :
-                    <select name="type_vetement_id" required class="">
+                </div>
+
+                <div class="crud-field">
+                    <label for="type_vetement_id">Type de vêtement</label>
+                    <select id="type_vetement_id" name="type_vetement_id" required>
                         <option value="">Sélectionner un type de vetement</option>
                         {% for type in types_vetement %}
-                             <option value="{{ type.id_type_vetement }}"> {{ type.libelle_type_vetement }}</option>
+                        <option value="{{ type.id_type_vetement }}">{{ type.libelle_type_vetement }}</option>
                         {% endfor %}
                     </select>
-                </label>
-                <label for="photo"> Image :
-                    <input name="photo" type="file" onchange="loadFile(event)" class="">
-                </label>
-                <label for="marque_id">Marque :
-                    <select name="marque_id" required class="">
-                        <option value="">Sélectionner une marque de vetement</option>
+                </div>
+            </div>
+
+            <div class="crud-input-container">
+                <div class="crud-field">
+                    <label for="photo">Image</label>
+                    <input id="photo" name="photo" type="file" onchange="loadFile(event)">
+                </div>
+
+                <div class="crud-field">
+                    <label for="marque_id">Marque</label>
+                    <select id="marque_id" name="marque_id" required>
+                        <option value="">Sélectionner une marque</option>
                         {% for marque in marques %}
-                             <option value="{{ marque.id_marque }}"> {{ marque.libelle_marque }}</option>
+                        <option value="{{ marque.id_marque }}">{{ marque.libelle_marque }}</option>
                         {% endfor %}
                     </select>
-                </label>
-                <label for="fournisseur_id">Fournisseur :
-                    <select name="fournisseur_id" required class="">
+                </div>
+            </div>
+
+            <div class="crud-input-container">
+                <div class="crud-field">
+                    <label for="fournisseur_id">Fournisseur</label>
+                    <select id="fournisseur_id" name="fournisseur_id" required>
                         <option value="">Sélectionner un fournisseur</option>
                         {% for fournisseur in fournisseurs %}
-                             <option value="{{ fournisseur.id_fournisseur }}"> {{ fournisseur.libelle_fournisseur }}</option>
+                        <option value="{{ fournisseur.id_fournisseur }}">{{ fournisseur.libelle_fournisseur }}</option>
                         {% endfor %}
                     </select>
-                </label>
-                <label for="taille_id">Taille :
-                    <select name="taille_id" required class="">
+                </div>
+
+                <div class="crud-field">
+                    <label for="taille_id">Taille</label>
+                    <select id="taille_id" name="taille_id" required>
                         <option value="">Sélectionner une taille</option>
                         {% for taille in tailles %}
-                             <option value="{{ taille.id_taille }}"> {{ taille.libelle_taille }}</option>
+                        <option value="{{ taille.id_taille }}">{{ taille.libelle_taille }}</option>
                         {% endfor %}
                     </select>
-                </label>
-                <label for="collection_id">Collection :
-                    <select name="collection_id" required class="">
+                </div>
+            </div>
+
+            <div class="crud-input-container">
+                <div class="crud-field">
+                    <label for="collection_id">Collection</label>
+                    <select id="collection_id" name="collection_id" required>
                         <option value="">Sélectionner une collection</option>
                         {% for collection in collections %}
-                             <option value="{{ collection.id_collection }}"> {{ collection.libelle_collection }}</option>
+                        <option value="{{ collection.id_collection }}">{{ collection.libelle_collection }}</option>
                         {% endfor %}
                     </select>
-                </label>
-                <label for="stock">stock :
-                    <input name="stock" type="number" min="0" step="1" max="2147483647" value=""  class="" required>
-                </label>
-                <label for="submit">
-                    <input name="submit" type="submit" value="Ajouter" class="">
-                </label>
-            </form>
-        <a href="/admin/vetement/show"><button class="btn btn-secondary mt-2">annuler</button></a>
-        </div>
+                </div>
+
+                <div class="crud-field">
+                    <label for="stock">Stock</label>
+                    <input id="stock" name="stock" type="number" min="0" step="1" max="2147483647" value="" required>
+                </div>
+            </div>
+
+            <div class="crud-field-actions">
+                <button class="validate-button-black" type="submit">Ajouter</button>
+                <a class="validate-button-white-outline" href="/admin/vetement/show" role="button">Annuler</a>
+            </div>
+        </form>
     </div>
+</main>
 {% endblock %}

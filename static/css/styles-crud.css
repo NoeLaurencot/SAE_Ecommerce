@@ -5,6 +5,17 @@
     gap: 10px;
 }
 
+.crud-update-container {
+    display: flex;
+    gap: 20px;
+}
+
+.crud-input-container {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+}
+
 .crud-add-button {
     position: fixed;
     right: 20px;
@@ -61,4 +72,65 @@ tr {
 table {
     overflow-x: scroll;
     border-collapse: collapse;
+}
+
+.crud-input-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.crud-field {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 4px;
+}
+
+.crud-field label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.crud-field input,
+.crud-field select {
+    padding: 8px 10px;
+    border: solid 1px rgb(180, 180, 180);
+    font-family: "Nunito", sans-serif;
+    font-size: 0.95rem;
+    transition: 0.3s border-color;
+    outline: none;
+    background-color: var(--white);
+}
+
+.crud-field input:focus,
+.crud-field select:focus {
+    border-color: var(--gold);
+}
+
+.crud-field-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.crud-warning {
+    color: var(--delete);
+    font-size: 0.85rem;
+}
+
+.crud-update-img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border: solid 1px rgb(200, 200, 200);
+    flex-shrink: 0;
+}
+
+.item-description-crud {
+    padding: 10px;
+    resize: vertical;
+    font-family: 'Nunito', sans-serif;
 }

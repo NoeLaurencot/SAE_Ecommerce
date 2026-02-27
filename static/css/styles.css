@@ -191,6 +191,7 @@ body {
 	justify-content: space-between;
     gap: 20px;
 	position: fixed;
+    margin-right: 10vw;
 	bottom: 20px;
 	z-index: var(--alert-zindex);
 	left: -100%;
