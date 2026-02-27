@@ -29,7 +29,7 @@
                 <td>
                     <div class="crud-button-container">
                         <a class="validate-button-white-outline" href="/admin/vetement/edit?id={{ vetement.id_vetement }}">Éditer</a>
-                        <a class="validate-button-white-outline" href="/admin/vetement/delete?id={{ vetement.id_vetement }}">Supprimer</a>
+                        <a class="validate-button-white-outline" href="/admin/vetement/cascade-delete?id={{ vetement.id_vetement }}&redirect_url={{ delete_url }}">Supprimer</a>
                     </div>
                 </td>
             </tr>

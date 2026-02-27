@@ -112,7 +112,8 @@ def delete_marque():
             type_element='La marque',
             libelle_element=marque['libelle_marque'],
             vetements=vetements,
-            back_url='/admin/marque/show')
+            back_url='/admin/marque/show',
+            delete_url='/admin/marque/delete?id=' + id)
 
     sql = """
     DELETE FROM marque
@@ -219,7 +220,8 @@ def delete_matiere():
             type_element='La matière',
             libelle_element=matiere['libelle_matiere'],
             vetements=vetements,
-            back_url='/admin/matiere/show')
+            back_url='/admin/matiere/show',
+            delete_url='/admin/matiere/delete?id=' + id)
 
     sql = """
     DELETE FROM matiere
@@ -325,7 +327,8 @@ def delete_type_vetement():
             type_element='Le type de vêtement',
             libelle_element=tv['libelle_type_vetement'],
             vetements=vetements,
-            back_url='/admin/type-vetement/show')
+            back_url='/admin/type-vetement/show',
+            delete_url='/admin/type-vetement/delete?id=' + id)
 
     sql = """
     DELETE FROM type_vetement
@@ -432,7 +435,8 @@ def delete_fournisseur():
             type_element='Le fournisseur',
             libelle_element=fournisseur['libelle_fournisseur'],
             vetements=vetements,
-            back_url='/admin/fournisseur/show')
+            back_url='/admin/fournisseur/show',
+            delete_url='/admin/fournisseur/delete?id=' + id)
 
     sql = """
     DELETE FROM fournisseur
@@ -538,7 +542,8 @@ def delete_taille():
             type_element='La taille',
             libelle_element=taille['libelle_taille'],
             vetements=vetements,
-            back_url='/admin/taille/show')
+            back_url='/admin/taille/show',
+            delete_url='/admin/taille/delete?id=' + id)
 
     sql = """
     DELETE FROM taille
@@ -647,7 +652,8 @@ def delete_collection():
             type_element='La collection',
             libelle_element=collection['libelle_collection'],
             vetements=vetements,
-            back_url='/admin/collection/show')
+            back_url='/admin/collection/show',
+            delete_url='/admin/collection/delete?id=' + id)
 
     sql = """
     DELETE FROM collection
