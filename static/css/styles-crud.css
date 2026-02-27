@@ -5,6 +5,13 @@
     gap: 10px;
 }
 
+.td-truncate {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -128,7 +135,7 @@ table {
     gap: 4px;
 }
 
-.crud-field label {
+.crud-field label:not(.checkbox-label) {
     font-weight: 600;
     font-size: 0.85rem;
     text-transform: uppercase;
@@ -174,4 +181,24 @@ table {
     padding: 10px;
     resize: vertical;
     font-family: 'Nunito', sans-serif;
+}
+
+.file-input-hidden {
+    display: none;
+}
+
+.file-input-label {
+    display: inline-block;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: var(--black);
+    color: var(--white);
+}
+
+.file-input-label:hover {
+    background-color: var(--gold);
+    color: var(--black);
 }
