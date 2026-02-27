@@ -9,8 +9,14 @@
     <div class="main-container">
         <div class="log-container">
             <form method="post" action="/logout">
-                <h2 class="form-title">Déconnexion</h2>
-				<p class="no-margin">{{ session['email'] }}</p>
+                <div class="account-list">
+                    <h2 class="form-title">Compte</h2>
+                    <p class="no-margin">{{ session['email'] }}</p>
+                    {% if session['role'] == 'ROLE_client' %}
+                        <div class="divider"></div>
+                        <a class="link-button-white" href="/client/commande/show">Mes commandes</a>
+                    {% endif %}
+                </div>
                 <input class="validate-button-black" type="submit" value="Se déconnecter">
             </form>
         </div>
