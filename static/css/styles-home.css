@@ -2,17 +2,26 @@
 
 .video-player-container {
 	display: flex;
-    color: white;
+	color: white;
 	justify-content: center;
-	position: relative;
 	align-items: center;
+	position: relative;
+	overflow: hidden;
+	height: calc(100vh - var(--nav-height));
+	width: 100%;
 }
 
 .video-player-container video {
-	overflow: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
 	width: 100%;
-	height: calc(100vh - var(--nav-height));
+	height: 100%;
 	object-fit: cover;
+}
+
+.video-player-container .main-button {
+	z-index: 1;
 }
 
 /* Collection homme femme */

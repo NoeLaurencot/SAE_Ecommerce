@@ -309,7 +309,8 @@ nav {
     width: calc(100% - 41px);
     height: 100%;
     padding: 80px 20px 20px 20px;
-    overflow-y: scroll;
+    overflow-y: auto;
+    scrollbar-color: var(--burger-border) transparent;
 }
 
 .burger-top-spacer {
