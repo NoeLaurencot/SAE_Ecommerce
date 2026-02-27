@@ -100,14 +100,14 @@ def client_vetement_show():
             sql = sql + ")"
             and_condition = " AND "
         sql = sql + """
-        GROUP BY id_vetement
+        GROUP BY id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque, libelle_fournisseur, libelle_matiere, libelle_taille, libelle_type_vetement, prix_vetement
         ORDER BY id_vetement;
         """
         print(sql)
         mycursor.execute(sql, list_param)
     else:
         sql = sql + """
-        GROUP BY id_vetement
+        GROUP BY id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque, libelle_fournisseur, libelle_matiere, libelle_taille, libelle_type_vetement, prix_vetement
         ORDER BY id_vetement;
         """
         mycursor.execute(sql)

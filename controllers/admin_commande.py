@@ -21,7 +21,7 @@ def admin_commande_show():
                       JOIN utilisateur on commande.utilisateur_id = utilisateur.id_utilisateur
                       JOIN etat on commande.etat_id = etat.id_etat
                       JOIN ligne_commande on commande.id_commande = ligne_commande.commande_id
-             GROUP BY id_commande;
+             GROUP BY id_commande, login, date_achat, libelle_etat, commande_id;
           '''
     mycursor.execute(sql)
     commandes=mycursor.fetchall()
