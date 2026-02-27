@@ -18,7 +18,7 @@ def show_vetement():
         return redirect('/')
     mycursor = get_db().cursor()
     sql = '''  
-    SELECT id_vetement, prix_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement, id_type_vetement, libelle_collection AS collection
+    SELECT id_vetement, prix_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement, id_type_vetement, GROUP_CONCAT(libelle_collection SEPARATOR ', ') AS collection
     FROM vetement
     JOIN matiere
         ON matiere.id_matiere = vetement.matiere_id
@@ -34,7 +34,7 @@ def show_vetement():
         ON vetement.id_vetement = vetement_collection.vetement_id
     JOIN collection
         ON collection.id_collection = vetement_collection.collection_id
-    GROUP BY id_vetement
+    GROUP BY id_vetement, prix_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque, libelle_fournisseur, libelle_matiere, libelle_taille, libelle_type_vetement, id_type_vetement
     ORDER BY id_type_vetement;
     '''
     mycursor.execute(sql)
@@ -111,7 +111,7 @@ def valid_add_vetement():
     marque_id = request.form.get('marque_id', '')
     fournisseur_id = request.form.get('fournisseur_id', '')
     taille_id = request.form.get('fournisseur_id', '')
-    collection_id = request.form.get('collection_id', '')
+    collection_ids = request.form.getlist('collection_id')
     stock = request.form.get('stock', '')
     
     if photo:
@@ -139,13 +139,12 @@ def valid_add_vetement():
     VALUES (%s, %s);
     '''
 
-    tuple_add = (id_vetement, collection_id)
-    print(tuple_add)
-    mycursor.execute(sql, tuple_add)
+    for collection_id in collection_ids:
+        mycursor.execute(sql, (id_vetement, collection_id))
 
     get_db().commit()
 
-    message = u'vetement ajouté , nom:' + nom + ' - description:' + description + ' - prix:' + prix + ' - matiere_id:' + matiere_id + ' - type_vetement:' + type_vetement_id + ' - photo:' + str(photo) + ' - marque_id:' + marque_id + ' - id_fournisseur:' + fournisseur_id + ' - taille_id:' + taille_id + ' - collection_id:' + collection_id + ' - stock:' + stock 
+    message = u'vetement ajouté , nom:' + nom + ' - description:' + description + ' - prix:' + prix + ' - matiere_id:' + matiere_id + ' - type_vetement:' + type_vetement_id + ' - photo:' + str(photo) + ' - marque_id:' + marque_id + ' - id_fournisseur:' + fournisseur_id + ' - taille_id:' + taille_id + ' - collection_ids:' + ', '.join(collection_ids) + ' - stock:' + stock 
     print(message)
     flash(message, 'alert-success')
     return redirect('/admin/vetement/show')
@@ -224,6 +223,56 @@ def delete_vetement():
     return redirect('/admin/vetement/show')
 
 
+@admin_vetement.route('/admin/vetement/cascade-delete', methods=['GET'])
+def cascade_delete_vetement():
+    id_vetement = request.args.get('id')
+    redirect_url = request.args.get('redirect_url', '/admin/vetement/show')
+    mycursor = get_db().cursor()
+
+    # sql = '''
+    # SELECT photo
+    # FROM vetement
+    # WHERE vetement.id_vetement = %s;
+    # '''
+    # mycursor.execute(sql, id_vetement)
+    # vetement = mycursor.fetchone()
+
+    # if vetement:
+    #     image = vetement['photo']
+    # else:
+    #     image = ''
+
+    sql = '''
+    DELETE FROM vetement_collection
+    WHERE vetement_id = %s;
+    '''
+    mycursor.execute(sql, id_vetement)
+
+    sql = '''
+    DELETE FROM ligne_panier
+    WHERE vetement_id = %s;
+    '''
+    mycursor.execute(sql, id_vetement)
+
+    sql = '''
+    DELETE FROM ligne_commande
+    WHERE vetement_id = %s;
+    '''
+    mycursor.execute(sql, id_vetement)
+
+    sql = '''
+    DELETE FROM vetement
+    WHERE id_vetement = %s;
+    '''
+    mycursor.execute(sql, id_vetement)
+    get_db().commit()
+
+    message = u'Vêtement supprimé, id : ' + id_vetement
+    flash(message, 'alert-success')
+
+    return redirect(redirect_url)
+
+
 @admin_vetement.route('/admin/vetement/edit', methods=['GET'])
 def edit_vetement():
     id_vetement = request.args.get('id')
@@ -232,14 +281,21 @@ def edit_vetement():
     sql = '''
     SELECT *
     FROM vetement
-    JOIN vetement_collection
-        ON vetement.id_vetement = vetement_collection.vetement_id
-    JOIN collection
-        ON collection.id_collection = vetement_collection.collection_id
     WHERE id_vetement = %s 
     '''
     mycursor.execute(sql, id_vetement)
     vetement = mycursor.fetchone()
+
+    sql = '''
+    SELECT collection_id
+    FROM vetement_collection
+    WHERE vetement_id = %s
+    '''
+    mycursor.execute(sql, id_vetement)
+    vetement_collections_rows = mycursor.fetchall()
+    vetement_collections = []
+    for row in vetement_collections_rows:
+        vetement_collections.append(row['collection_id'])
 
     sql = '''  
     SELECT *
@@ -297,6 +353,7 @@ def edit_vetement():
                            ,fournisseurs=fournisseurs
                            ,tailles=tailles
                            ,collections=collections
+                           ,vetement_collections=vetement_collections
                             )
 
 
@@ -312,7 +369,7 @@ def valid_edit_vetement():
     marque_id = request.form.get('marque_id', '')
     fournisseur_id = request.form.get('fournisseur_id', '')
     taille_id = request.form.get('fournisseur_id', '')
-    collection_id = request.form.get('collection_id', '')
+    collection_ids = request.form.getlist('collection_id')
     stock = request.form.get('stock', '')
 
     print(photo)
@@ -358,12 +415,13 @@ def valid_edit_vetement():
     INSERT INTO vetement_collection(vetement_id, collection_id)
     VALUES (%s, %s)
     '''
-    mycursor.execute(sql, (id_vetement, collection_id))
+    for collection_id in collection_ids:
+        mycursor.execute(sql, (id_vetement, collection_id))
 
     get_db().commit()
     #if image_nom is None:
     #    image_nom = ''
-    message = u'Vêtement modifié , nom:' + nom + ' - description:' + description + ' - prix:' + prix + ' - matiere_id:' + matiere_id + ' - type_vetement:' + type_vetement_id + ' - photo:' + str(photo) + ' - marque_id:' + marque_id + ' - id_fournisseur:' + fournisseur_id + ' - taille_id:' + taille_id + ' - collection_id:' + collection_id + ' - stock:' + stock 
+    message = u'Vêtement modifié , nom:' + nom + ' - description:' + description + ' - prix:' + prix + ' - matiere_id:' + matiere_id + ' - type_vetement:' + type_vetement_id + ' - photo:' + str(photo) + ' - marque_id:' + marque_id + ' - id_fournisseur:' + fournisseur_id + ' - taille_id:' + taille_id + ' - collection_ids:' + ', '.join(collection_ids) + ' - stock:' + stock 
     flash(message, 'alert-success')
     return redirect('/admin/vetement/show')
 

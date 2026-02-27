@@ -58,8 +58,9 @@
 
             <div class="crud-input-container">
                 <div class="crud-field">
-                    <label for="photo">Image</label>
-                    <input id="photo" name="photo" onchange="loadFile(event)" type="file" value="{{ vetement.photo }}">
+                    <label>Image</label>
+                    <input id="photo" name="photo" onchange="loadFile(event)" type="file" class="file-input-hidden">
+                    <label for="photo" class="file-input-label">Choisir un fichier</label>
                 </div>
 
                 <div class="crud-field">
@@ -98,14 +99,13 @@
 
             <div class="crud-input-container">
                 <div class="crud-field">
-                    <label for="collection_id">Collection</label>
-                    <select id="collection_id" name="collection_id">
-                        {% for collection in collections %}
-                        <option value="{{ collection.id_collection }}" {% if
-                            collection.id_collection==vetement.collection_id %} selected {% endif %}>{{
-                            collection.libelle_collection }}</option>
-                        {% endfor %}
-                    </select>
+                    <label>Collections</label>
+                    {% for collection in collections %}
+                    <div>
+                        <input type="checkbox" id="collection_{{ collection.id_collection }}" name="collection_id" value="{{ collection.id_collection }}" {% if collection.id_collection in vetement_collections %}checked{% endif %}>
+                        <label class="checkbox-label" for="collection_{{ collection.id_collection }}">{{ collection.libelle_collection }}</label>
+                    </div>
+                    {% endfor %}
                 </div>
 
                 <div class="crud-field">

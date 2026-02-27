@@ -54,8 +54,9 @@
 
             <div class="crud-input-container">
                 <div class="crud-field">
-                    <label for="photo">Image</label>
-                    <input id="photo" name="photo" type="file" onchange="loadFile(event)">
+                    <label>Image</label>
+                    <input id="photo" name="photo" type="file" onchange="loadFile(event)" class="file-input-hidden">
+                    <label for="photo" class="file-input-label">Choisir un fichier</label>
                 </div>
 
                 <div class="crud-field">
@@ -93,13 +94,13 @@
 
             <div class="crud-input-container">
                 <div class="crud-field">
-                    <label for="collection_id">Collection</label>
-                    <select id="collection_id" name="collection_id" required>
-                        <option value="">Sélectionner une collection</option>
-                        {% for collection in collections %}
-                        <option value="{{ collection.id_collection }}">{{ collection.libelle_collection }}</option>
-                        {% endfor %}
-                    </select>
+                    <label>Collections</label>
+                    {% for collection in collections %}
+                    <div>
+                        <input type="checkbox" id="collection_{{ collection.id_collection }}" name="collection_id" value="{{ collection.id_collection }}">
+                        <label class="checkbox-label" for="collection_{{ collection.id_collection }}">{{ collection.libelle_collection }}</label>
+                    </div>
+                    {% endfor %}
                 </div>
 
                 <div class="crud-field">
