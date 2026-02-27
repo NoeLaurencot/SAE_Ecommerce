@@ -204,7 +204,7 @@
     }
 
     /**###########################
-    ####### VETEMENT ADMIN #######
+    ####### ADMIN #######
     ############################*/
 
     @media (max-width: 1000px) {
@@ -217,6 +217,18 @@
             padding: 4px;
         }
     }
+
+    @media (max-width: 900px) {
+        .dashboard-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 500px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+}
 
     /**###################
     ####### FOOTER #######

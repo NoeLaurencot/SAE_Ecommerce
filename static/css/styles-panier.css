@@ -10,7 +10,7 @@
     line-height: 0.8;
 }
 
-.panier-articles {
+.panier-vetements {
     flex: 3;
 }
 
@@ -268,4 +268,9 @@
     width: 100%;
     box-sizing: border-box;
     text-align: center;
+}
+
+.panier-info-gray {
+    font-size: 0.8rem;
+    color: var(--gray);
 }

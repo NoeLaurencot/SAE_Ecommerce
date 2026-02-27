@@ -5,6 +5,46 @@
     gap: 10px;
 }
 
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    width: 100%;
+}
+
+.dashboard-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    padding: 30px;
+    border: solid 1px rgb(200, 200, 200);
+    text-decoration: none;
+    color: var(--black);
+    transition: 0.3s;
+}
+
+.dashboard-tile:hover {
+    border-color: var(--gold);
+}
+
+.dashboard-tile-icon {
+    font-size: 2rem;
+    color: var(--gold);
+}
+
+.dashboard-tile h3 {
+    margin: 5px 0 0 0;
+    font-size: 1.1rem;
+}
+
+.dashboard-tile p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--gray);
+    font-family: 'EB Garamond', serif;
+}
+
 .crud-update-container {
     display: flex;
     gap: 20px;
