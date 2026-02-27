@@ -242,6 +242,50 @@ nav {
     opacity: 1;
 }
 
+.search-suggestions {
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    width: 100%;
+    background-color: var(--black);
+    z-index: var(--search-zindex);
+}
+
+.search-suggestion-item {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 12px;
+    padding: 8px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+}
+
+.search-suggestion-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.search-suggestion-item img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+.search-suggestion-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-suggestion-name {
+    color: var(--white);
+    font-size: 1rem;
+}
+
+.search-suggestion-brand {
+    color: var(--white);
+    font-size: 0.8rem;
+}
+
 /* intérieur burger menu */
 
 .burger-menu-container {
@@ -319,6 +363,13 @@ nav {
 .burger-content h2 {
     margin: 0;
     line-height: 1;
+}
+
+.burger-content h4 {
+    margin: 0;
+    line-height: 1;
+    font-weight: normal;
+    margin-left: 20px;
 }
 
 .burger-content a:hover {
