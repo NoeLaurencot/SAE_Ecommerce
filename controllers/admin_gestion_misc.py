@@ -68,7 +68,8 @@ def edit_marque():
     sql = """
     SELECT id_marque, libelle_marque FROM marque WHERE id_marque = %s;
     """
-    mycursor.execute(sql, (id,))
+    param = (id)
+    mycursor.execute(sql, param)
     marque = mycursor.fetchone()
     return render_template('admin/gestion/edit_marque.html', marque=marque)
 
@@ -174,7 +175,8 @@ def edit_matiere():
     FROM matiere
     WHERE id_matiere = %s;
     """
-    mycursor.execute(sql, (id,))
+    param = (id)
+    mycursor.execute(sql, param)
     matiere = mycursor.fetchone()
     return render_template('admin/gestion/edit_matiere.html', matiere=matiere)
 
@@ -279,7 +281,8 @@ def edit_type_vetement():
     FROM type_vetement
     WHERE id_type_vetement = %s;
     """
-    mycursor.execute(sql, (id,))
+    param = (id)
+    mycursor.execute(sql, param)
     type_vetement = mycursor.fetchone()
     return render_template('admin/gestion/edit_type_vetement.html', type_vetement=type_vetement)
 
@@ -385,7 +388,8 @@ def edit_fournisseur():
     FROM fournisseur
     WHERE id_fournisseur = %s;
     """
-    mycursor.execute(sql, (id,))
+    param = (id)
+    mycursor.execute(sql, param)
     fournisseur = mycursor.fetchone()
     return render_template('admin/gestion/edit_fournisseur.html', fournisseur=fournisseur)
 
@@ -490,7 +494,8 @@ def edit_taille():
     FROM taille
     WHERE id_taille = %s;
     """
-    mycursor.execute(sql, (id,))
+    param = (id)
+    mycursor.execute(sql, param)
     taille = mycursor.fetchone()
     return render_template('admin/gestion/edit_taille.html', taille=taille)
 
@@ -596,7 +601,8 @@ def edit_collection():
     FROM collection
     WHERE id_collection = %s;
     """
-    mycursor.execute(sql, (id,))
+    param = (id)
+    mycursor.execute(sql, param)
     collection = mycursor.fetchone()
     return render_template('admin/gestion/edit_collection.html', collection=collection)
 
