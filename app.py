@@ -18,7 +18,6 @@ from controllers.client_coordonnee import *
 from controllers.admin_vetement import *
 from controllers.admin_declinaison_vetement import *
 from controllers.admin_commande import *
-from controllers.admin_type_vetement import *
 from controllers.admin_dataviz import *
 from controllers.admin_commentaire import *
 from controllers.admin_gestion_misc import *
@@ -104,7 +103,6 @@ app.register_blueprint(client_liste_envies)
 app.register_blueprint(admin_vetement)
 app.register_blueprint(admin_declinaison_vetement)
 app.register_blueprint(admin_commande)
-app.register_blueprint(admin_type_vetement)
 app.register_blueprint(admin_dataviz)
 app.register_blueprint(admin_commentaire)
 app.register_blueprint(admin_gestion_misc)
