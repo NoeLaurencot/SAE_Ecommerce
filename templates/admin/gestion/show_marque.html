@@ -16,6 +16,7 @@
             <tr>
                 <th>ID</th>
                 <th>Libellé</th>
+                <th>Nombre de vêtements</th>
                 <th>Opérations</th>
             </tr>
         </thead>
@@ -25,6 +26,7 @@
             <tr>
                 <td>{{ ligne.id_marque }}</td>
                 <td>{{ ligne.libelle_marque }}</td>
+                <td style="color:red">{{ligne.nbr_vetement}}</td>
                 <td class="crud-button-container">
                     <a class="validate-button-white-outline" href="/admin/marque/edit?id={{ ligne.id_marque }}">Editer</a>
                     <a class="validate-button-white-outline" href="/admin/marque/delete?id={{ ligne.id_marque }}">Supprimer</a>

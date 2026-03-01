@@ -27,9 +27,11 @@ def show_marque():
         return redirect('/')
     mycursor = get_db().cursor()
     sql = """
-    SELECT id_marque, libelle_marque
+    SELECT id_marque, libelle_marque, COUNT(id_vetement) AS nbr_vetement
     FROM marque
-    ORDER BY id_marque;
+    LEFT JOIN vetement
+        ON vetement.marque_id = marque.id_marque
+    GROUP BY id_marque;
     """
     mycursor.execute(sql)
     marques = mycursor.fetchall()
@@ -53,7 +55,7 @@ def valid_add_marque():
     INSERT INTO marque (libelle_marque)
     VALUES (%s);
     """
-    mycursor.execute(sql, (libelle,))
+    mycursor.execute(sql, (libelle))
     get_db().commit()
     flash(u'Marque ajoutée : ' + libelle, 'alert-success')
     return redirect('/admin/marque/show')
@@ -133,9 +135,11 @@ def show_matiere():
         return redirect('/')
     mycursor = get_db().cursor()
     sql = """
-    SELECT id_matiere, libelle_matiere
+    SELECT id_matiere, libelle_matiere, COUNT(id_vetement) AS nbr_vetement
     FROM matiere
-    ORDER BY id_matiere;
+    LEFT JOIN vetement
+        ON vetement.matiere_id = matiere.id_matiere
+    GROUP BY id_matiere;
     """
     mycursor.execute(sql)
     matieres = mycursor.fetchall()
@@ -240,9 +244,11 @@ def show_type_vetement():
         return redirect('/')
     mycursor = get_db().cursor()
     sql = """
-    SELECT id_type_vetement, libelle_type_vetement
+    SELECT id_type_vetement, libelle_type_vetement, COUNT(id_vetement) AS nbr_vetement
     FROM type_vetement
-    ORDER BY id_type_vetement;
+    LEFT JOIN vetement
+        ON vetement.type_vetement_id = type_vetement.id_type_vetement
+    GROUP BY id_type_vetement;
     """
     mycursor.execute(sql)
     types_vetement = mycursor.fetchall()
@@ -348,9 +354,11 @@ def show_fournisseur():
         return redirect('/')
     mycursor = get_db().cursor()
     sql = """
-    SELECT id_fournisseur, libelle_fournisseur
+    SELECT id_fournisseur, libelle_fournisseur, COUNT(id_vetement) AS nbr_vetement
     FROM fournisseur
-    ORDER BY id_fournisseur;
+    LEFT JOIN vetement
+        ON vetement.fournisseur_id = fournisseur.id_fournisseur
+    GROUP BY id_fournisseur;
     """
     mycursor.execute(sql)
     fournisseurs = mycursor.fetchall()
@@ -455,9 +463,11 @@ def show_taille():
         return redirect('/')
     mycursor = get_db().cursor()
     sql = """
-    SELECT id_taille, libelle_taille
+    SELECT id_taille, libelle_taille, COUNT(id_vetement) AS nbr_vetement
     FROM taille
-    ORDER BY id_taille;
+    LEFT JOIN vetement
+        ON vetement.taille_id = taille.id_taille
+    GROUP BY id_taille;
     """
     mycursor.execute(sql)
     tailles = mycursor.fetchall()
@@ -481,7 +491,7 @@ def valid_add_taille():
     INSERT INTO taille (libelle_taille)
     VALUES (%s);
     """
-    mycursor.execute(sql, (libelle,))
+    mycursor.execute(sql, (libelle))
     get_db().commit()
     flash(u'Taille ajoutée : ' + libelle, 'alert-success')
     return redirect('/admin/taille/show')
@@ -563,9 +573,13 @@ def show_collection():
         return redirect('/')
     mycursor = get_db().cursor()
     sql = """
-    SELECT id_collection, libelle_collection
+    SELECT id_collection, libelle_collection, COUNT(id_vetement) AS nbr_vetement
     FROM collection
-    ORDER BY id_collection;
+    JOIN vetement_collection
+        ON vetement_collection.collection_id = id_collection
+    JOIN vetement
+        ON vetement.id_vetement = vetement_collection.vetement_id
+    GROUP BY id_collection;
     """
     mycursor.execute(sql)
     collections = mycursor.fetchall()

@@ -16,6 +16,7 @@
             <tr>
                 <th>ID</th>
                 <th>Libellé</th>
+                <th>Nombre de vêtements</th>
                 <th>Opérations</th>
             </tr>
         </thead>
@@ -25,6 +26,7 @@
             <tr>
                 <td>{{ ligne.id_matiere }}</td>
                 <td>{{ ligne.libelle_matiere }}</td>
+                <td style="color:red">{{ligne.nbr_vetement}}</td>
                 <td class="crud-button-container">
                     <a class="validate-button-white-outline" href="/admin/matiere/edit?id={{ ligne.id_matiere }}">Editer</a>
                     <a class="validate-button-white-outline" href="/admin/matiere/delete?id={{ ligne.id_matiere }}">Supprimer</a>
