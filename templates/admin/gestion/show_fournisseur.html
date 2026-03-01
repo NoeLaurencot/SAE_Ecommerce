@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+<title>Gestion fournisseurs</title>
+{% endblock %}
+
+{% block body %}
+<main class="crud-container">
+    <h3>Gestion fournisseurs</h3>
+    <div class="crud-top-actions">
+        <a class="validate-button-white-outline" href="/admin/dashboard">Retour</a>
+        <a class="validate-button-black" href="/admin/fournisseur/add">Ajouter un fournisseur</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Libellé</th>
+                <th>Nombre de vêtements</th>
+                <th>Opérations</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if fournisseurs | length >= 1 %}
+            {% for ligne in fournisseurs %}
+            <tr>
+                <td>{{ ligne.id_fournisseur }}</td>
+                <td>{{ ligne.libelle_fournisseur }}</td>
+                <td style="color:red">{{ligne.nbr_vetement}}</td>
+                <td class="crud-button-container">
+                    <a class="validate-button-white-outline" href="/admin/fournisseur/edit?id={{ ligne.id_fournisseur }}">Editer</a>
+                    <a class="validate-button-white-outline" href="/admin/fournisseur/delete?id={{ ligne.id_fournisseur }}">Supprimer</a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td>Aucun fournisseur</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</main>
+{% endblock %}

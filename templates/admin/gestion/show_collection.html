@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+<title>Gestion collections</title>
+{% endblock %}
+
+{% block body %}
+<main class="crud-container">
+    <h3>Gestion collections</h3>
+    <div class="crud-top-actions">
+        <a class="validate-button-white-outline" href="/admin/dashboard">Retour</a>
+        <a class="validate-button-black" href="/admin/collection/add">Ajouter une collection</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Libellé</th>
+                <th>Nombre de vêtements</th>
+                <th>Opérations</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if collections | length >= 1 %}
+            {% for ligne in collections %}
+            <tr>
+                <td>{{ ligne.id_collection }}</td>
+                <td>{{ ligne.libelle_collection }}</td>
+                <td style="color:red">{{ligne.nbr_vetement}}</td>
+                <td class="crud-button-container">
+                    <a class="validate-button-white-outline" href="/admin/collection/edit?id={{ ligne.id_collection }}">Editer</a>
+                    <a class="validate-button-white-outline" href="/admin/collection/delete?id={{ ligne.id_collection }}">Supprimer</a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td>Aucune collection</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</main>
+{% endblock %}

@@ -1,109 +1,139 @@
-{#
-vetement (dictionnaire)
-id_vetement, nom, type_vetement_id, prix, image
-    * option :
-        * stock ,
-        * nb_avis ,
-        * nb_declinaisons
-
-types_vetement : tableau de dictionnaires
-* tableau de "type_vetement"
-    * id_type_vetement, libelle
-#}
-
 {% extends 'layout.html' %}
 {% block title %}
-    <title>Modifier un vetement</title>
+<title>Modifier un vêtement</title>
 {% endblock %}
 
 {% block body %}
-    <h2>modifier un vetement</h2>
-        <div class="">
-        {%  if vetement.photo is not none %}
-            <img class=""  style="width:200px; height:200px; border: 1px solid black; padding: 25px;"   id="img_output" src="{{ url_for('static', filename = 'assets/images/clothes/') }}{{ vetement.photo}}"  alt="image de {{ vetement.nom_vetement }}" >
+<main class="crud-container">
+    <h2>Modifier un vêtement</h2>
+    <div class="crud-update-container">
+        {% if vetement.photo is not none %}
+        <img class="crud-update-img" id="img_output"
+            src="{{ url_for('static', filename = 'assets/images/clothes/') }}{{ vetement.photo }}"
+            alt="Image de {{ vetement.nom_vetement }}">
         {% endif %}
-            <div class="">
-                <form class="" method="post" action="/admin/vetement/edit" enctype="multipart/form-data">
-                    <input type="hidden" value="{{ vetement.id_vetement }}" name="id_vetement">
-                    <label for="nom">Nom :
-                        <input name="nom" type="text" value="{{ vetement.nom_vetement }}" class="">
-                    </label>
-                    <label for="prix" > Prix (€) :
-                        <input name="prix" type="number" min="0.0" step="0.01" value="{{ vetement.prix_vetement }}" class="form-control" >
-                    </label>    
-                    <label for="description">Description :
-                        <input name="description" type="text" value="{{ vetement.description }}" class="form-control">
-                    </label>
-                    <label for="matiere_id">Matière du vetement :
-                        <select name="matiere_id" class="form-select">
-                            {% for matiere in matieres %}
-                                 <option value="{{ matiere.id_matiere }}" {% if matiere.id_matiere == vetement.matiere_id %} selected {% endif %}> {{ matiere.libelle_matiere }}</option>
-                            {% endfor %}
-                        </select>
-                    </label>
-                    <label for="type_vetement_id">Type du vetement :
-                        <select name="type_vetement_id" class="form-select">
-                            {% for type in types_vetement %}
-                                 <option value="{{ type.id_type_vetement }}" {% if type.id_type_vetement == vetement.type_vetement_id %} selected {% endif %}> {{ type.libelle_type_vetement }}</option>
-                            {% endfor %}
-                        </select>
-                    </label>
-                    <label for="photo">Image :                       {# à modifier #}
-                        <input name="photo"  onchange="loadFile(event)" type="file" class="form-control" value="{{vetement.photo}}">             {# à modifier #}
-                    </label>    
-                    <label for="marque_id">Marque du vetement :
-                        <select name="marque_id" class="form-select">
-                            {% for marque in marques %}
-                                 <option value="{{ marque.id_marque }}" {% if marque.id_marque == vetement.marque_id %} selected {% endif %}> {{ marque.libelle_marque }}</option>
-                            {% endfor %}
-                        </select>
-                    </label>
-                    <label for="fournisseur_id">Fournisseur du vetement :
-                        <select name="fournisseur_id" class="form-select">
-                            {% for fournisseur in fournisseurs %}
-                                 <option value="{{ fournisseur.id_fournisseur }}" {% if fournisseur.id_fournisseur == vetement.fournisseur_id %} selected {% endif %}> {{ fournisseur.libelle_fournisseur }}</option>
-                            {% endfor %}
-                        </select>
-                    </label>
-                    <label for="taille_id">Taille du vetement :
-                        <select name="taille_id" class="form-select">
-                            {% for taille in tailles %}
-                                 <option value="{{ taille.id_taille }}" {% if taille.id_taille == vetement.taille_id %} selected {% endif %}> {{ taille.libelle_taille }}</option>
-                            {% endfor %}
-                        </select>
-                    </label>
-                    <label for="collection_id">Collection du vetement :
-                        <select name="collection_id" class="form-select">
-                            {% for collection in collections %}
-                                 <option value="{{ collection.id_collection }}" {% if collection.id_collection == vetement.collection_id %} selected {% endif %}> {{ collection.libelle_collection }}</option>
-                            {% endfor %}
-                        </select>
-                    </label>
-                    <label for="stock" > Stock :
-                        <input name="stock" type="number" min="0.0" step="0.01" value="{{ vetement.stock }}" class="form-control" >
-                    </label>  
-                    <button class="">
-                                Modifier
-                    </button>
-                    <a class="" href="/admin/vetement/show"  role="button">retour</a>
-                </form>
+        <form class="crud-input-list" method="post" action="/admin/vetement/edit" enctype="multipart/form-data">
+            <input type="hidden" value="{{ vetement.id_vetement }}" name="id_vetement">
 
-                <div class="container-fluid " style="width: 1000px;">
+            <div class="crud-input-container">
+                <div class="crud-field">
+                    <label for="nom">Nom</label>
+                    <input id="nom" name="nom" type="text" value="{{ vetement.nom_vetement }}">
+                </div>
 
-                    <div style="display: flex; justify-content: space-between">
+                <div class="crud-field">
+                    <label for="prix">Prix (€)</label>
+                    <input id="prix" name="prix" type="number" min="0.0" step="0.01"
+                        value="{{ vetement.prix_vetement }}">
+                </div>
+            </div>
+
+            <div class="crud-field">
+                <label for="description">Description</label>
+                <textarea id="description" class="item-description-crud" name="description" type="text">{{ vetement.description }}</textarea>
+            </div>
+
+            <div class="crud-input-container">
+                <div class="crud-field">
+                    <label for="matiere_id">Matière</label>
+                    <select id="matiere_id" name="matiere_id">
+                        {% for matiere in matieres %}
+                        <option value="{{ matiere.id_matiere }}" {% if matiere.id_matiere==vetement.matiere_id %}
+                            selected {% endif %}>{{ matiere.libelle_matiere }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="crud-field">
+                    <label for="type_vetement_id">Type de vêtement</label>
+                    <select id="type_vetement_id" name="type_vetement_id">
+                        {% for type in types_vetement %}
+                        <option value="{{ type.id_type_vetement }}" {% if
+                            type.id_type_vetement==vetement.type_vetement_id %} selected {% endif %}>{{
+                            type.libelle_type_vetement }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="crud-input-container">
+                <div class="crud-field">
+                    <label>Image</label>
+                    <input id="photo" name="photo" onchange="loadFile(event)" type="file" class="file-input-hidden">
+                    <label for="photo" class="file-input-label">Choisir un fichier</label>
+                </div>
+
+                <div class="crud-field">
+                    <label for="marque_id">Marque</label>
+                    <select id="marque_id" name="marque_id">
+                        {% for marque in marques %}
+                        <option value="{{ marque.id_marque }}" {% if marque.id_marque==vetement.marque_id %} selected {%
+                            endif %}>{{ marque.libelle_marque }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="crud-input-container">
+                <div class="crud-field">
+                    <label for="fournisseur_id">Fournisseur</label>
+                    <select id="fournisseur_id" name="fournisseur_id">
+                        {% for fournisseur in fournisseurs %}
+                        <option value="{{ fournisseur.id_fournisseur }}" {% if
+                            fournisseur.id_fournisseur==vetement.fournisseur_id %} selected {% endif %}>{{
+                            fournisseur.libelle_fournisseur }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="crud-field">
+                    <label for="taille_id">Taille</label>
+                    <select id="taille_id" name="taille_id">
+                        {% for taille in tailles %}
+                        <option value="{{ taille.id_taille }}" {% if taille.id_taille==vetement.taille_id %} selected {%
+                            endif %}>{{ taille.libelle_taille }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="crud-input-container">
+                <div class="crud-field">
+                    <label>Collections</label>
+                    {% for collection in collections %}
+                    <div>
+                        <input type="checkbox" id="collection_{{ collection.id_collection }}" name="collection_id" value="{{ collection.id_collection }}" {% if collection.id_collection in vetement_collections %}checked{% endif %}>
+                        <label class="checkbox-label" for="collection_{{ collection.id_collection }}">{{ collection.libelle_collection }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="crud-field">
+                    <label for="stock">Stock</label>
+                    <input id="stock" name="stock" type="number" min="0" step="1" value="{{ vetement.stock }}">
+                </div>
+            </div>
+
+            <div class="crud-field-actions">
+                <button class="validate-button-black" type="submit">Modifier</button>
+                <a class="validate-button-white-outline" href="/admin/vetement/show" role="button">Retour</a>
+        </form>
+
+        <!-- <div>
+                    <div>
                         <h3>déclinaison en fonction de la taille/couleur (variante)</h3>
-                        <a class="img-fluid" href="/admin/declinaison_vetement/add?id_vetement={{ vetement.id_vetement }}">
-                            <button class="btn btn-primary">
+                        <a href="/admin/declinaison_vetement/add?id_vetement={{ vetement.id_vetement }}">
+                            <button>
                                 Ajouter une déclinaison (variante)
                             </button>
                         </a>
                     </div>
                     <table class="">
 
-                        <th style="width: 300px">taille</th>
-                        <th style="width: 300px">couleur</th>
-                        <th style="width: 300px">stock</th>
-                        <th style="width: 300px">opérations</th>
+                        <th>taille</th>
+                        <th>couleur</th>
+                        <th>stock</th>
+                        <th>opérations</th>
 
                         {% if declinaisons_vetement | length == 0 %}
                             <tr>
@@ -122,14 +152,14 @@ types_vetement : tableau de dictionnaires
                                         {{ declinaison_vetement.libelle_couleur }}
                                     </td>
                                     <td>{{ declinaison_vetement.stock }}</td>
-                                    <td style="display: flex">
-                                        <a class="img-fluid" href="/admin/declinaison_vetement/delete?id_declinaison_vetement={{ declinaison_vetement.id_declinaison_vetement }}&amp;id_vetement={{ declinaison_vetement.vetement_id }}">
+                                    <td>
+                                        <a href="/admin/declinaison_vetement/delete?id_declinaison_vetement={{ declinaison_vetement.id_declinaison_vetement }}&amp;id_vetement={{ declinaison_vetement.vetement_id }}">
                                             <button class="btn btn-primary mx-1">
                                                 supprimer
                                             </button>
                                         </a>
-                                        <a class="img-fluid" href="/admin/declinaison_vetement/edit?id_declinaison_vetement={{ declinaison_vetement.id_declinaison_vetement }}">
-                                            <button class="btn btn-primary mx-1">
+                                        <a href="/admin/declinaison_vetement/edit?id_declinaison_vetement={{ declinaison_vetement.id_declinaison_vetement }}">
+                                            <button>
                                                 editer
                                             </button>
                                         </a>
@@ -139,14 +169,15 @@ types_vetement : tableau de dictionnaires
                         {% endif %}
                     </table>
 
-                </div>
+                </div> -->
+    </div>
+    </div>
 
-            </div>
-            {% if pb_taille_uniq is defined and pb_taille_uniq==1 %}
-                    <br><span style="color: #fd7e14">(⚠️ pb sur les tailles : une taille unique est définie avec d'autres tailles)</span>
-            {% endif %}
-            {% if pb_couleur_uniq is defined and pb_couleur_uniq==1 %}
-                    <br><span style="color: #fd7e14">(⚠️ pb sur les couleurs : une couleur unique est définie avec d'autres couleurs)</span>
-            {% endif %}
-        </div>
+    {% if pb_taille_uniq is defined and pb_taille_uniq==1 %}
+    <span class="crud-warning">(pb sur les tailles : une taille unique est définie avec d'autres tailles)</span>
+    {% endif %}
+    {% if pb_couleur_uniq is defined and pb_couleur_uniq==1 %}
+    <span class="crud-warning">(pb sur les couleurs : une couleur unique est définie avec d'autres couleurs)</span>
+    {% endif %}
+</main>
 {% endblock %}

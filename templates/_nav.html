@@ -40,15 +40,50 @@
                 {% if session['role'] == 'ROLE_admin' %}
                 <div class="divider-fancy"></div>
                 <div class="burger-boutique-category">
-                    <a href="/admin/vetement/show">
-                        <h2>Gestion vêtements</h2>
+                    <a href="/admin/dashboard">
+                        <h2>Tableau de bord</h2>
                     </a>
                 </div>
-                    <div class="burger-boutique-category">
-                        <a href="/admin/commande/show">
-                            <h2>Gestion commandes client</h2>
-                        </a>
-                    </div>
+                <div class="burger-boutique-category">
+                    <a href="/admin/vetement/show">
+                        <h4>Gestion vêtements</h2>
+                    </a>
+                </div>
+                <div class="burger-boutique-category">
+                    <a href="/admin/commande/show">
+                        <h4>Gestion commandes client</h2>
+                    </a>
+                </div>
+                <div class="burger-boutique-category">
+                    <a href="/admin/marque/show">
+                        <h4>Gestion marques</h2>
+                    </a>
+                </div>
+                <div class="burger-boutique-category">
+                    <a href="/admin/matiere/show">
+                        <h4>Gestion matières</h2>
+                    </a>
+                </div>
+                <div class="burger-boutique-category">
+                    <a href="/admin/type-vetement/show">
+                        <h4>Gestion types vêtements</h2>
+                    </a>
+                </div>
+                <div class="burger-boutique-category">
+                    <a href="/admin/fournisseur/show">
+                        <h4>Gestion fournisseurs</h2>
+                    </a>
+                </div>
+                <div class="burger-boutique-category">
+                    <a href="/admin/taille/show">
+                        <h4>Gestion tailles</h2>
+                    </a>
+                </div>
+                <div class="burger-boutique-category">
+                    <a href="/admin/collection/show">
+                        <h4>Gestion collections</h2>
+                    </a>
+                </div>
                 {% endif %}
             {% if session['role'] == 'ROLE_client' %}
                 <div class="divider-fancy"></div>
@@ -70,8 +105,8 @@
     <form class="nav-search-container" id="nav-search-container" action="/client/vetement/show" method="post">
         <button class="material-symbols-outlined nav-search-icons" id="nav-search-close-button"
             type="button">close</button>
-        <input class="nav-searchbar" id="nav-searchbar" type="text" required name="filter_name"
-            placeholder="Rechercher dans la boutique...">
+        <input class="nav-searchbar" id="nav-searchbar" type="text" required name="filter_word"
+            placeholder="Rechercher dans la boutique..." autocomplete="off">
         <button class="material-symbols-outlined nav-search-icons" type="submit">search</button>
     </form>
 
@@ -112,4 +147,5 @@
         </div>
     </div>
 </nav>
+<div class="search-suggestions" id="search-suggestions"></div>
 <div id="nav-offset"></div> <!-- Pour que les éléments de la page ne soient pas en dessous de la navbar -->

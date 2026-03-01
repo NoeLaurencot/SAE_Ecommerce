@@ -1,3 +1,7 @@
+function loadFile(event) {
+    
+}
+
 let arrowUpArr = document.getElementsByClassName('input-vetement-up');
 let arrowDownArr = document.getElementsByClassName('input-vetement-down');
 

@@ -72,27 +72,27 @@ def client_panier_add():
         return redirect('/client/vetement/show')
 
     # ---------
-    #id_declinaison_article=request.form.get('id_declinaison_article',None)
-    id_declinaison_article = 1
+    #id_declinaison_vetement=request.form.get('id_declinaison_vetement',None)
+    id_declinaison_vetement = 1
 
-# ajout dans le panier d'une déclinaison d'un article (si 1 declinaison : immédiat sinon => vu pour faire un choix
+# ajout dans le panier d'une déclinaison d'un vetement (si 1 declinaison : immédiat sinon => vu pour faire un choix
 #     sql = '''SELECT '''
 #     mycursor.execute(sql, (id_vetement))
     # declinaisons = mycursor.fetchall()
     # if len(declinaisons) == 1:
-    #     id_declinaison_article = declinaisons[0]['id_declinaison_article']
+    #     id_declinaison_vetement = declinaisons[0]['id_declinaison_vetement']
     # elif len(declinaisons) == 0:
     #     abort("pb nb de declinaison")
     # else:
     #     sql = '''   '''
-    #     mycursor.execute(sql, (id_article))
-    #     article = mycursor.fetchone()
-    #     return render_template('client/boutique/declinaison_article.html'
+    #     mycursor.execute(sql, (id_vetement))
+    #     vetement = mycursor.fetchone()
+    #     return render_template('client/boutique/declinaison_vetement.html'
     #                                , declinaisons=declinaisons
     #                                , quantite=quantite
-    #                                , article=article)
+    #                                , vetement=vetement)
 
-# ajout dans le panier d'un article
+# ajout dans le panier d'un vetement
     sql = """
     SELECT utilisateur_id, vetement_id, quantite
     FROM ligne_panier
@@ -120,24 +120,24 @@ def client_panier_add():
 def client_panier_delete():
     mycursor = get_db().cursor()
     id_client = session['id_user']
-    id_article = request.form.get('id_article','')
+    id_vetement = request.form.get('id_vetement','')
     quantite = 1
 
     # ---------
-    # partie 2 : on supprime une déclinaison de l'article
-    # id_declinaison_article = request.form.get('id_declinaison_article', None)
+    # partie 2 : on supprime une déclinaison de l'vetement
+    # id_declinaison_vetement = request.form.get('id_declinaison_vetement', None)
 
-    sql = ''' selection de la ligne du panier pour l'article et l'utilisateur connecté'''
-    article_panier=[]
+    sql = ''' selection de la ligne du panier pour l'vetement et l'utilisateur connecté'''
+    vetement_panier=[]
 
-    if not(article_panier is None) and article_panier['quantite'] > 1:
-        sql = ''' mise à jour de la quantité dans le panier => -1 article '''
+    if not(vetement_panier is None) and vetement_panier['quantite'] > 1:
+        sql = ''' mise à jour de la quantité dans le panier => -1 vetement '''
     else:
         sql = ''' suppression de la ligne de panier'''
 
-    # mise à jour du stock de l'article disponible
+    # mise à jour du stock de l'vetement disponible
     get_db().commit()
-    return redirect('/client/article/show')
+    return redirect('/client/vetement/show')
 
 
 
@@ -171,7 +171,7 @@ def client_panier_vider():
 def client_panier_delete_line():
     mycursor = get_db().cursor()
     id_client = session['id_user']
-    #id_declinaison_article = request.form.get('id_declinaison_article')
+    #id_declinaison_vetement = request.form.get('id_declinaison_vetement')
     id_vetement = request.form.get("id-ligne")
 
     param = (id_client, id_vetement)

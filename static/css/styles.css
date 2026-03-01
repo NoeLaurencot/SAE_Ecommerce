@@ -149,6 +149,16 @@ body {
 	cursor: pointer;
 }
 
+.link-button-white {
+    text-decoration: none;
+    color: var(--white);
+}
+
+.link-button-white:hover {
+    color: var(--gold);
+    cursor: pointer;
+}
+
 .main-container {
     padding: 20px;
     display: flex;
@@ -191,6 +201,7 @@ body {
 	justify-content: space-between;
     gap: 20px;
 	position: fixed;
+    margin-right: 10vw;
 	bottom: 20px;
 	z-index: var(--alert-zindex);
 	left: -100%;

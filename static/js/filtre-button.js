@@ -16,7 +16,8 @@ function toggleFiltre() {
         openMenuFiltre();
     }
 }
-
-filtreButton.addEventListener("click", function() {
-    toggleFiltre();
-});
+if (filtreButton) {
+    filtreButton.addEventListener("click", function() {
+        toggleFiltre();
+    });
+}

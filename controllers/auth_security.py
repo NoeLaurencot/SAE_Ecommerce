@@ -40,7 +40,7 @@ def auth_login_post():
             session['nom'] = user['nom']
             print(user['login'], user['role'])
             if user['role'] == 'ROLE_admin':
-                return redirect('/admin/vetement/show')                
+                return redirect('/admin/dashboard')                
             else:
                 return redirect('/')
     else:
@@ -101,7 +101,7 @@ def auth_signup_post():
     session['email'] = email
     session['id_user'] = id_user
     flash(u'Compte crée avec succès', 'alert-success')
-    # return redirect('/client/article/show')
+    # return redirect('/client/vetement/show')
     return redirect('/')
 
 @auth_security.route('/logout', methods=['GET'])

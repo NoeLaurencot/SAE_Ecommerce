@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+<title>Tableau de bord | Admin</title>
+{% endblock %}
+
+{% block body %}
+<main class="crud-container">
+    <h2>Tableau de bord</h2>
+    <div class="dashboard-grid">
+        <a class="dashboard-tile" href="/admin/vetement/show">
+            <span class="material-symbols-outlined dashboard-tile-icon">checkroom</span>
+            <h3>Gestion vêtements</h3>
+            <p>Accès au CRUD des vêtements</p>
+        </a>
+        <a class="dashboard-tile" href="/admin/commande/show">
+            <span class="material-symbols-outlined dashboard-tile-icon">local_shipping</span>
+            <h3>Gestion commandes client</h3>
+            <p>Consulter et valider les commandes</p>
+        </a>
+        <a class="dashboard-tile" href="/admin/marque/show">
+            <span class="material-symbols-outlined dashboard-tile-icon">label</span>
+            <h3>Gestion marques</h3>
+            <p>Accès au CRUD des marques</p>
+        </a>
+        <a class="dashboard-tile" href="/admin/matiere/show">
+            <span class="material-symbols-outlined dashboard-tile-icon">texture</span>
+            <h3>Gestion matières</h3>
+            <p>Accès au CRUD des matières</p>
+        </a>
+        <a class="dashboard-tile" href="/admin/type-vetement/show">
+            <span class="material-symbols-outlined dashboard-tile-icon">category</span>
+            <h3>Gestion types vêtements</h3>
+            <p>Accès au CRUD des types de vêtements</p>
+        </a>
+        <a class="dashboard-tile" href="/admin/fournisseur/show">
+            <span class="material-symbols-outlined dashboard-tile-icon">inventory</span>
+            <h3>Gestion fournisseurs</h3>
+            <p>Accès au CRUD des fournisseurs</p>
+        </a>
+        <a class="dashboard-tile" href="/admin/taille/show">
+            <span class="material-symbols-outlined dashboard-tile-icon">straighten</span>
+            <h3>Gestion tailles</h3>
+            <p>Accès au CRUD des tailles</p>
+        </a>
+        <a class="dashboard-tile" href="/admin/collection/show">
+            <span class="material-symbols-outlined dashboard-tile-icon">collections_bookmark</span>
+            <h3>Gestion collections</h3>
+            <p>Accès au CRUD des collections</p>
+        </a>
+    </div>
+</main>
+{% endblock %}

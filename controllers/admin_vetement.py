@@ -7,18 +7,18 @@ from flask import request, render_template, redirect, flash, session
 
 from connexion_db import get_db
 
-admin_article = Blueprint('admin_article', __name__,
+admin_vetement = Blueprint('admin_vetement', __name__,
                           template_folder='templates')
 
 
-@admin_article.route('/admin/vetement/show')
+@admin_vetement.route('/admin/vetement/show')
 def show_vetement():
     if 'login' not in session or session['role'] != 'ROLE_admin':
         flash(u'Vous n\'avez pas les droits pour accéder à cette page','alert-danger')
         return redirect('/')
     mycursor = get_db().cursor()
     sql = '''  
-    SELECT id_vetement, prix_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement, id_type_vetement, libelle_collection AS collection
+    SELECT id_vetement, prix_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement, id_type_vetement, GROUP_CONCAT(libelle_collection SEPARATOR ', ') AS collection
     FROM vetement
     JOIN matiere
         ON matiere.id_matiere = vetement.matiere_id
@@ -34,6 +34,7 @@ def show_vetement():
         ON vetement.id_vetement = vetement_collection.vetement_id
     JOIN collection
         ON collection.id_collection = vetement_collection.collection_id
+    GROUP BY id_vetement, prix_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque, libelle_fournisseur, libelle_matiere, libelle_taille, libelle_type_vetement, id_type_vetement
     ORDER BY id_type_vetement;
     '''
     mycursor.execute(sql)
@@ -42,7 +43,7 @@ def show_vetement():
     return render_template('admin/vetement/show_vetement.html', vetements=vetements)
 
 
-@admin_article.route('/admin/vetement/add', methods=['GET'])
+@admin_vetement.route('/admin/vetement/add', methods=['GET'])
 def add_vetement():
     mycursor = get_db().cursor()
     sql = '''  
@@ -97,8 +98,8 @@ def add_vetement():
                             )
 
 
-@admin_article.route('/admin/vetement/add', methods=['POST'])
-def valid_add_article():
+@admin_vetement.route('/admin/vetement/add', methods=['POST'])
+def valid_add_vetement():
     mycursor = get_db().cursor()
 
     nom = request.form.get('nom', '')
@@ -110,7 +111,7 @@ def valid_add_article():
     marque_id = request.form.get('marque_id', '')
     fournisseur_id = request.form.get('fournisseur_id', '')
     taille_id = request.form.get('fournisseur_id', '')
-    collection_id = request.form.get('collection_id', '')
+    collection_ids = request.form.getlist('collection_id')
     stock = request.form.get('stock', '')
     
     if photo:
@@ -138,19 +139,18 @@ def valid_add_article():
     VALUES (%s, %s);
     '''
 
-    tuple_add = (id_vetement, collection_id)
-    print(tuple_add)
-    mycursor.execute(sql, tuple_add)
+    for collection_id in collection_ids:
+        mycursor.execute(sql, (id_vetement, collection_id))
 
     get_db().commit()
 
-    message = u'vetement ajouté , nom:' + nom + ' - description:' + description + ' - prix:' + prix + ' - matiere_id:' + matiere_id + ' - type_vetement:' + type_vetement_id + ' - photo:' + str(photo) + ' - marque_id:' + marque_id + ' - id_fournisseur:' + fournisseur_id + ' - taille_id:' + taille_id + ' - collection_id:' + collection_id + ' - stock:' + stock 
+    message = u'vetement ajouté , nom:' + nom + ' - description:' + description + ' - prix:' + prix + ' - matiere_id:' + matiere_id + ' - type_vetement:' + type_vetement_id + ' - photo:' + str(photo) + ' - marque_id:' + marque_id + ' - id_fournisseur:' + fournisseur_id + ' - taille_id:' + taille_id + ' - collection_ids:' + ', '.join(collection_ids) + ' - stock:' + stock 
     print(message)
     flash(message, 'alert-success')
     return redirect('/admin/vetement/show')
 
 
-@admin_article.route('/admin/vetement/delete', methods=['GET'])
+@admin_vetement.route('/admin/vetement/delete', methods=['GET'])
 def delete_vetement():
     id_vetement = request.args.get('id')
     mycursor = get_db().cursor()
@@ -166,7 +166,7 @@ def delete_vetement():
 
     """
     if nb_declinaison['nb_declinaison'] > 0:
-        message= u'il y a des declinaisons dans cet article : vous ne pouvez pas le supprimer'
+        message= u'il y a des declinaisons dans cet vetement : vous ne pouvez pas le supprimer'
         flash(message, 'alert-warning')
     """
     if (False):
@@ -216,14 +216,64 @@ def delete_vetement():
             #os.remove('static/images/' + image)
             pass
 
-        print("un vetement supprimé, id : ", id_vetement)
-        message = u'un vetement supprimé, id : ' + id_vetement
+        print("Vêtement supprimé, id : ", id_vetement)
+        message = u'un Vêtement supprimé, id : ' + id_vetement
         flash(message, 'alert-success')
 
     return redirect('/admin/vetement/show')
 
 
-@admin_article.route('/admin/vetement/edit', methods=['GET'])
+@admin_vetement.route('/admin/vetement/cascade-delete', methods=['GET'])
+def cascade_delete_vetement():
+    id_vetement = request.args.get('id')
+    redirect_url = request.args.get('redirect_url', '/admin/vetement/show')
+    mycursor = get_db().cursor()
+
+    # sql = '''
+    # SELECT photo
+    # FROM vetement
+    # WHERE vetement.id_vetement = %s;
+    # '''
+    # mycursor.execute(sql, id_vetement)
+    # vetement = mycursor.fetchone()
+
+    # if vetement:
+    #     image = vetement['photo']
+    # else:
+    #     image = ''
+
+    sql = '''
+    DELETE FROM vetement_collection
+    WHERE vetement_id = %s;
+    '''
+    mycursor.execute(sql, id_vetement)
+
+    sql = '''
+    DELETE FROM ligne_panier
+    WHERE vetement_id = %s;
+    '''
+    mycursor.execute(sql, id_vetement)
+
+    sql = '''
+    DELETE FROM ligne_commande
+    WHERE vetement_id = %s;
+    '''
+    mycursor.execute(sql, id_vetement)
+
+    sql = '''
+    DELETE FROM vetement
+    WHERE id_vetement = %s;
+    '''
+    mycursor.execute(sql, id_vetement)
+    get_db().commit()
+
+    message = u'Vêtement supprimé, id : ' + id_vetement
+    flash(message, 'alert-success')
+
+    return redirect(redirect_url)
+
+
+@admin_vetement.route('/admin/vetement/edit', methods=['GET'])
 def edit_vetement():
     id_vetement = request.args.get('id')
 
@@ -231,14 +281,21 @@ def edit_vetement():
     sql = '''
     SELECT *
     FROM vetement
-    JOIN vetement_collection
-        ON vetement.id_vetement = vetement_collection.vetement_id
-    JOIN collection
-        ON collection.id_collection = vetement_collection.collection_id
     WHERE id_vetement = %s 
     '''
     mycursor.execute(sql, id_vetement)
     vetement = mycursor.fetchone()
+
+    sql = '''
+    SELECT collection_id
+    FROM vetement_collection
+    WHERE vetement_id = %s
+    '''
+    mycursor.execute(sql, id_vetement)
+    vetement_collections_rows = mycursor.fetchall()
+    vetement_collections = []
+    for row in vetement_collections_rows:
+        vetement_collections.append(row['collection_id'])
 
     sql = '''  
     SELECT *
@@ -283,10 +340,10 @@ def edit_vetement():
     collections = mycursor.fetchall()
 
     # sql = '''
-    # requête admin_article_6
+    # requête admin_vetement_6
     # '''
-    # mycursor.execute(sql, id_article)
-    # declinaisons_article = mycursor.fetchall()
+    # mycursor.execute(sql, id_vetement)
+    # declinaisons_vetement = mycursor.fetchall()
 
     return render_template('admin/vetement/edit_vetement.html'
                            ,vetement=vetement
@@ -296,10 +353,11 @@ def edit_vetement():
                            ,fournisseurs=fournisseurs
                            ,tailles=tailles
                            ,collections=collections
+                           ,vetement_collections=vetement_collections
                             )
 
 
-@admin_article.route('/admin/vetement/edit', methods=['POST'])
+@admin_vetement.route('/admin/vetement/edit', methods=['POST'])
 def valid_edit_vetement():
     id_vetement = request.form.get('id_vetement', '')
     nom = request.form.get('nom', '')
@@ -311,7 +369,7 @@ def valid_edit_vetement():
     marque_id = request.form.get('marque_id', '')
     fournisseur_id = request.form.get('fournisseur_id', '')
     taille_id = request.form.get('fournisseur_id', '')
-    collection_id = request.form.get('collection_id', '')
+    collection_ids = request.form.getlist('collection_id')
     stock = request.form.get('stock', '')
 
     print(photo)
@@ -357,33 +415,34 @@ def valid_edit_vetement():
     INSERT INTO vetement_collection(vetement_id, collection_id)
     VALUES (%s, %s)
     '''
-    mycursor.execute(sql, (id_vetement, collection_id))
+    for collection_id in collection_ids:
+        mycursor.execute(sql, (id_vetement, collection_id))
 
     get_db().commit()
     #if image_nom is None:
     #    image_nom = ''
-    message = u'article modifié , nom:' + nom + ' - description:' + description + ' - prix:' + prix + ' - matiere_id:' + matiere_id + ' - type_vetement:' + type_vetement_id + ' - photo:' + str(photo) + ' - marque_id:' + marque_id + ' - id_fournisseur:' + fournisseur_id + ' - taille_id:' + taille_id + ' - collection_id:' + collection_id + ' - stock:' + stock 
+    message = u'Vêtement modifié , nom:' + nom + ' - description:' + description + ' - prix:' + prix + ' - matiere_id:' + matiere_id + ' - type_vetement:' + type_vetement_id + ' - photo:' + str(photo) + ' - marque_id:' + marque_id + ' - id_fournisseur:' + fournisseur_id + ' - taille_id:' + taille_id + ' - collection_ids:' + ', '.join(collection_ids) + ' - stock:' + stock 
     flash(message, 'alert-success')
     return redirect('/admin/vetement/show')
 
 
 
 
-@admin_article.route('/admin/article/avis/<int:id>', methods=['GET'])
+@admin_vetement.route('/admin/vetement/avis/<int:id>', methods=['GET'])
 def admin_avis(id):
     mycursor = get_db().cursor()
-    article=[]
+    vetement=[]
     commentaires = {}
-    return render_template('admin/article/show_avis.html'
-                           , article=article
+    return render_template('admin/vetement/show_avis.html'
+                           , vetement=vetement
                            , commentaires=commentaires
                            )
 
 
-@admin_article.route('/admin/comment/delete', methods=['POST'])
+@admin_vetement.route('/admin/comment/delete', methods=['POST'])
 def admin_avis_delete():
     mycursor = get_db().cursor()
-    article_id = request.form.get('idArticle', None)
+    vetement_id = request.form.get('idvetement', None)
     userId = request.form.get('idUser', None)
 
-    return admin_avis(article_id)
+    return admin_avis(vetement_id)
