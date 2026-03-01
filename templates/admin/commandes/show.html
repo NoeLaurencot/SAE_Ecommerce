@@ -7,6 +7,7 @@
 {% block body %}
     <main>
         <div class="command-container">
+
             {% if vetement_commandes != None %}
                 <table class="width60p align-self-center">
                 <thead>
@@ -30,40 +31,45 @@
                 </table>
             {% endif %}
         </div>
-        <div class="command-container">
-            <table>
-                <thead>
-                <tr>
-                    <th>Client</th>
-                    <th>Date de commande</th>
-                    <th>Nombre d'articles</th>
-                    <th>Coût total</th>
-                    <th>Etat de la commande</th>
-                    <th>Option</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for commande in commandes %}
+        {% if commandes | length > 0 %}
+            <div class="command-container">
+                <table>
+                    <thead>
                     <tr>
-                        <td>{{ commande.login }}</td>
-                        <td>{{ commande.date_achat }}</td>
-                        <td>{{ commande.quantite }}</td>
-                        <td>{{ commande.prix }}</td>
-                        <td>{{ commande.libelle_etat }}</td>
-                        <td class="command-button-container ">
-                            <form class="command" action="/admin/commande/valider" method="post">
-                                <input type="hidden" name="id_commande" id="id_commande"
-                                       value="{{ commande.commande_id }}">
-                                <button class="validate-button-white-outline width100p font-1rem">Valider (Expédier)</button>
-                            </form>
-                            <a class="validate-button-white-outline"
-                               href="/admin/commande/show?id_commande={{ commande.commande_id }}">Details</a>
-                        </td>
+                        <th>Client</th>
+                        <th>Date de commande</th>
+                        <th>Nombre d'articles</th>
+                        <th>Coût total</th>
+                        <th>Etat de la commande</th>
+                        <th>Option</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
+                    </thead>
+                    <tbody>
+                    {% for commande in commandes %}
+                        <tr>
+                            <td>{{ commande.login }}</td>
+                            <td>{{ commande.date_achat }}</td>
+                            <td>{{ commande.quantite }}</td>
+                            <td>{{ commande.prix }}</td>
+                            <td>{{ commande.libelle_etat }}</td>
+                            <td class="command-button-container ">
+                                <form class="command" action="/admin/commande/valider" method="post">
+                                    <input type="hidden" name="id_commande" id="id_commande"
+                                           value="{{ commande.commande_id }}">
+                                    <button class="validate-button-white-outline width100p font-1rem">Valider (Expédier)</button>
+                                </form>
+                                <a class="validate-button-white-outline"
+                                   href="/admin/commande/show?id_commande={{ commande.commande_id }}">Details</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="command-container">
+                <p class="align-self-center">Il n'y a pas de commande actuellement</p>
+            </div>
+        {% endif %}
     </main>
 {% endblock %}

@@ -30,33 +30,38 @@
                 </table>
             {% endif %}
         </div>
-        <div class="command-container">
-            <table>
-                <thead>
-                <tr>
-                    <th>Date de commande</th>
-                    <th>Nombre d'articles</th>
-                    <th>Coût total</th>
-                    <th>Etat de la commande</th>
-                    <th>Option</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for commande in commandes %}
+        {% if commandes | length > 0 %}
+            <div class="command-container">
+                <table>
+                    <thead>
                     <tr>
-                        <td>{{ commande.date_achat }}</td>
-                        <td>{{ commande.quantite }}</td>
-                        <td>{{ commande.prix }}</td>
-                        <td>{{ commande.libelle_etat }}</td>
-                        <td class="command-button-container">
-                            <a class="validate-button-white-outline"
-                               href="/client/commande/show?id_commande={{ commande.commande_id }}">Details</a>
-                        </td>
+                        <th>Date de commande</th>
+                        <th>Nombre d'articles</th>
+                        <th>Coût total</th>
+                        <th>Etat de la commande</th>
+                        <th>Option</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
+                    </thead>
+                    <tbody>
+                    {% for commande in commandes %}
+                        <tr>
+                            <td>{{ commande.date_achat }}</td>
+                            <td>{{ commande.quantite }}</td>
+                            <td>{{ commande.prix }}</td>
+                            <td>{{ commande.libelle_etat }}</td>
+                            <td class="command-button-container">
+                                <a class="validate-button-white-outline"
+                                   href="/client/commande/show?id_commande={{ commande.commande_id }}">Details</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="command-container">
+                <p class="align-self-center">Il n'y a pas de commande actuellement</p>
+            </div>
+        {% endif %}
     </main>
 {% endblock %}
