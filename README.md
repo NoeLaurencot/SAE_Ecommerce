@@ -2,13 +2,13 @@
 
 Projet de SAE  2 3 4
 
-Boutique fictive
+Boutique fictive faite avec Flask
 
 ## Gaullois
 
 Boutique de vêtements de luxe
 
- ## Fait part
+ ## Auteurs
 
  - Jules JEANROT
 
@@ -16,4 +16,6 @@ Boutique de vêtements de luxe
 
  - Noé LAURENÇOT
 
-https://gaullois-sae.up.railway.app/
+[Lien site 1](https://sae-ecommerce.onrender.com/)
+
+[Lien site 2](https://earlyalpha.ddns.net/)
