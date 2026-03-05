@@ -45,26 +45,6 @@
             <div class="panier-section panier-paiement">
                 <h2 class="no-margin">Paiement</h2>
                 <div class="divider"></div>
-                <div class="panier-paiement-line">
-                    <span>Sous-total</span>
-                    <span class="panier-paiement-link"></span>
-                    {% if lignes_panier %}
-                    <span>{{ panier_prix.prix_HT | round(2) }} €</span>
-                    {% else %}
-                    <span>0.00 €</span>
-                    {% endif %}
-                </div>
-                <div class="divider"></div>
-                <div class="panier-paiement-line">
-                    <span>Taxes</span>
-                    <span class="panier-paiement-link"></span>
-                    {% if lignes_panier %}
-                    <span>{{ panier_prix.prix_taxe | round(2) }} €</span>
-                    {% else %}
-                    <span>0.00 €</span>
-                    {% endif %}
-                </div>
-                <div class="divider"></div>
                 <div class="panier-paiement-line paiement-total">
                     <span>Total</span>
                     <span class="panier-paiement-link"></span>
