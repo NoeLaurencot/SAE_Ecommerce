@@ -1,5 +1,3 @@
-USE sae_commerce;
-
 DROP TABLE IF EXISTS vetement_taille;
 DROP TABLE IF EXISTS vetement_collection;
 DROP TABLE IF EXISTS ligne_panier;
@@ -246,6 +244,8 @@ VALUES ('Chemise de bureau bleue', 370, 'Chemise d''élégance intemporelle pour
     ('Chaussures de ville', 980, 'Chaussures de ville à patine artisanale sur cuir de veau.', 2, 6, 'shoes_leather.avif', 2, 2, 3, 5),
     ('Chaussure sneakers', 710, 'Sneakers à conception moderne alliant confort et style.', 8, 6, 'shoes_sneaker.avif', 3, 3, 3, 5),
     ('Chaussures baskets', 1200, 'Baskets de performance technique habillées de luxe.', 8, 6, 'shoes_sport.avif', 3, 3, 3, 5);
+
+
 
 INSERT INTO vetement_collection (vetement_id, collection_id)
 VALUES (1, 2),
