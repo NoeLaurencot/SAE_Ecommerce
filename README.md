@@ -16,5 +16,6 @@ Boutique de vêtements de luxe
 
  - Noé LAURENÇOT
 
-[Lien 1](https://sae-ecommerce.onrender.com/)
-[Lien 2](https://earlyalpha.ddns.net/)
+[Lien site 1](https://sae-ecommerce.onrender.com/)
+
+[Lien site 2](https://earlyalpha.ddns.net/)
