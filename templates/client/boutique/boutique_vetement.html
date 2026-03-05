@@ -87,9 +87,10 @@
                             </div>
                             {% if vetement.stock == 0 %}
                             <span class="vetement-stock-warning">Rupture de stock</span>
-                            {% elif vetement.stock <= 4 %} <span class="vetement-stock-warning">Plus que {{ vetement.stock
-                                }} vetements</span>
-                                {% endif %}
+                            {% elif vetement.stock <= 4 %} <span class="vetement-stock-warning">Plus que {{ vetement.stock}} vetements</span>
+                            {% else %}
+                            <span class="vetement-stock">{{ vetement.stock}} vetements restants</span>
+                            {% endif %}
                         </form>
                     </div>
                 </div>
