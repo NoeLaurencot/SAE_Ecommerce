@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS vetement
     id_vetement      INT AUTO_INCREMENT,
     nom_vetement     VARCHAR(50),
     prix_vetement    DECIMAL(17, 2),
-    description      CHAR(50),
+    description      VARCHAR(255),
     photo            VARCHAR(50),
     marque_id        INT NOT NULL,
     fournisseur_id   INT NOT NULL,
@@ -340,6 +340,22 @@ VALUES ('Chemise de bureau bleue', 370, 'Chemise d''élégance intemporelle pour
         'shoes_sneaker.avif', 3, 3),
        ('Chaussures baskets', 1200, 'Baskets de performance technique habillées de luxe.', 8, 6, 'shoes_sport.avif', 3,
         3);
+
+-- INSERT INTO declinaison_vetement (stock, vetement_id, taille_id)
+-- VALUES ();
+
+INSERT INTO adresse (nom_adresse, rue_adresse, code_postal, ville, date_utilisation, utilisateur_id)
+VALUES ("3 Rue du Cerisier", "Rue du Cerisier", "70000", "Vesoul", '2026-02-23', 2),
+       ("18 Rue Edouard Belin", "Rue Edouard Belin", "70000", "Vesoul", '2026-02-24', 2),
+       ("5 Rue de la 5eme DB", "Rue de la 5eme DB", "90000", "Belfort", '2025-02-24', 3),
+       ("2 Grande Rue", "Grande Rue", "90000", "Belfort", '2025-02-21', 3);
+
+INSERT INTO commande (date_achat, utilisateur_id, etat_id, adresse_livraison_id, adresse_facturation_id)
+VALUES
+    ('2026-02-20', 2, 1, 1, 1),
+    ('2026-02-20', 2, 1, 1, 2),
+    ('2026-02-21', 3, 2, 3, 3),
+    ('2026-02-22', 3, 3, 3, 4);
 
 INSERT INTO vetement_collection (vetement_id, collection_id)
 VALUES (1, 2),
