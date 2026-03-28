@@ -86,15 +86,6 @@
                     </select>
                 </div>
 
-                <div class="crud-field">
-                    <label for="taille_id">Taille</label>
-                    <select id="taille_id" name="taille_id">
-                        {% for taille in tailles %}
-                        <option value="{{ taille.id_taille }}" {% if taille.id_taille==vetement.taille_id %} selected {%
-                            endif %}>{{ taille.libelle_taille }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
             </div>
 
             <div class="crud-input-container">
