@@ -80,16 +80,6 @@
                         {% endfor %}
                     </select>
                 </div>
-
-                <div class="crud-field">
-                    <label for="taille_id">Taille</label>
-                    <select id="taille_id" name="taille_id" required>
-                        <option value="">Sélectionner une taille</option>
-                        {% for taille in tailles %}
-                        <option value="{{ taille.id_taille }}">{{ taille.libelle_taille }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
             </div>
 
             <div class="crud-input-container">

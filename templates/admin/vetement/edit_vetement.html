@@ -117,11 +117,12 @@
             <div class="crud-field-actions">
                 <button class="validate-button-black" type="submit">Modifier</button>
                 <a class="validate-button-white-outline" href="/admin/vetement/show" role="button">Retour</a>
+            </div>
         </form>
 
-        <!-- <div>
+        <div>
                     <div>
-                        <h3>déclinaison en fonction de la taille/couleur (variante)</h3>
+                        <h3>déclinaison en fonction de la taille (variante)</h3>
                         <a href="/admin/declinaison_vetement/add?id_vetement={{ vetement.id_vetement }}">
                             <button>
                                 Ajouter une déclinaison (variante)
@@ -131,14 +132,12 @@
                     <table class="">
 
                         <th>taille</th>
-                        <th>couleur</th>
                         <th>stock</th>
                         <th>opérations</th>
 
                         {% if declinaisons_vetement | length == 0 %}
                             <tr>
                                 <td>Aucun modèle</td>
-                                <td></td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -148,13 +147,10 @@
                                     <td>
                                         {{ declinaison_vetement.libelle_taille }}
                                     </td>
-                                    <td>
-                                        {{ declinaison_vetement.libelle_couleur }}
-                                    </td>
                                     <td>{{ declinaison_vetement.stock }}</td>
                                     <td>
                                         <a href="/admin/declinaison_vetement/delete?id_declinaison_vetement={{ declinaison_vetement.id_declinaison_vetement }}&amp;id_vetement={{ declinaison_vetement.vetement_id }}">
-                                            <button class="btn btn-primary mx-1">
+                                            <button class="">
                                                 supprimer
                                             </button>
                                         </a>
@@ -169,15 +165,11 @@
                         {% endif %}
                     </table>
 
-                </div> -->
-    </div>
-    </div>
+                </div>
 
+    </div>
     {% if pb_taille_uniq is defined and pb_taille_uniq==1 %}
     <span class="crud-warning">(pb sur les tailles : une taille unique est définie avec d'autres tailles)</span>
-    {% endif %}
-    {% if pb_couleur_uniq is defined and pb_couleur_uniq==1 %}
-    <span class="crud-warning">(pb sur les couleurs : une couleur unique est définie avec d'autres couleurs)</span>
     {% endif %}
 </main>
 {% endblock %}

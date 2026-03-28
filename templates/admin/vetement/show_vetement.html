@@ -21,9 +21,9 @@
                 <th>Marque</th>
                 <th>Fournisseur</th>
                 <th>Matiere</th>
-                <th>Taille</th>
                 <th>Collection</th>
-                <th>Stock</th>
+                <th style="color: green">Stock</th>
+                <th>nb déclinaissons</th>
                 <th>Image</th>
                 <th>Opérations</th>
             </tr>
@@ -39,9 +39,9 @@
                 <td>{{ ligne.marque }}</td>
                 <td>{{ ligne.fournisseur }}</td>
                 <td>{{ ligne.matiere }}</td>
-                <td>{{ ligne.taille }}</td>
                 <td class="td-truncate" title="{{ ligne.collection }}">{{ ligne.collection }}</td>
-                <td><strong>{{ ligne.stock }}</strong></td>
+                <td style="color: green"><strong>{{ ligne.stock }}</strong></td>
+                <td>{{ ligne.nb_declinaison }}</td>
                 <td>
                     <div class="crud-img">
                         {% if ligne.photo is not none %}
@@ -67,7 +67,7 @@
             {% else %}
             <tr>
                 <td>
-                    Pas d'vetement
+                    Pas de vetement
                 </td>
             </tr>
             {% endif %}

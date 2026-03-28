@@ -18,28 +18,27 @@ def show_vetement():
         return redirect('/')
     mycursor = get_db().cursor()
     sql = '''  
-    SELECT id_vetement, prix_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement, id_type_vetement, GROUP_CONCAT(libelle_collection SEPARATOR ', ') AS collection
+    SELECT id_vetement, prix_vetement, nom_vetement, description, SUM(stock) AS stock, COUNT(id_declinaison_vetement) AS nb_declinaison, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_type_vetement, id_type_vetement, GROUP_CONCAT(libelle_collection SEPARATOR ', ') AS collection
     FROM vetement
+    JOIN declinaison_vetement
+        ON declinaison_vetement.vetement_id = vetement.id_vetement
     JOIN matiere
         ON matiere.id_matiere = vetement.matiere_id
     JOIN fournisseur
         ON fournisseur.id_fournisseur = vetement.fournisseur_id
     JOIN marque
         ON marque.id_marque = vetement.marque_id
-    JOIN taille
-        ON taille.id_taille = vetement.taille_id
     JOIN type_vetement
         ON type_vetement.id_type_vetement = vetement.type_vetement_id
     JOIN vetement_collection
         ON vetement.id_vetement = vetement_collection.vetement_id
     JOIN collection
         ON collection.id_collection = vetement_collection.collection_id
-    GROUP BY id_vetement, prix_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque, libelle_fournisseur, libelle_matiere, libelle_taille, libelle_type_vetement, id_type_vetement
+    GROUP BY id_vetement, prix_vetement, nom_vetement, description, vetement.photo, marque, fournisseur, matiere, libelle_type_vetement, id_type_vetement
     ORDER BY id_type_vetement;
     '''
     mycursor.execute(sql)
     vetements = mycursor.fetchall()
-    print(vetements)
     return render_template('admin/vetement/show_vetement.html', vetements=vetements)
 
 
@@ -76,13 +75,6 @@ def add_vetement():
 
     sql = '''  
     SELECT *
-    FROM taille;
-    '''
-    mycursor.execute(sql)
-    tailles = mycursor.fetchall()
-
-    sql = '''  
-    SELECT *
     FROM collection;
     '''
     mycursor.execute(sql)
@@ -93,7 +85,6 @@ def add_vetement():
                            ,types_vetement=types_vetement
                            ,marques=marques
                            ,fournisseurs=fournisseurs
-                           ,tailles=tailles
                            ,collections=collections
                             )
 
@@ -126,7 +117,6 @@ def valid_add_vetement():
     '''
 
     tuple_add = (nom, prix, description, matiere_id, type_vetement_id, filename, marque_id, fournisseur_id, taille_id, stock)
-    print(tuple_add)
     mycursor.execute(sql, tuple_add)
 
     sql = '''SELECT last_insert_id() as last_insert_id
@@ -145,7 +135,6 @@ def valid_add_vetement():
     get_db().commit()
 
     message = u'vetement ajouté , nom:' + nom + ' - description:' + description + ' - prix:' + prix + ' - matiere_id:' + matiere_id + ' - type_vetement:' + type_vetement_id + ' - photo:' + str(photo) + ' - marque_id:' + marque_id + ' - id_fournisseur:' + fournisseur_id + ' - taille_id:' + taille_id + ' - collection_ids:' + ', '.join(collection_ids) + ' - stock:' + stock 
-    print(message)
     flash(message, 'alert-success')
     return redirect('/admin/vetement/show')
 
@@ -177,16 +166,13 @@ def delete_vetement():
         FROM vetement
         WHERE vetement.id_vetement = %s;
         '''
-        print("aaaaaaaaaaaaaaaaaaaa", id_vetement)
         mycursor.execute(sql, id_vetement)
         vetement = mycursor.fetchone()
-        print(vetement)
 
         if (vetement):
             image = vetement['photo']
         else:
             image = ''
-        print(image)
 
         sql = ''' 
         DELETE FROM vetement_collection
@@ -327,23 +313,20 @@ def edit_vetement():
 
     sql = '''  
     SELECT *
-    FROM taille;
-    '''
-    mycursor.execute(sql)
-    tailles = mycursor.fetchall()
-
-    sql = '''  
-    SELECT *
     FROM collection;
     '''
     mycursor.execute(sql)
     collections = mycursor.fetchall()
 
-    # sql = '''
-    # requête admin_vetement_6
-    # '''
-    # mycursor.execute(sql, id_vetement)
-    # declinaisons_vetement = mycursor.fetchall()
+    sql = '''
+    SELECT id_declinaison_vetement, libelle_taille, stock, vetement_id
+    FROM vetement
+    JOIN declinaison_vetement ON declinaison_vetement.vetement_id = vetement.id_vetement
+    JOIN taille ON taille.id_taille = declinaison_vetement.taille_id
+    WHERE id_vetement = %s;
+    '''
+    mycursor.execute(sql, id_vetement)
+    declinaisons = mycursor.fetchall()
 
     return render_template('admin/vetement/edit_vetement.html'
                            ,vetement=vetement
@@ -351,9 +334,9 @@ def edit_vetement():
                            ,types_vetement=types_vetement
                            ,marques=marques
                            ,fournisseurs=fournisseurs
-                           ,tailles=tailles
                            ,collections=collections
                            ,vetement_collections=vetement_collections
+                           ,declinaisons_vetement=declinaisons
                             )
 
 
@@ -400,10 +383,10 @@ def valid_edit_vetement():
     UPDATE vetement
     SET nom_vetement = %s, prix_vetement = %s, description = %s,
     matiere_id = %s, type_vetement_id = %s, marque_id = %s,
-    fournisseur_id = %s, taille_id = %s, stock = %s
+    fournisseur_id = %s
     WHERE id_vetement = %s; 
     '''
-    mycursor.execute(sql, (nom, prix, description, matiere_id, type_vetement_id, marque_id, fournisseur_id, taille_id, stock, id_vetement))
+    mycursor.execute(sql, (nom, prix, description, matiere_id, type_vetement_id, marque_id, fournisseur_id, id_vetement))
 
     sql = '''
     DELETE FROM vetement_collection
