@@ -1,4 +1,4 @@
-{% extends 'admin/layout_admin.html' %}
+{% extends 'layout.html' %}
 
 {% block title %}
     <title>ajouter un casque</title>
@@ -6,48 +6,30 @@
 
 {% block body %}
     <h2>ajouter une déclinaison d'un vetement</h2>
-    <div class="row mt-5">
-    {% if vetement.image is defined and vetement.image is not none %}
-        <img class="card-img-top rounded mx-4 d-block"  style="width:200px; height:200px; border: 1px solid black; padding: 25px;" id="output" src="{{ url_for('static', filename = 'images/')}}{{ vetement.image }}" alt="">
+    <div class="">
+    {% if vetement.photo is defined and vetement.photo is not none %}
+        <img class=""  style="width:200px; height:200px; border: 1px solid black; padding: 25px;" id="output" src="{{ url_for('static', filename = 'assets/images/clothes/')}}{{ vetement.photo }}" alt="">
     {% endif %}
-        <div class="w-25">
-            <form class="w-190" method="post" action="/admin/declinaison_vetement/add">
+        <div class="">
+            <form class="" method="post" action="/admin/declinaison_vetement/add">
                 <input id="id_vetement" type="hidden" name="id_vetement" value="{{ vetement.id_vetement }}">
                 <label for="stock">stock :
                     <input name="stock" id="stock" type="number" class="form-control" required>
                 </label>
-                {% if  d_couleur_uniq is defined and  d_couleur_uniq==1 %}
-                    <div>!</div><div><strong>Une couleur unique est définie </strong></div>
-                    <input type="hidden" name="couleur" value="1">
-                {% else %}
-                <label for="couleur">Couleur :
-                    <select name="couleur" required class="form-select">
-                        <option value="">Sélectionner une couleur</option>
-                        {% for couleur in couleurs %}
-                             <option value="{{ couleur.id_couleur }}"> {{ couleur.libelle }}</option>
-                        {% endfor %}
-                    </select>
-                </label>
-                {% endif %}
-                {% if  d_taille_uniq is defined and  d_taille_uniq==1 %}
-                    <div>!</div><div><strong>Une taille unique est définie </strong></div>
-                    <input type="hidden" name="taille" value="1">
-                {% else %}
                 <label for="taille">Taille :
-                    <select id="taille" name="taille" required class="form-select">
+                    <select id="id_taille" name="id_taille" required class="">
                         <option value="">Sélectionner une taille</option>
                         {% for taille in tailles %}
-                            <option value="{{ taille.id_taille }}"> {{ taille.libelle }}</option>
+                            <option value="{{ taille.id_taille }}"> {{ taille.libelle_taille }}</option>
                         {% endfor %}
                     </select>
                 </label>
-                {% endif %}
                 <label for="submit">
-                    <input name="submit" type="submit" value="Ajouter" class="btn btn-primary mt-2">
+                    <input name="submit" type="submit" value="Ajouter" class="">
                 </label>
 
             </form>
-         <a href="/admin/vetement/edit?id_vetement={{ vetement.id_vetement }}"><button class="btn btn-secondary mt-2">annuler</button></a>
+         <a href="/admin/vetement/edit?id_vetement={{ vetement.id_vetement }}"><button class="">annuler</button></a>
         </div>
     </div>
 {% endblock %}

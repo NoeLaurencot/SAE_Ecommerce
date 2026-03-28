@@ -13,12 +13,22 @@ admin_declinaison_vetement = Blueprint('admin_declinaison_vetement', __name__,
 def add_declinaison_vetement():
     id_vetement=request.args.get('id_vetement')
     mycursor = get_db().cursor()
-    vetement=[]
-    tailles=None
+
+    sql = '''
+    SELECT *
+    FROM vetement
+    WHERE vetement.id_vetement = %s
+    '''
+    mycursor.execute(sql, id_vetement);
+    vetement = mycursor.fetchone()
 
     sql = '''
     SELECT * FROM taille
     '''
+    mycursor.execute(sql);
+    tailles = mycursor.fetchall()
+    print(tailles)
+
     return render_template('admin/vetement/add_declinaison_vetement.html'
                            , vetement=vetement
                            , tailles=tailles
@@ -31,11 +41,49 @@ def valid_add_declinaison_vetement():
 
     id_vetement = request.form.get('id_vetement')
     stock = request.form.get('stock')
-    taille = request.form.get('taille')
-    couleur = request.form.get('couleur')
-    # attention au doublon
-    get_db().commit()
-    return redirect('/admin/vetement/edit?id_vetement=' + id_vetement)
+    id_taille = request.form.get('id_taille')
+
+    sql = '''
+    SELECT *
+    FROM declinaison_vetement
+    WHERE vetement_id = %s AND taille_id = %s
+    '''
+    tuple_param = (id_vetement, id_taille)
+    mycursor.execute(sql, tuple_param)
+    vetement = mycursor.fetchone()
+
+    if (vetement):
+
+        # Déclinaison voulue déjà présente, on met à jour le stock
+        sql = '''
+        UPDATE declinaison_vetement
+        SET stock = %s
+        WHERE vetement_id = %s AND taille_id = %s
+        '''
+        tuple_param = (stock, id_vetement, id_taille)
+        mycursor.execute(sql, tuple_param)
+
+        get_db().commit()
+
+        message = u'déclinaison déjà présente, mise à jour du stock : ' + stock
+        flash(message, 'alert-warning')
+
+    else:
+
+        # Ajouter une nouvelle déclinaison
+        sql = '''
+        INSERT INTO declinaison_vetement (stock, vetement_id, taille_id)
+        VALUES (%s, %s, %s)
+        '''
+        tuple_param = (stock, id_vetement, id_taille)
+        mycursor.execute(sql, tuple_param)
+
+        get_db().commit()
+
+        message = u'Déclinaison ajoutée : stock : ' + stock + ', vetement_id : ' + id_vetement + ', taille_id : ' + id_taille
+        flash(message, 'alert-success')
+
+    return redirect('/admin/vetement/edit?id=' + id_vetement)
 
 
 @admin_declinaison_vetement.route('/admin/declinaison_vetement/edit', methods=['GET'])
