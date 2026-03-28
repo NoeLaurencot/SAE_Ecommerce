@@ -14,16 +14,14 @@ def add_declinaison_vetement():
     id_vetement=request.args.get('id_vetement')
     mycursor = get_db().cursor()
     vetement=[]
-    couleurs=None
     tailles=None
-    d_taille_uniq=None
-    d_couleur_uniq=None
+
+    sql = '''
+    SELECT * FROM taille
+    '''
     return render_template('admin/vetement/add_declinaison_vetement.html'
                            , vetement=vetement
-                           , couleurs=couleurs
                            , tailles=tailles
-                           , d_taille_uniq=d_taille_uniq
-                           , d_couleur_uniq=d_couleur_uniq
                            )
 
 
@@ -76,6 +74,16 @@ def valid_edit_declinaison_vetement():
 def admin_delete_declinaison_vetement():
     id_declinaison_vetement = request.args.get('id_declinaison_vetement','')
     id_vetement = request.args.get('id_vetement','')
+    mycursor = get_db().cursor()
+    print(id_declinaison_vetement + "---------------------------")
+
+    sql = '''
+    DELETE FROM declinaison_vetement
+    WHERE declinaison_vetement.id_declinaison_vetement = %s;
+    '''
+    mycursor.execute(sql, (id_declinaison_vetement));
+
+    get_db().commit()
 
     flash(u'declinaison supprimée, id_declinaison_vetement : ' + str(id_declinaison_vetement),  'alert-success')
-    return redirect('/admin/vetement/edit?id_vetement=' + str(id_vetement))
+    return redirect('/admin/vetement/edit?id=' + str(id_vetement))
