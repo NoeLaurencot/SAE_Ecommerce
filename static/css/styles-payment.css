@@ -1,0 +1,35 @@
+.semi-container-payment {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: calc(50% - 20px);
+}
+.form-payment{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: var(--black);
+    width: calc(100% - 100px);
+    color: var(--white);
+    font-size: 1.2rem;
+    font-family: Playfair, serif;
+    height: fit-content;
+    padding: 20px 50px 50px 50px;
+    gap: 0.9rem;
+}
+.form-payment select {
+    width: 80%;
+    padding: 3px 40px 3px 5px;
+    margin: 10px;
+    border-radius: 0;
+    border: none;
+    color: var(--gold);
+    font-size: 0.9rem;
+}
+.form-payment label {
+    justify-self: start;
+    align-self: start;
+}

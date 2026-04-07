@@ -1,13 +1,30 @@
 {% extends('layout.html') %}
 
 {% block title %}
-    <title>Commandes | Gaullois</title>
+    <title>Paiement | Gaullois</title>
 {% endblock %}
 
 {% block body %}
     <main>
-        <div class="command-contain">
+        <div class="main-container-row">
+            <div class="semi-container-payment"></div>
+            <div class="semi-container-payment">
 
+                <form class="form-payment">
+                    <label for="shiping_adress_id">Adresse de livraison :</label>
+                    <select name="shiping_adress_id" id="shiping_adress_id">
+                        <option>Sélectionner une adresse</option>
+
+                    </select>
+                    <label for="payment_adress_id">Adresse de facturation :</label>
+                    <select name="payment_adress_id" id="payment_adress_id">
+                        <option>Sélectionner une adresse de facturation</option>
+
+                    </select>
+                    <input class="validate-button-white font-1rem width40p" type="submit" value="Valider">
+                </form>
+
+            </div>
         </div>
     </main>
 {% endblock %}

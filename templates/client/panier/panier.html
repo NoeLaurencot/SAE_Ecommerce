@@ -26,7 +26,7 @@
                         <span><b>{{ ligne_panier.prix_vetement }}€</b></span>
                     </div>
                     <form action="/client/panier/delete/line" method="post">
-                        <input hidden type="text" value="{{ ligne_panier.id_vetement }}" name="id-ligne">
+                        <input hidden type="text" value="{{ ligne_panier.id_declinaison_vetement }}" name="id-ligne">
                         <button class="material-symbols-outlined panier-item-delete" type="submit">delete</button>
                     </form>
                 </div>
@@ -62,10 +62,17 @@
                     </div>
                 </div>
                 <div class="divider"></div>
-                <form action="/client/commande/add" method="post"> <!-- TODO changer la route pour passer commande -->
+            {% if lignes_panier %}
+                <form action="/client/commande/valide" method="post">
                     <button class="validate-button-black" type="submit">
                         <span class="material-symbols-outlined">lock</span>Passer au paiement</button>
                 </form>
+            {% else %}
+                <form >
+                    <button disabled class="validate-button-black-disabled">
+                        <span class="material-symbols-outlined">lock</span>Passer au paiement</button>
+                </form>
+            {% endif %}
             </div>
         </div>
     </div>

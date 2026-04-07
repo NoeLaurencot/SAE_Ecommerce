@@ -27,7 +27,7 @@
                                 <span class="panier-boutique-item-price">{{ ligne.prix_vetement }} €</span>
                             </div>
                             <form action="/client/panier/delete/line" method="post">
-                                <input hidden type="text" value="{{ ligne.id_vetement }}" name="id-ligne">
+                                <input hidden type="text" value="{{ ligne.declinaison_vetement_id }}" name="id-ligne">
                                 <button class="panier-boutique-item-delete" type="submit">
                                     <span class="material-symbols-outlined">delete</span>
                                 </button>

@@ -8,23 +8,38 @@ from connexion_db import get_db
 client_commande = Blueprint('client_commande', __name__,
                         template_folder='templates')
 
-
 # validation de la commande : partie 2 -- vue pour choisir les adresses (livraision et facturation)
 @client_commande.route('/client/commande/valide', methods=['POST'])
 def client_commande_valide():
-
+    if 'login' not in session:
+        flash(u'Veuillez vous connecte', 'alert-danger')
+        return redirect('/login')
+    elif session['role'] != 'ROLE_client':
+        flash(u'Un admin ne peut pas commander', 'alert-danger')
+        return redirect('/')
     mycursor = get_db().cursor()
+
     id_client = session['id_user']
-    sql = '''
-    '''
-    vetements_panier = []
+    sql = '''SELECT utilisateur_id, ligne_panier.ideclinaison_vetement_id, vetement.prix_vetement as prix, quantite
+             FROM ligne_panier
+                      JOIN declinaison_vetement on declinaison_vetement.id_declinaison_vetement = ligne_panier.ideclinaison_vetement_id
+                      JOIN vetement on declinaison_vetement.vetement_id = vetement.id_vetement
+             WHERE utilisateur_id = %s; \
+          '''
+    mycursor.execute(sql, id_client)
+    vetements_panier = mycursor.fetchall()
+    if len(vetements_panier) < 1:
+        flash(u'Panier vide', 'alert-danger')
+        return redirect('/')
+
+
     if len(vetements_panier) >= 1:
         sql = ''' calcul du prix total du panier '''
         prix_total = None
     else:
         prix_total = None
     # etape 2 : selection des adresses
-    return render_template('client/boutique/panier_validation_adresses.html'
+    return render_template('client/commandes/panier_validation.html'
                            #, adresses=adresses
                            , vetements_panier=vetements_panier
                            , prix_total= prix_total
@@ -35,7 +50,10 @@ def client_commande_valide():
 
 @client_commande.route('/client/commande/add', methods=['POST'])
 def client_commande_add():
-    if 'login' not in session or session['role'] != 'ROLE_client':
+    if 'login' not in session:
+        flash(u'Veuillez vous connecte', 'alert-danger')
+        return redirect('/login')
+    elif session['role'] != 'ROLE_client':
         flash(u'Un admin ne peut pas commander', 'alert-danger')
         return redirect('/')
     mycursor = get_db().cursor()
@@ -43,9 +61,10 @@ def client_commande_add():
     # choix de(s) (l')adresse(s)
 
     id_client = session['id_user']
-    sql = '''SELECT utilisateur_id ,vetement_id,vetement.prix_vetement as prix,quantite
+    sql = '''SELECT utilisateur_id ,ligne_panier.ideclinaison_vetement_id,vetement.prix_vetement as prix,quantite
         FROM ligne_panier
-        JOIN vetement on vetement.id_vetement = ligne_panier.vetement_id
+            JOIN declinaison_vetement on ligne_panier.ideclinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
+        JOIN vetement on vetement.id_vetement = declinaison_vetement.vetement_id
         WHERE utilisateur_id = %s;
 '''
     mycursor.execute(sql,id_client)
@@ -70,13 +89,13 @@ def client_commande_add():
 
     for item in items_ligne_panier:
         sql = '''DELETE FROM ligne_panier
-                WHERE utilisateur_id = %s and vetement_id = %s'''
-        param = (item['utilisateur_id'],item['vetement_id'])
+                WHERE utilisateur_id = %s and ideclinaison_vetement_id = %s'''
+        param = (item['utilisateur_id'],item['ideclinaison_vetement_id'])
         mycursor.execute(sql,param)
         get_db().commit()
-        sql1 = '''INSERT INTO ligne_commande (commande_id,vetement_id,prix,quantite)
+        sql1 = '''INSERT INTO ligne_commande (commande_id,declinaison_vetement_id,prix,quantite)
                   VALUES (%s,%s,%s,%s)'''
-        param = (id_commande,item['vetement_id'],item['prix'],item['quantite'])
+        param = (id_commande,item['ideclinaison_vetement_id'],item['prix'],item['quantite'])
         mycursor.execute(sql1,param)
         get_db().commit()
 
@@ -88,7 +107,10 @@ def client_commande_add():
 
 @client_commande.route('/client/commande/show', methods=['get','post'])
 def client_commande_show():
-    if 'login' not in session or session['role'] != 'ROLE_client':
+    if 'login' not in session:
+        flash(u'Veuillez vous connecte', 'alert-danger')
+        return redirect('/login')
+    elif session['role'] != 'ROLE_client':
         flash(u'Un admin ne peut pas commander', 'alert-danger')
         return redirect('/')
     mycursor = get_db().cursor()
@@ -107,10 +129,22 @@ def client_commande_show():
     vetement_commandes = None
     commande_adresses = None
     id_commande = request.args.get('id_commande', None)
+
+    sql= """SELECT id_commande
+            FROM commande
+            WHERE utilisateur_id = %s"""
+    mycursor.execute(sql,id_client)
+    should_have = mycursor.fetchall()
+    should_have = [commande['id_commande'] for commande in should_have]
+
     if id_commande != None:
+        if int(id_commande) not in should_have:
+            flash(u'Ce n\'est pas votre commande', 'alert-danger')
+            return redirect('/')
         sql = ''' SELECT nom_vetement,quantite,prix,prix*quantite as prix_total
                  FROM ligne_commande
-                          JOIN vetement on ligne_commande.vetement_id = vetement.id_vetement
+                          JOIN declinaison_vetement on ligne_commande.declinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
+                          JOIN vetement on declinaison_vetement.vetement_id = vetement.id_vetement
                  WHERE commande_id = %s;'''
         mycursor.execute(sql,id_commande)
         vetement_commandes = mycursor.fetchall()
@@ -123,3 +157,4 @@ def client_commande_show():
                            , vetement_commandes=vetement_commandes
                            , commande_adresses=commande_adresses
                            )
+

@@ -8,12 +8,40 @@ from connexion_db import get_db
 client_coordonnee = Blueprint('client_coordonnee', __name__,
                         template_folder='templates')
 
+"""
+Define whether the session can log in the page or not.
+Return false if it can,else return a redirection based on the session.
+"""
+def canAcess():
+    if 'login' not in session:
+        flash(u'Veuillez vous connecte', 'alert-danger')
+        return True,redirect('/login')
+    elif session['role'] != 'ROLE_client':
+        flash(u'Un admin n\'a pas de coordonnee', 'alert-danger')
+        return True,redirect('/')
+    else:
+        return False
+
 
 @client_coordonnee.route('/client/coordonnee/show')
 def client_coordonnee_show():
+    access = canAcess()
+    if access[0]:
+        return access[1]
     mycursor = get_db().cursor()
     id_client = session['id_user']
-    utilisateur=[]
+    sql="""SELECT login,nom,email
+        FROM utilisateur
+        WHERE id_utilisateur = %s;
+    """
+    mycursor.execute(sql,id_client)
+    utilisateur=mycursor.fetchall()
+
+
+
+
+
+
     return render_template('client/coordonnee/show_coordonnee.html'
                            , utilisateur=utilisateur
                          #  , adresses=adresses
@@ -22,6 +50,10 @@ def client_coordonnee_show():
 
 @client_coordonnee.route('/client/coordonnee/edit', methods=['GET'])
 def client_coordonnee_edit():
+    access = canAcess()
+    if access[0]:
+        return access[1]
+
     mycursor = get_db().cursor()
     id_client = session['id_user']
 

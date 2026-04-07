@@ -92,6 +92,24 @@ body {
 	cursor: pointer;
 }
 
+
+.validate-button-black-disabled {
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+    align-items: center;
+    color: var(--white);
+    border : none;
+    background-color: var(--gray);
+	padding: 10px 40px;
+	font-weight: 500;
+	font-family: "Playfair", sans-serif;
+}
+
+.validate-button-black-disabled:hover {
+	cursor: not-allowed;
+}
+
 .validate-button-white {
     display: flex;
     justify-content: center;

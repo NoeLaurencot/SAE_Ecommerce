@@ -19,11 +19,12 @@ def client_panier_show():
     id_utilisateur = session['id_user']
     param = (id_utilisateur)
     sql = """
-    SELECT id_vetement, nom_vetement, vetement.photo, stock, prix_vetement, libelle_taille, libelle_marque, ligne_panier.quantite, ligne_panier.date_ajout
+    SELECT id_declinaison_vetement, nom_vetement, vetement.photo, stock, prix_vetement, libelle_taille, libelle_marque, ligne_panier.quantite, ligne_panier.date_ajout
     FROM ligne_panier
-    INNER JOIN vetement ON ligne_panier.vetement_id = vetement.id_vetement
+    INNER JOIN declinaison_vetement on ligne_panier.ideclinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
+    INNER JOIN vetement ON declinaison_vetement.vetement_id = vetement.id_vetement
     INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
-    INNER JOIN taille ON vetement.taille_id = taille.id_taille
+    INNER JOIN taille ON declinaison_vetement.taille_id = taille.id_taille
     INNER JOIN marque ON vetement.marque_id = marque.id_marque
     WHERE id_utilisateur = %s;
     """
@@ -33,7 +34,8 @@ def client_panier_show():
     sql = """
     SELECT SUM(prix_vetement * quantite) as prix_TTC, SUM(prix_vetement * 0.2 * quantite) AS prix_taxe, SUM(prix_vetement * quantite - prix_vetement * 0.2 * quantite) AS prix_HT
     FROM ligne_panier
-    INNER JOIN vetement ON ligne_panier.vetement_id = vetement.id_vetement
+    INNER JOIN declinaison_vetement on ligne_panier.ideclinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
+    INNER JOIN vetement ON declinaison_vetement.vetement_id = vetement.id_vetement
     INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
     WHERE id_utilisateur = %s;
     """
@@ -56,14 +58,14 @@ def client_panier_add():
 
     mycursor = get_db().cursor()
     id_client = session['id_user']
-    id_vetement = request.form.get('id_vetement')
+    id_vetement = request.form.get('declinaison_vetement_id')
     quantite = request.form.get('quantite')
 
     param = (id_vetement)
     sql = """
     SELECT stock
-    FROM vetement
-    WHERE id_vetement = %s;
+    FROM declinaison_vetement
+    WHERE id_declinaison_vetement = %s;
     """
     mycursor.execute(sql, param)
     tmp = mycursor.fetchone()

@@ -75,7 +75,7 @@
                     <div class="card-price-button">
                         <div class="card-price">{{ vetement.prix }} €</div>
                         <form class="input-vetement-container" action="/client/panier/add" method="post">
-                            <input type="hidden" name="id_vetement" id="id_vetement" value="{{ vetement.id_vetement }}">
+                            <input type="hidden" name="declinaison_vetement_id" id="declinaison_vetement_id" value="{{ vetement.declinaison_vetement_id }}">
                             <div class="input-vetement">
                                 <button class="material-symbols-outlined card-button" type="submit">shopping_cart</button>
                                 <div class="input-vetement-wrapper">
