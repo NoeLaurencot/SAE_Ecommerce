@@ -12,22 +12,29 @@ admin_dataviz = Blueprint('admin_dataviz', __name__,
 def show_type_vetement_stock():
     mycursor = get_db().cursor()
     sql = '''
-    
-           '''
-    # mycursor.execute(sql)
-    # datas_show = mycursor.fetchall()
-    # labels = [str(row['libelle']) for row in datas_show]
-    # values = [int(row['nbr_vetements']) for row in datas_show]
+    SELECT id_type_vetement, libelle_type_vetement, COUNT(id_vetement) as nbr_vetements
+    FROM type_vetement
+    JOIN vetement
+        ON vetement.type_vetement_id = type_vetement.id_type_vetement
+    GROUP BY id_type_vetement, libelle_type_vetement;
+    '''
+    mycursor.execute(sql)
+    datas_show = mycursor.fetchall()
+    labels = [str(row['libelle_type_vetement']) for row in datas_show]
+    values = [int(row['nbr_vetements']) for row in datas_show]
 
-    # sql = '''
-    #         
-    #        '''
-    datas_show=[]
-    labels=[]
-    values=[]
+    print(datas_show)
+
+    sql = '''
+    SELECT COUNT(id_vetement) AS nb
+    FROM vetement;
+    '''
+    mycursor.execute(sql)
+    nb_vetements = mycursor.fetchone()
 
     return render_template('admin/dataviz/dataviz_etat_1.html'
                            , datas_show=datas_show
+                           , nb_vetements=nb_vetements
                            , labels=labels
                            , values=values)
 

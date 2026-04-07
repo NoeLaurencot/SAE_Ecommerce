@@ -1,43 +1,47 @@
-{% extends 'admin/layout_admin.html' %}
+{% extends 'layout.html' %}
 
 
 {% block javascripts %}
 {#    attention il faut importer la bibliotheque chart.js avant de définir l'objet chart#}
-    {{ super() }}
-   {# <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.js') }}" ></script>#}
+
+   <script src="{{ url_for('static', filename='js/bootstrap.js') }}" ></script>
+
 {% endblock %}
 
 {% block javascripts_head %}
 {#    attention il faut importer la bibliotheque chart.js avant de définir l'objet chart#}
-{#    <script src="{{ url_for('static', filename='chart.js') }}" ></script>#}
-      <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+    <script src="{{ url_for('static', filename='js/Chart.js') }}" ></script>
+{#<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>#}
+
 {% endblock %}
 
+
 {% block title %}
-    <title>afficher les types d'vetement</title>
+    <title>Afficher les types de vetements</title>
 {% endblock %}
 
 {% block body %}
 <br>
 
-    <h2> nombre d'vetements :
-{#    <span style="color: red;">{{ cout_total.nbr_vetements }}</span></h2>#}
+    <h2> nombre de vetements :
+    <span style="color: red;">{{ nb_vetements.nb }}</span>
+    </h2>
 
-<table class="table">
-    <thead class="thead-dark">
+<table class="">
+    <thead class="">
         <tr>
-           <th>type d'vetement</th> <th>(id)</th><th>nombre d'vetements</th>
+           <th>type de vetement</th> <th>(id)</th><th>nombre de vetements</th>
         </tr>
     </thead>
     <tbody>
-    {% if types_vetements_nb | length >= 1 %}
-        {% for ligne in types_vetements_nb %}
+    {% if datas_show | length >= 1 %}
+        {% for ligne in datas_show %}
            <tr>
-                  <td>{{ ligne.libelle }}</td>
+                  <td>{{ ligne.libelle_type_vetement }}</td>
                   <td>{{ ligne.id_type_vetement }}</td>
                    <td><span style="color: red">
-                       {% if ligne.nbr_vetements_stock is not none %}  {{ ligne.nbr_vetements }} {% else %}
-                       pas d'vetement {% endif %}
+                       {% if ligne.nbr_vetements is not none %}  {{ ligne.nbr_vetements }} {% else %}
+                       pas de vetement {% endif %}
                    </span></td>
 
            </tr>
@@ -48,7 +52,7 @@
     </tbody>
 </table>
     <br>
-{#    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>#}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <h2>visualisation de données : graph.js</h2>
 <h3>Documentation</h3>
@@ -84,7 +88,14 @@
   			]
   		},
   		option: {
-  			responsive: false
+  			responsive: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
   		}
 	});
     </script>
@@ -100,7 +111,7 @@
     data: {
       labels: {{ labels | safe }},
       datasets: [{
-        label: "Type d'vetements (nombre)",
+        label: "Type de vetements (nombre)",
          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
              "#faf24c"
              , "#6a6ce7","#55f68f","#D0c309","#c45000"],

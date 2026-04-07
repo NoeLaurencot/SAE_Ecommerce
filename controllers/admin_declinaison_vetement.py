@@ -90,17 +90,26 @@ def valid_add_declinaison_vetement():
 def edit_declinaison_vetement():
     id_declinaison_vetement = request.args.get('id_declinaison_vetement')
     mycursor = get_db().cursor()
-    declinaison_vetement=[]
-    couleurs=None
-    tailles=None
-    d_taille_uniq=None
-    d_couleur_uniq=None
+
+    sql = '''
+    SELECT *
+    FROM declinaison_vetement
+    WHERE id_declinaison_vetement = %s
+    '''
+
+    mycursor.execute(sql, id_declinaison_vetement)
+    declinaison_vetement = mycursor.fetchone()
+
+    sql = '''
+    SELECT *
+    FROM taille
+    '''
+
+    mycursor.execute(sql)
+    tailles = mycursor.fetchall()
     return render_template('admin/vetement/edit_declinaison_vetement.html'
                            , tailles=tailles
-                           , couleurs=couleurs
                            , declinaison_vetement=declinaison_vetement
-                           , d_taille_uniq=d_taille_uniq
-                           , d_couleur_uniq=d_couleur_uniq
                            )
 
 
@@ -110,12 +119,21 @@ def valid_edit_declinaison_vetement():
     id_vetement = request.form.get('id_vetement','')
     stock = request.form.get('stock','')
     taille_id = request.form.get('id_taille','')
-    couleur_id = request.form.get('id_couleur','')
     mycursor = get_db().cursor()
 
-    message = u'declinaison_vetement modifié , id:' + str(id_declinaison_vetement) + '- stock :' + str(stock) + ' - taille_id:' + str(taille_id) + ' - couleur_id:' + str(couleur_id)
+    print(id_vetement + '- -------------------------')
+    sql = '''
+    UPDATE declinaison_vetement
+    SET stock = %s, taille_id = %s
+    WHERE id_declinaison_vetement = %s;
+    '''
+
+    mycursor.execute(sql, (stock, taille_id, id_declinaison_vetement))
+    get_db().commit()
+
+    message = u'declinaison_vetement modifié , id:' + str(id_declinaison_vetement) + '- stock :' + str(stock) + ' - taille_id:' + str(taille_id)
     flash(message, 'alert-success')
-    return redirect('/admin/vetement/edit?id_vetement=' + str(id_vetement))
+    return redirect('/admin/vetement/edit?id=' + str(id_vetement))
 
 
 @admin_declinaison_vetement.route('/admin/declinaison_vetement/delete', methods=['GET'])
@@ -123,7 +141,6 @@ def admin_delete_declinaison_vetement():
     id_declinaison_vetement = request.args.get('id_declinaison_vetement','')
     id_vetement = request.args.get('id_vetement','')
     mycursor = get_db().cursor()
-    print(id_declinaison_vetement + "---------------------------")
 
     sql = '''
     DELETE FROM declinaison_vetement

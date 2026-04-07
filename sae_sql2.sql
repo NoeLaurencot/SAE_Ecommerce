@@ -284,7 +284,6 @@ VALUES ('Chemise de bureau bleue', 370, 'Chemise d''élégance intemporelle pour
         'shirt_feathers.avif', 2, 3),
        ('Chemise a fioriture en or', 1630, 'Chemise aux détails dorés brodés main, symbole de prestige absolu.', 5, 1,
         'shirt_gold.avif', 3, 3),
-       ('Chemise en jean', 710, 'Chemise en denim premium au style décontracté chic.', 6, 1, 'shirt_jeans.avif', 4, 3),
        ('Chemise de soie', 2100, 'Chemise en soie pure tissée avec finesse pour un confort luxueux.', 5, 1,
         'shirt_silk.avif', 5, 1),
 
@@ -311,11 +310,9 @@ VALUES ('Chemise de bureau bleue', 370, 'Chemise d''élégance intemporelle pour
        ('Robe bleue', 570, 'Robe en bleu azur profond pour une féminité éclatante.', 1, 4, 'dress_blue.avif', 2, 1),
        ('Robe Grise Designer', 1880, 'Robe création exclusive alliant audace et raffinement.', 5, 4,
         'dress_designer.avif', 1, 1),
-       ('Robe à points', 120, 'Robe au motif pois rétro revisité avec modernité.', 1, 4, 'dress_dots.avif', 2, 3),
        ('Robe pencil blanche', 1900, 'Robe à silhouette sculptée en soie blanche immaculée.', 5, 4,
         'dress_pencil_white.avif', 5, 3),
        ('Robe rouge', 380, 'Robe rouge passion pour une présence magnétique.', 1, 4, 'dress_red.avif', 1, 2),
-       ('Robe à rose', 1560, 'Robe ornée d''une rose brodée, romantisme absolu.', 1, 4, 'dress_rose.avif', 1, 3),
 
        ('Manteau vert', 1320, 'Manteau vert émeraude profond, élégance végétale.', 1, 5, 'coat_designer.avif', 6, 3),
        ('Manteau New York', 750, 'Manteau à coupe urbaine inspirée des avenues new-yorkaises.', 1, 5,
@@ -329,7 +326,6 @@ VALUES ('Chemise de bureau bleue', 370, 'Chemise d''élégance intemporelle pour
        ('Veste de costume', 8630, 'Veste de tailleur d''exception pour occasions prestigieuses.', 4, 5,
         'coat_suit.avif', 6, 1),
 
-       ('Bottes modernes', 3700, 'Bottes en cuir noble au design contemporain épuré.', 2, 6, 'shoes_boots.avif', 6, 3),
        ('Chassures à talons en verre', 6200, 'Chaussures à talons en verre soufflé main, pièce de collection unique.',
         7, 6, 'shoes_glass.avif', 6, 1),
        ('Chaussures de randonnée', 2600, 'Chaussures de randonnée en cuir robuste pour explorer avec distinction.', 2,
@@ -443,24 +439,7 @@ VALUES (2, 1, 4),
        (1, 31, 7),
        (2, 31, 4),
        (1, 31, 1),
-       (2, 31, 2),
-       (1, 32, 3),
-       (1, 32, 4),
-       (2, 32, 5),
-       (8, 33, 6),
-       (2, 33, 4),
-       (3, 34, 4),
-       (4, 35, 4),
-       (3, 35, 2),
-       (2, 35, 5),
-       (1, 35, 1),
-       (1, 36, 7),
-       (1, 36, 6),
-       (1, 36, 5),
-       (2, 36, 1),
-       (1, 36, 2),
-       (1, 36, 3),
-       (2, 36, 4);
+       (2, 31, 2);
 
 INSERT INTO adresse (nom_adresse, rue_adresse, code_postal, ville, date_utilisation, utilisateur_id)
 VALUES ("3 Rue du Cerisier", "Rue du Cerisier", "70000", "Vesoul", '2026-02-23', 2),
@@ -516,10 +495,4 @@ VALUES (1, 2),
        (29, 2),
        (30, 2),
 
-       (31, 2),
-       (32, 2),
-       (33, 1),
-       (34, 1),
-       (35, 2),
-       (36, 1),
-       (36, 3);
+       (31, 2);

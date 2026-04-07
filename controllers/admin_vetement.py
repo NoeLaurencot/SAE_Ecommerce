@@ -39,6 +39,7 @@ def show_vetement():
     '''
     mycursor.execute(sql)
     vetements = mycursor.fetchall()
+
     return render_template('admin/vetement/show_vetement.html', vetements=vetements)
 
 

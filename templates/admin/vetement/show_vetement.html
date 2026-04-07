@@ -40,7 +40,11 @@
                 <td>{{ ligne.fournisseur }}</td>
                 <td>{{ ligne.matiere }}</td>
                 <td class="td-truncate" title="{{ ligne.collection }}">{{ ligne.collection }}</td>
+                {% if ligne.stock > 0 %}
                 <td style="color: green"><strong>{{ ligne.stock }}</strong></td>
+                {% else %}
+                <td style="color: red"><strong>{{ ligne.stock }}</strong></td>
+                {% endif %}
                 <td>{{ ligne.nb_declinaison }}</td>
                 <td>
                     <div class="crud-img">
