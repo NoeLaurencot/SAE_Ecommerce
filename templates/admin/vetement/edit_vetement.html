@@ -8,9 +8,7 @@
     <h2>Modifier un vêtement</h2>
     <div class="crud-update-container">
         {% if vetement.photo is not none %}
-        <img class="crud-update-img" id="img_output"
-            src="{{ url_for('static', filename = 'assets/images/clothes/') }}{{ vetement.photo }}"
-            alt="Image de {{ vetement.nom_vetement }}">
+        <img class="crud-update-img" id="img_output" src="{{ url_for('static', filename = 'assets/images/clothes/') }}{{ vetement.photo }}" alt="Image de {{ vetement.nom_vetement }}">
         {% endif %}
         <form class="crud-input-list" method="post" action="/admin/vetement/edit" enctype="multipart/form-data">
             <input type="hidden" value="{{ vetement.id_vetement }}" name="id_vetement">
@@ -23,8 +21,7 @@
 
                 <div class="crud-field">
                     <label for="prix">Prix (€)</label>
-                    <input id="prix" name="prix" type="number" min="0.0" step="0.01"
-                        value="{{ vetement.prix_vetement }}">
+                    <input id="prix" name="prix" type="number" min="0.0" step="0.01" value="{{ vetement.prix_vetement }}">
                 </div>
             </div>
 
@@ -38,8 +35,7 @@
                     <label for="matiere_id">Matière</label>
                     <select id="matiere_id" name="matiere_id">
                         {% for matiere in matieres %}
-                        <option value="{{ matiere.id_matiere }}" {% if matiere.id_matiere==vetement.matiere_id %}
-                            selected {% endif %}>{{ matiere.libelle_matiere }}</option>
+                        <option value="{{ matiere.id_matiere }}" {% if matiere.id_matiere==vetement.matiere_id %} selected {% endif %}>{{ matiere.libelle_matiere }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -48,8 +44,7 @@
                     <label for="type_vetement_id">Type de vêtement</label>
                     <select id="type_vetement_id" name="type_vetement_id">
                         {% for type in types_vetement %}
-                        <option value="{{ type.id_type_vetement }}" {% if
-                            type.id_type_vetement==vetement.type_vetement_id %} selected {% endif %}>{{
+                        <option value="{{ type.id_type_vetement }}" {% if type.id_type_vetement==vetement.type_vetement_id %} selected {% endif %}>{{
                             type.libelle_type_vetement }}</option>
                         {% endfor %}
                     </select>
@@ -67,8 +62,7 @@
                     <label for="marque_id">Marque</label>
                     <select id="marque_id" name="marque_id">
                         {% for marque in marques %}
-                        <option value="{{ marque.id_marque }}" {% if marque.id_marque==vetement.marque_id %} selected {%
-                            endif %}>{{ marque.libelle_marque }}</option>
+                        <option value="{{ marque.id_marque }}" {% if marque.id_marque==vetement.marque_id %} selected {% endif %}>{{ marque.libelle_marque }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -79,8 +73,7 @@
                     <label for="fournisseur_id">Fournisseur</label>
                     <select id="fournisseur_id" name="fournisseur_id">
                         {% for fournisseur in fournisseurs %}
-                        <option value="{{ fournisseur.id_fournisseur }}" {% if
-                            fournisseur.id_fournisseur==vetement.fournisseur_id %} selected {% endif %}>{{
+                        <option value="{{ fournisseur.id_fournisseur }}" {% if fournisseur.id_fournisseur==vetement.fournisseur_id %} selected {% endif %}>{{
                             fournisseur.libelle_fournisseur }}</option>
                         {% endfor %}
                     </select>
@@ -106,52 +99,49 @@
             </div>
         </form>
 
-        <div>
-                    <div>
-                        <h3>déclinaison en fonction de la taille (variante)</h3>
-                        <a href="/admin/declinaison_vetement/add?id_vetement={{ vetement.id_vetement }}">
-                            <button>
-                                Ajouter une déclinaison (variante)
-                            </button>
-                        </a>
-                    </div>
-                    <table class="">
+        <div style="flex-grow: 1;">
+            <div class="crud-top-actions" style="margin-bottom: 20px;">
+                <h3>Déclinaisons (variantes)</h3>
+                <a class="validate-button-white-outline" href="/admin/declinaison_vetement/add?id_vetement={{ vetement.id_vetement }}">
+                    Ajouter une déclinaison
+                </a>
+            </div>
+            <table>
+                <tr>
+                    <th>Taille</th>
+                    <th>Stock</th>
+                    <th>Opérations</th>
+                </tr>
 
-                        <th>taille</th>
-                        <th>stock</th>
-                        <th>opérations</th>
+                {% if declinaisons_vetement | length == 0 %}
+                <tr>
+                    <td>Aucun modèle</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% else %}
+                {% for declinaison_vetement in declinaisons_vetement %}
+                <tr>
+                    <td>
+                        {{ declinaison_vetement.libelle_taille }}
+                    </td>
+                    <td>{{ declinaison_vetement.stock }}</td>
+                    <td>
+                        <div class="crud-button-container">
+                            <a class="validate-button-black" style="padding: 5px 10px; font-size: 0.8rem;" href="/admin/declinaison_vetement/edit?id_declinaison_vetement={{ declinaison_vetement.id_declinaison_vetement }}">
+                                Éditer
+                            </a>
+                            <a class="validate-button-white-outline" style="padding: 5px 10px; font-size: 0.8rem;" href="/admin/declinaison_vetement/delete?id_declinaison_vetement={{ declinaison_vetement.id_declinaison_vetement }}&amp;id_vetement={{ declinaison_vetement.vetement_id }}">
+                                Supprimer
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </table>
 
-                        {% if declinaisons_vetement | length == 0 %}
-                            <tr>
-                                <td>Aucun modèle</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        {% else %}
-                            {% for declinaison_vetement in declinaisons_vetement %}
-                                <tr>
-                                    <td>
-                                        {{ declinaison_vetement.libelle_taille }}
-                                    </td>
-                                    <td>{{ declinaison_vetement.stock }}</td>
-                                    <td>
-                                        <a href="/admin/declinaison_vetement/delete?id_declinaison_vetement={{ declinaison_vetement.id_declinaison_vetement }}&amp;id_vetement={{ declinaison_vetement.vetement_id }}">
-                                            <button class="">
-                                                supprimer
-                                            </button>
-                                        </a>
-                                        <a href="/admin/declinaison_vetement/edit?id_declinaison_vetement={{ declinaison_vetement.id_declinaison_vetement }}">
-                                            <button>
-                                                editer
-                                            </button>
-                                        </a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
-                    </table>
-
-                </div>
+        </div>
 
     </div>
     {% if pb_taille_uniq is defined and pb_taille_uniq==1 %}

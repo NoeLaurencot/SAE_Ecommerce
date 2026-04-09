@@ -1,35 +1,43 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-    <title>ajouter un casque</title>
+    <title>Ajouter une déclinaison</title>
 {% endblock %}
 
 {% block body %}
-    <h2>ajouter une déclinaison d'un vetement</h2>
-    <div class="">
+<main class="crud-container">
+    <h2>Ajouter une déclinaison d'un vêtement</h2>
+    <div class="crud-update-container">
     {% if vetement.photo is defined and vetement.photo is not none %}
-        <img class=""  style="width:200px; height:200px; border: 1px solid black; padding: 25px;" id="output" src="{{ url_for('static', filename = 'assets/images/clothes/')}}{{ vetement.photo }}" alt="">
+        <img class="crud-update-img" id="output" src="{{ url_for('static', filename = 'assets/images/clothes/')}}{{ vetement.photo }}" alt="">
+    {% else %}
+        <img class="crud-update-img" id="output" src="{{ url_for('static', filename = 'assets/images/clothes/') }}no_photo.jpeg" alt="">
     {% endif %}
-        <div class="">
-            <form class="" method="post" action="/admin/declinaison_vetement/add">
-                <input id="id_vetement" type="hidden" name="id_vetement" value="{{ vetement.id_vetement }}">
-                <label for="stock">stock :
-                    <input name="stock" id="stock" type="number" class="form-control" required>
-                </label>
-                <label for="taille">Taille :
-                    <select id="id_taille" name="id_taille" required class="">
+        <form class="crud-input-list" method="post" action="/admin/declinaison_vetement/add">
+            <input id="id_vetement" type="hidden" name="id_vetement" value="{{ vetement.id_vetement }}">
+            
+            <div class="crud-input-container">
+                <div class="crud-field">
+                    <label for="stock">Stock</label>
+                    <input name="stock" id="stock" type="number" required>
+                </div>
+                
+                <div class="crud-field">
+                    <label for="id_taille">Taille</label>
+                    <select id="id_taille" name="id_taille" required>
                         <option value="">Sélectionner une taille</option>
                         {% for taille in tailles %}
-                            <option value="{{ taille.id_taille }}"> {{ taille.libelle_taille }}</option>
+                            <option value="{{ taille.id_taille }}">{{ taille.libelle_taille }}</option>
                         {% endfor %}
                     </select>
-                </label>
-                <label for="submit">
-                    <input name="submit" type="submit" value="Ajouter" class="">
-                </label>
+                </div>
+            </div>
 
-            </form>
-         <a href="/admin/vetement/edit?id_vetement={{ vetement.id_vetement }}"><button class="">annuler</button></a>
-        </div>
+            <div class="crud-field-actions">
+                <button class="validate-button-black" type="submit">Ajouter</button>
+                <a class="validate-button-white-outline" href="/admin/vetement/edit?id={{ vetement.id_vetement }}">Annuler</a>
+            </div>
+        </form>
     </div>
+</main>
 {% endblock %}

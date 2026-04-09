@@ -65,7 +65,7 @@ def valid_add_declinaison_vetement():
 
         get_db().commit()
 
-        message = u'déclinaison déjà présente, mise à jour du stock : ' + stock
+        message = u'Une déclinaison avec cette taille existe déjà pour ce vêtement, mise à jour du stock : ' + stock
         flash(message, 'alert-warning')
 
     else:
@@ -120,6 +120,18 @@ def valid_edit_declinaison_vetement():
     stock = request.form.get('stock','')
     taille_id = request.form.get('id_taille','')
     mycursor = get_db().cursor()
+
+    sql = '''
+    SELECT *
+    FROM declinaison_vetement
+    WHERE vetement_id = %s AND taille_id = %s AND id_declinaison_vetement != %s
+    '''
+    mycursor.execute(sql, (id_vetement, taille_id, id_declinaison_vetement))
+    existing_declinaison = mycursor.fetchone()
+
+    if existing_declinaison:
+        flash(u'Une déclinaison avec cette taille existe déjà pour ce vêtement.', 'alert-danger')
+        return redirect('/admin/declinaison_vetement/edit?id_declinaison_vetement=' + str(id_declinaison_vetement))
 
     print(id_vetement + '- -------------------------')
     sql = '''
