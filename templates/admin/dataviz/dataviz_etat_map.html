@@ -18,27 +18,20 @@
 {% endblock %}
 
 {% block body %}
-    <a href="https://github.com/regisenguehard/carte-france-svg/blob/master/carte-france-svg.html" target="_blank">exemple github carte</a>
-    <br>
-    <a href="https://www.youtube.com/watch?v=UZs8l50gxjU" target="_blank"> video graficart</a>
-    <br>
-    <a href="https://www.amcharts.com/svg-maps/?map=franceDepartments"> github carte svg</a>
-    <br>
+<main class="crud-container">
+    <h2>Données sur les adresses clients</h2>
 
-    <div class="text-center border w-50 m-auto">
-        <h2 class="text-center">Données sur les adresses clients</h2>
-        {% include 'admin/dataviz/franceMap.html' %}
+    <div style="display: flex; justify-content: center; padding: 40px; border: solid 1px rgb(200, 200, 200); margin-top: 20px;">
+        <div style="max-width: 600px; width: 100%;">
+            {% include 'admin/dataviz/franceMap.html' %}
+        </div>
     </div>
+</main>
 
-    <script>
+<script>
     {% for element in adresses %}
-        document.getElementById({{ element['dep'] }}).style.fill= "#000000";
-        document.getElementById({{ element['dep'] }}).setAttribute("fill-opacity", {{ element['indice'] }});
+        document.getElementById("{{ element['dep'] }}").style.fill= "#000000";
+        document.getElementById("{{ element['dep'] }}").setAttribute("fill-opacity", {{ element['indice'] }});
     {% endfor %}
-    </script>
-
-{#    /* couleur avec transparence */#}
-{#background-color : rgba(255,255,255,0.5);#}
-{#    https://web-color.aliasdmc.fr/couleur-web-white-avec-transparence.html#}
-
+</script>
 {% endblock %}
