@@ -37,15 +37,15 @@ def client_coordonnee_show():
     WHERE adresse_livraison_id = id_adresse OR adresse_facturation_id = id_adresse) as nb_utilisation
     FROM adresse
     WHERE adresse.utilisateur_id = %s
-    ORDER BY valide DESC ;
+    ORDER BY date_utilisation DESC , valide;
     """
     mycursor.execute(sql,id_client)
     adresses=mycursor.fetchall()
-    sql="""SELECT COUNT(*)
+    sql="""SELECT COUNT(*) as nb
     FROM adresse
-        WHERE valide = true;
+        WHERE valide = true AND utilisateur_id = %s;
     """
-    mycursor.execute(sql)
+    mycursor.execute(sql,id_client)
     nb_adresses = mycursor.fetchone()
 
 
@@ -158,9 +158,15 @@ def client_coordonnee_delete_adresse():
 def client_coordonnee_add_adresse():
     mycursor = get_db().cursor()
     id_client = session['id_user']
+    sql="""
+    SELECT nom , login
+    FROM utilisateur
+        WHERE id_utilisateur = %s"""
+    mycursor.execute(sql,id_client)
+    utilisateur = mycursor.fetchone()
 
     return render_template('client/coordonnee/add_adresse.html'
-                           #,utilisateur=utilisateur
+                           ,utilisateur=utilisateur
                            )
 
 @client_coordonnee.route('/client/coordonnee/add_adresse',methods=['POST'])
@@ -171,6 +177,24 @@ def client_coordonnee_add_adresse_valide():
     rue = request.form.get('rue')
     code_postal = request.form.get('code_postal')
     ville = request.form.get('ville')
+
+    sql="""SELECT COUNT(*) as nb
+           FROM adresse
+           WHERE valide = true AND utilisateur_id = %s; \
+        """
+    mycursor.execute(sql,id_client)
+    nb_adresses = mycursor.fetchone()
+
+    if nb_adresses['nb'] >= 4:
+        flash("4 Adresse maximum","alert-warning")
+        return redirect('/client/coordonnee/show')
+
+    sql="""
+    INSERT INTO adresse (nom_adresse, rue_adresse, code_postal, ville, date_utilisation, utilisateur_id, valide) VALUE 
+        (%s,%s,%s,%s,NOW(),%s,TRUE)"""
+    mycursor.execute(sql,(nom,rue,code_postal,ville,id_client))
+    get_db().commit()
+
     return redirect('/client/coordonnee/show')
 
 @client_coordonnee.route('/client/coordonnee/edit_adresse')
@@ -178,10 +202,37 @@ def client_coordonnee_edit_adresse():
     mycursor = get_db().cursor()
     id_client = session['id_user']
     id_adresse = request.args.get('id_adresse')
+    sql="""SELECT id_adresse
+    FROM adresse
+        WHERE utilisateur_id = %s"""
+    mycursor.execute(sql,id_client)
+    adresse_user = mycursor.fetchall()
+    valid_id = [row['id_adresse'] for row in adresse_user]
+    print(valid_id ,id_adresse)
+    if int(id_adresse) not in valid_id:
+        flash("Ce n'est pas Votre adresse","alert-warning")
+        return redirect('/client/coordonnee/show')
+
+
+    sql="""
+    SELECT nom_adresse as nom,rue_adresse as rue, ville , code_postal,id_adresse
+    FROM adresse
+        WHERE id_adresse = %s"""
+    mycursor.execute(sql,id_adresse)
+    adresse = mycursor.fetchone()
+
+    sql="""
+        SELECT nom , login
+        FROM utilisateur
+        WHERE id_utilisateur = %s"""
+    mycursor.execute(sql,id_client)
+    utilisateur = mycursor.fetchone()
+
+
 
     return render_template('/client/coordonnee/edit_adresse.html'
-                           # ,utilisateur=utilisateur
-                           # ,adresse=adresse
+                            ,utilisateur=utilisateur
+                            ,adresse=adresse
                            )
 
 @client_coordonnee.route('/client/coordonnee/edit_adresse',methods=['POST'])
@@ -193,5 +244,44 @@ def client_coordonnee_edit_adresse_valide():
     code_postal = request.form.get('code_postal')
     ville = request.form.get('ville')
     id_adresse = request.form.get('id_adresse')
+
+    sql="""SELECT id_adresse
+           FROM adresse
+           WHERE utilisateur_id = %s"""
+    mycursor.execute(sql,id_client)
+    adresse_user = mycursor.fetchall()
+    valid_id = [row['id_adresse'] for row in adresse_user]
+    print(valid_id ,id_adresse)
+    if int(id_adresse) not in valid_id:
+        flash("Ce n'est pas Votre adresse","alert-warning")
+        return redirect('/client/coordonnee/show')
+    sql="""
+        SELECT COUNT(*) as nb
+        FROM commande
+        WHERE adresse_livraison_id = %s OR adresse_facturation_id = %s
+        """
+    mycursor.execute(sql,(id_adresse,id_adresse))
+    commande = mycursor.fetchone()
+
+    if commande['nb'] > 0:
+        sql="""
+            INSERT INTO adresse (nom_adresse, rue_adresse, code_postal, ville, date_utilisation, utilisateur_id, valide) VALUES
+                (%s,%s,%s,%s,NOW(),%s,TRUE)
+            """
+        mycursor.execute(sql,(nom,rue,code_postal,ville,id_client))
+        get_db().commit()
+        sql="""
+            UPDATE adresse SET valide = false WHERE id_adresse = %s
+            """
+        mycursor.execute(sql,id_adresse)
+        get_db().commit()
+        flash("L'ancienne adresse n'a pas était modifier mais une nouvelle c'est crée (Il y a encore des commande liée)","alert-warning")
+        return redirect('/client/coordonnee/show')
+    else:
+        sql="""
+            UPDATE adresse SET nom_adresse = %s,rue_adresse = %s,code_postal = %s,ville = %s, date_utilisation = NOW() WHERE id_adresse = %s
+            """
+        mycursor.execute(sql,(nom,rue,code_postal,ville,id_adresse))
+        get_db().commit()
 
     return redirect('/client/coordonnee/show')
