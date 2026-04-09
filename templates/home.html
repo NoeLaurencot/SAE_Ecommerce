@@ -18,35 +18,41 @@
             <p>Nos vetements inutilement trop chers ne sauront vous résister</p>
         </div>
         <div class="main-tile tile-collection">
-            <a class="collection-container no-link-style" href="/client/vetement/show">
-                <img class="collection-img" src="../static/assets/images/collection-homme.avif" alt="collection homme">
-                <div class="collection-overlay">
-                    <div class="collection-info">
-                        <div class="collection-title">
-                            <h2 >Masculin</h2>
+            <form action="/client/vetement/show" method="post" style="display: contents;">
+                <input type="hidden" name="filter_collections" value="1">
+                <button type="submit" class="collection-container no-link-style pointer" style="border:none; padding:0; background:transparent; text-align:left;">
+                    <img class="collection-img" src="../static/assets/images/collection-homme.avif" alt="collection homme">
+                    <div class="collection-overlay">
+                        <div class="collection-info">
+                            <div class="collection-title">
+                                <h2 >Masculin</h2>
+                            </div>
+                            <div class="collection-desc">
+                                <p>Découvrez notre collection masculine : des vêtements élégants et confortables pour toutes les occasions.</p>
+                            </div>
                         </div>
-                        <div class="collection-desc">
-                            <p>Découvrez notre collection masculine : des vêtements élégants et confortables pour toutes les occasions.</p>
-                        </div>
+                        <div class="collection-img-dimmer"></div>
                     </div>
-                    <div class="collection-img-dimmer"></div>
-                </div>
-            </a>
+                </button>
+            </form>
 
-            <a class="collection-container no-link-style" href="/client/vetement/show">
-                <img class="collection-img" src="../static/assets/images/collection-femme.avif" alt="collection femme">
-                <div class="collection-overlay">
-                    <div class="collection-info">
-                        <div class="collection-title">
-                            <h2>Féminin</h2>
+            <form action="/client/vetement/show" method="post" style="display: contents;">
+                <input type="hidden" name="filter_collections" value="2">
+                <button type="submit" class="collection-container no-link-style pointer" style="border:none; padding:0; background:transparent; text-align:left;">
+                    <img class="collection-img" src="../static/assets/images/collection-femme.avif" alt="collection femme">
+                    <div class="collection-overlay">
+                        <div class="collection-info">
+                            <div class="collection-title">
+                                <h2>Féminin</h2>
+                            </div>
+                            <div class="collection-desc">
+                                <p>Explorez notre collection féminine : des pièces tendances et raffinées pour sublimer votre style au quotidien.</p>
+                            </div>
                         </div>
-                        <div class="collection-desc">
-                            <p>Explorez notre collection féminine : des pièces tendances et raffinées pour sublimer votre style au quotidien.</p>
-                        </div>
+                        <div class="collection-img-dimmer"></div>
                     </div>
-                    <div class="collection-img-dimmer"></div>
-                </div>
-            </a>
+                </button>
+            </form>
         </div>
 
 
@@ -57,16 +63,22 @@
             <div class="new-collection-info">
                 <h1>Nouveautés</h1>
                 <p>Les dernières tendances, fraîchement sorties des usines du Bangladesh</p>
-                <a class="validate-button-black" href="/client/vetement/show">Découvrire les nouveautés</a>
+                <form action="/client/vetement/show" method="post" style="display: contents;">
+                    <input type="hidden" name="filter_collections" value="3">
+                    <button type="submit" class="validate-button-black pointer">Découvrire les nouveautés</button>
+                </form>
             </div>
             <div class="new-collection-container">
                 {% for nouveaute in nouveautes %}
-                <a class="new-collection-img-container" href="/client/vetement/show">
-                    <img src="../static/assets/images/clothes/{{ nouveaute.photo }}" alt="{{ nouveaute.nom_vetement }}">
-                    <div class="overlay">
-                        <div class="overlay-dimmer"></div>
-                    </div>
-                </a>
+                <form action="/client/vetement/show" method="post" style="display: contents;">
+                    <input type="hidden" name="filter_collections" value="3">
+                    <button type="submit" class="new-collection-img-container pointer" style="border:none; padding:0; background:transparent;">
+                        <img src="../static/assets/images/clothes/{{ nouveaute.photo }}" alt="{{ nouveaute.nom_vetement }}">
+                        <div class="overlay">
+                            <div class="overlay-dimmer"></div>
+                        </div>
+                    </button>
+                </form>
                 {% endfor %}
             </div>
         </div>
