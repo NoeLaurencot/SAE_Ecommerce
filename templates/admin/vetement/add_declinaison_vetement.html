@@ -7,6 +7,7 @@
 {% block body %}
 <main class="crud-container">
     <h2>Ajouter une déclinaison d'un vêtement</h2>
+    <p>Vêtement : <strong>{{ vetement.nom_vetement }}</strong></p>
     <div class="crud-update-container">
     {% if vetement.photo is defined and vetement.photo is not none %}
         <img class="crud-update-img" id="output" src="{{ url_for('static', filename = 'assets/images/clothes/')}}{{ vetement.photo }}" alt="">

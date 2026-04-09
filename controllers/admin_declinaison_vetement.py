@@ -92,8 +92,9 @@ def edit_declinaison_vetement():
     mycursor = get_db().cursor()
 
     sql = '''
-    SELECT *
+    SELECT declinaison_vetement.*, vetement.photo, vetement.nom_vetement
     FROM declinaison_vetement
+    JOIN vetement ON declinaison_vetement.vetement_id = vetement.id_vetement
     WHERE id_declinaison_vetement = %s
     '''
 
