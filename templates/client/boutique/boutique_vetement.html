@@ -75,9 +75,19 @@
                     <div class="card-price-button">
                         <div class="card-price">{{ vetement.prix }} €</div>
                         <form class="input-vetement-container" action="/client/panier/add" method="post">
-                            <input type="hidden" name="declinaison_vetement_id" id="declinaison_vetement_id" value="{{ vetement.declinaison_vetement_id }}">
+                            {% if vetement.declinaisons %}
+                            <select name="declinaison_vetement_id" id="declinaison_vetement_id" style="width: 100%; border: solid 1px var(--gray); outline: none; padding: 5px; margin-bottom: 5px;">
+                                {% for declinaison in vetement.declinaisons %}
+                                    {% if declinaison.stock > 0 %}
+                                    <option value="{{ declinaison.id_declinaison_vetement }}">Taille {{ declinaison.libelle_taille }} ({{ declinaison.stock }} restants)</option>
+                                    {% else %}
+                                    <option value="{{ declinaison.id_declinaison_vetement }}" disabled>Taille {{ declinaison.libelle_taille }} (Rupture)</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            {% endif %}
                             <div class="input-vetement">
-                                <button class="material-symbols-outlined card-button" type="submit">shopping_cart</button>
+                                <button class="material-symbols-outlined card-button" type="submit" {% if vetement.stock == 0 %}disabled{% endif %}>shopping_cart</button>
                                 <div class="input-vetement-wrapper">
                                     <input class="card-input" type="number" name="quantite" id="quantite" value="1" min="1"
                                         max="{{ vetement.stock }}">
@@ -86,10 +96,7 @@
                                 </div>
                             </div>
                             {% if vetement.stock == 0 %}
-                            <span class="vetement-stock-warning">Rupture de stock</span>
-                            {% elif vetement.stock <= 4 %} <span class="vetement-stock-warning">Plus que {{ vetement.stock}} vetements</span>
-                            {% else %}
-                            <span class="vetement-stock">{{ vetement.stock}} vetements restants</span>
+                            <span class="vetement-stock-warning">Rupture totale de stock</span>
                             {% endif %}
                         </form>
                     </div>

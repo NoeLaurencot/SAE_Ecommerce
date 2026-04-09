@@ -16,7 +16,7 @@ def client_vetement_show():
         id_client = None
 
     sql = """ 
-    SELECT id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_taille AS taille, libelle_type_vetement, prix_vetement AS prix
+    SELECT id_vetement, nom_vetement, description, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_type_vetement, prix_vetement AS prix
     FROM vetement
     JOIN matiere
         ON matiere.id_matiere = vetement.matiere_id
@@ -24,8 +24,6 @@ def client_vetement_show():
         ON fournisseur.id_fournisseur = vetement.fournisseur_id
     JOIN marque
         ON marque.id_marque = vetement.marque_id
-    JOIN taille
-        ON taille.id_taille = vetement.taille_id
     JOIN type_vetement
         ON type_vetement.id_type_vetement = vetement.type_vetement_id
     JOIN vetement_collection
@@ -100,30 +98,43 @@ def client_vetement_show():
             sql = sql + ")"
             and_condition = " AND "
         sql = sql + """
-        GROUP BY id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque, libelle_fournisseur, libelle_matiere, libelle_taille, libelle_type_vetement, prix_vetement
+        GROUP BY id_vetement, nom_vetement, description, vetement.photo, libelle_marque, libelle_fournisseur, libelle_matiere, libelle_type_vetement, prix_vetement
         ORDER BY id_vetement;
         """
         print(sql)
         mycursor.execute(sql, list_param)
     else:
         sql = sql + """
-        GROUP BY id_vetement, nom_vetement, description, stock, vetement.photo, libelle_marque, libelle_fournisseur, libelle_matiere, libelle_taille, libelle_type_vetement, prix_vetement
+        GROUP BY id_vetement, nom_vetement, description, vetement.photo, libelle_marque, libelle_fournisseur, libelle_matiere, libelle_type_vetement, prix_vetement
         ORDER BY id_vetement;
         """
         mycursor.execute(sql)
 
     vetements = mycursor.fetchall()
     
+    sql = """
+    SELECT id_declinaison_vetement, vetement_id, stock, libelle_taille
+    FROM declinaison_vetement
+    JOIN taille ON declinaison_vetement.taille_id = taille.id_taille
+    """
+    mycursor.execute(sql)
+    declinaisons = mycursor.fetchall()
+    for v in vetements:
+        v['declinaisons'] = [d for d in declinaisons if d['vetement_id'] == v['id_vetement']]
+        # get global stock optionally
+        v['stock'] = sum([d['stock'] for d in v['declinaisons'] if d['stock'] is not None])
+    
     mycursor = get_db().cursor()
     if 'login' in session:
         id_utilisateur = session['id_user']
         param = (id_utilisateur)
         sql = """
-        SELECT id_vetement, nom_vetement, vetement.photo, stock, prix_vetement, libelle_taille, libelle_marque, ligne_panier.quantite, ligne_panier.date_ajout
+        SELECT declinaison_vetement.id_declinaison_vetement, nom_vetement, vetement.photo, declinaison_vetement.stock, prix_vetement, libelle_taille, libelle_marque, ligne_panier.quantite, ligne_panier.date_ajout
         FROM ligne_panier
-        INNER JOIN vetement ON ligne_panier.vetement_id = vetement.id_vetement
+        INNER JOIN declinaison_vetement ON ligne_panier.ideclinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
+        INNER JOIN vetement ON declinaison_vetement.vetement_id = vetement.id_vetement
         INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
-        INNER JOIN taille ON vetement.taille_id = taille.id_taille
+        INNER JOIN taille ON declinaison_vetement.taille_id = taille.id_taille
         INNER JOIN marque ON vetement.marque_id = marque.id_marque
         WHERE id_utilisateur = %s;
         """
@@ -133,7 +144,8 @@ def client_vetement_show():
         sql = """
         SELECT SUM(prix_vetement * quantite) as prix_TTC, SUM(prix_vetement * 0.2 * quantite) AS prix_taxe, SUM(prix_vetement * quantite - prix_vetement * 0.2 * quantite) AS prix_HT
         FROM ligne_panier
-        INNER JOIN vetement ON ligne_panier.vetement_id = vetement.id_vetement
+        INNER JOIN declinaison_vetement ON ligne_panier.ideclinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
+        INNER JOIN vetement ON declinaison_vetement.vetement_id = vetement.id_vetement
         INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
         WHERE id_utilisateur = %s;
         """

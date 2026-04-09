@@ -19,7 +19,7 @@ def client_panier_show():
     id_utilisateur = session['id_user']
     param = (id_utilisateur)
     sql = """
-    SELECT id_declinaison_vetement, nom_vetement, vetement.photo, stock, prix_vetement, libelle_taille, libelle_marque, ligne_panier.quantite, ligne_panier.date_ajout
+    SELECT declinaison_vetement.id_declinaison_vetement, vetement.id_vetement, nom_vetement, vetement.photo, declinaison_vetement.stock, prix_vetement, libelle_taille, libelle_marque, ligne_panier.quantite, ligne_panier.date_ajout
     FROM ligne_panier
     INNER JOIN declinaison_vetement on ligne_panier.ideclinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
     INNER JOIN vetement ON declinaison_vetement.vetement_id = vetement.id_vetement
@@ -30,6 +30,17 @@ def client_panier_show():
     """
     mycursor.execute(sql, param)
     lignes_panier = mycursor.fetchall()
+
+    sql = """
+    SELECT id_declinaison_vetement, vetement_id, stock, libelle_taille
+    FROM declinaison_vetement
+    JOIN taille ON declinaison_vetement.taille_id = taille.id_taille
+    """
+    mycursor.execute(sql)
+    declinaisons_tot = mycursor.fetchall()
+    
+    for ligne in lignes_panier:
+        ligne['declinaisons'] = [d for d in declinaisons_tot if d['vetement_id'] == ligne['id_vetement']]
 
     sql = """
     SELECT SUM(prix_vetement * quantite) as prix_TTC, SUM(prix_vetement * 0.2 * quantite) AS prix_taxe, SUM(prix_vetement * quantite - prix_vetement * 0.2 * quantite) AS prix_HT
@@ -96,23 +107,23 @@ def client_panier_add():
 
 # ajout dans le panier d'un vetement
     sql = """
-    SELECT utilisateur_id, vetement_id, quantite
+    SELECT utilisateur_id, ideclinaison_vetement_id, quantite
     FROM ligne_panier
-    WHERE utilisateur_id = %s AND vetement_id = %s;
+    WHERE utilisateur_id = %s AND ideclinaison_vetement_id = %s;
     """
     mycursor.execute(sql, (id_client, id_vetement))
     tmp = mycursor.fetchall()
     if len(tmp) == 1:
         sql = '''UPDATE ligne_panier SET quantite = (quantite + %s)
-              WHERE vetement_id = %s AND utilisateur_id = %s;'''
+              WHERE ideclinaison_vetement_id = %s AND utilisateur_id = %s;'''
         mycursor.execute(sql, (quantite,id_vetement,id_client))
     else:
         sql = '''INSERT INTO ligne_panier 
                  VALUES (%s, %s, %s, %s); '''
-        mycursor.execute(sql, (id_client, id_vetement, '2022-05-05', quantite))
+        mycursor.execute(sql, (id_vetement, id_client, '2026-05-05', quantite))
 
-    sql = '''UPDATE vetement SET stock = (stock - %s)
-              WHERE id_vetement = %s;'''
+    sql = '''UPDATE declinaison_vetement SET stock = (stock - %s)
+              WHERE id_declinaison_vetement = %s;'''
     mycursor.execute(sql, (quantite, id_vetement))
 
     get_db().commit()
@@ -149,21 +160,21 @@ def client_panier_delete():
 def client_panier_vider():
     mycursor = get_db().cursor()
     client_id = session['id_user']
-    sql = '''SELECT quantite,vetement_id
+    sql = '''SELECT quantite, ideclinaison_vetement_id
         FROM ligne_panier
         WHERE utilisateur_id = %s;'''
     mycursor.execute(sql,client_id)
     items_panier = mycursor.fetchall()
     for item in items_panier:
         sql = '''DELETE FROM ligne_panier
-                WHERE utilisateur_id = %s AND vetement_id = %s;'''
-        param = (client_id,item['vetement_id'])
+                WHERE utilisateur_id = %s AND ideclinaison_vetement_id = %s;'''
+        param = (client_id,item['ideclinaison_vetement_id'])
         mycursor.execute(sql,param)
         get_db().commit()
 
-        sql2='''UPDATE vetement SET stock = stock + %s 
-                WHERE id_vetement = %s;'''
-        param2 = (item['quantite'],item['vetement_id'])
+        sql2='''UPDATE declinaison_vetement SET stock = stock + %s 
+                WHERE id_declinaison_vetement = %s;'''
+        param2 = (item['quantite'],item['ideclinaison_vetement_id'])
         mycursor.execute(sql2,param2)
         get_db().commit()
     return redirect('/client/panier')
@@ -173,22 +184,21 @@ def client_panier_vider():
 def client_panier_delete_line():
     mycursor = get_db().cursor()
     id_client = session['id_user']
-    #id_declinaison_vetement = request.form.get('id_declinaison_vetement')
     id_vetement = request.form.get("id-ligne")
 
     param = (id_client, id_vetement)
 
     sql = """
-    SELECT vetement_id, utilisateur_id, quantite, date_ajout
+    SELECT ideclinaison_vetement_id, utilisateur_id, quantite, date_ajout
     FROM ligne_panier
-    WHERE utilisateur_id = %s AND vetement_id = %s;
+    WHERE utilisateur_id = %s AND ideclinaison_vetement_id = %s;
     """
     mycursor.execute(sql, param)
     ligne_to_delete = mycursor.fetchone()
 
     sql = """
     DELETE FROM ligne_panier
-    WHERE utilisateur_id = %s AND vetement_id = %s;
+    WHERE utilisateur_id = %s AND ideclinaison_vetement_id = %s;
     """
     mycursor.execute(sql, param)
     get_db().commit()
@@ -196,8 +206,8 @@ def client_panier_delete_line():
     param_quantite = (ligne_to_delete['quantite'], id_vetement)
 
     sql = """
-    UPDATE vetement SET stock = (stock + %s)
-    WHERE id_vetement = %s;
+    UPDATE declinaison_vetement SET stock = (stock + %s)
+    WHERE id_declinaison_vetement = %s;
     """
     mycursor.execute(sql, param_quantite)
     get_db().commit()
