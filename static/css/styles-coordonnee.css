@@ -1,0 +1,27 @@
+.coordonne-container {
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    gap: 10px;
+}
+.coordonnee-user-table {
+    border: black groove 1px;
+    width: fit-content;
+    align-self: center;
+}
+.coordonnee-adress-table {
+    width: 60%;
+    align-self: center;
+}
+.coordonnee-button-container {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}
+.coordonnee-adress-invalid {
+    color: orange;
+}
+.button-coordonnee {
+    width: calc(100% - 80px);
+    height: calc(100% - 20px);
+}

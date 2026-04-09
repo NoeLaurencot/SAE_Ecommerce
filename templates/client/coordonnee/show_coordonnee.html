@@ -1,11 +1,77 @@
 {% extends('layout.html') %}
 
 {% block title %}
-    <title>  | Gaullois</title>
+    <title> | Gaullois</title>
 {% endblock %}
 
 {% block body %}
     <main>
+        <div class="coordonne-container">
+            <table class="coordonnee-user-table">
+                <tbody>
+                <tr>
+                    <th>Login : {{ utilisateur.login }}</th>
+                </tr>
+                <tr>
+                    <th>Nom : {{ utilisateur.nom }}</th>
+                </tr>
+                <tr>
+                    <th>Email : {{ utilisateur.email }}</th>
+                </tr>
+                <tr>
+                    <th><a href="/client/coordonnee/edit" class="validate-button-white-outline align-self-center button-coordonnee" type="submit">
+                        Modifier
+                    </a></th>
+                </tr>
 
+                </tbody>
+            </table>
+        </div>
+
+        <div class="coordonne-container">
+            <table class="coordonnee-adress-table">
+                <thead>
+                    <tr>
+                        <th>nom</th>
+                        <th>Rue</th>
+                        <th>Code Postal</th>
+                        <th>Ville</th>
+                        <th>nbr. utilisation commande</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for adresse in adresses %}
+                    {% if adresse.valide %}
+                        <tr>
+                            <td>{{ adresse.nom }}</td>
+                            <td>{{ adresse.rue }}</td>
+                            <td>{{ adresse.code_postal }}</td>
+                            <td>{{ adresse.ville }}</td>
+                            <td>{{ adresse.nb_utilisation }}</td>
+                            <td class="coordonnee-button-container ">
+                                <form action="/client/coordonnee/delete_adresse" method="post">
+                                    <input type="hidden" name="id_adresse" id="id_adresse"
+                                           value="{{ adresse.id_adresse }}">
+                                    <button class="validate-button-white-outline width100p font-1rem">Supprimer</button>
+                                </form>
+                                <a class="validate-button-white-outline"
+                                   href="/client/coordonnee/edit_adress?id_commande={{ adresse.id_adresse }}">Modifier</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr class="coordonnee-adress-invalid">
+                            <td>{{ adresse.nom }}</td>
+                            <td>{{ adresse.rue }}</td>
+                            <td>{{ adresse.code_postal }}</td>
+                            <td>{{ adresse.ville }}</td>
+                            <td>{{ adresse.nb_utilisation }}</td>
+                        </tr>
+                    {% endif %}
+
+
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </main>
 {% endblock %}

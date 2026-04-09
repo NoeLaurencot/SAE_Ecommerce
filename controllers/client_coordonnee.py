@@ -8,74 +8,119 @@ from connexion_db import get_db
 client_coordonnee = Blueprint('client_coordonnee', __name__,
                         template_folder='templates')
 
-"""
-Define whether the session can log in the page or not.
-Return false if it can,else return a redirection based on the session.
-"""
-def canAcess():
-    if 'login' not in session:
-        flash(u'Veuillez vous connecte', 'alert-danger')
-        return True,redirect('/login')
-    elif session['role'] != 'ROLE_client':
-        flash(u'Un admin n\'a pas de coordonnee', 'alert-danger')
-        return True,redirect('/')
-    else:
-        return False
+
+
 
 
 @client_coordonnee.route('/client/coordonnee/show')
 def client_coordonnee_show():
-    access = canAcess()
-    if access[0]:
-        return access[1]
+    if 'login' not in session:
+        flash(u'Veuillez vous connecte', 'alert-danger')
+        return redirect('/login')
+    elif session['role'] != 'ROLE_client':
+        flash(u'Un admin n\'a pas de coordonnee', 'alert-danger')
+        return redirect('/')
+
     mycursor = get_db().cursor()
     id_client = session['id_user']
-    sql="""SELECT login,nom,email
+    sql="""
+        SELECT login,nom,email
         FROM utilisateur
         WHERE id_utilisateur = %s;
     """
     mycursor.execute(sql,id_client)
-    utilisateur=mycursor.fetchall()
+    utilisateur=mycursor.fetchone()
 
-
-
-
+    sql="""
+    SELECT valide,nom_adresse as nom,rue_adresse as rue, code_postal, ville ,id_adresse,(SELECT  COUNT(*)
+    FROM commande
+    WHERE adresse_livraison_id = id_adresse OR adresse_facturation_id = id_adresse) as nb_utilisation
+    FROM adresse
+    WHERE adresse.utilisateur_id = %s
+    ORDER BY valide DESC ;
+    """
+    mycursor.execute(sql,id_client)
+    adresses=mycursor.fetchall()
+    sql="""SELECT COUNT(*)
+    FROM adresse
+        WHERE valide = true;
+    """
+    mycursor.execute(sql)
+    nb_adresses = mycursor.fetchone()
 
 
     return render_template('client/coordonnee/show_coordonnee.html'
                            , utilisateur=utilisateur
-                         #  , adresses=adresses
-                         #  , nb_adresses=nb_adresses
+                           , adresses=adresses
+                           , nb_adresses=nb_adresses
                            )
 
 @client_coordonnee.route('/client/coordonnee/edit', methods=['GET'])
 def client_coordonnee_edit():
-    access = canAcess()
-    if access[0]:
-        return access[1]
+    if 'login' not in session:
+        flash(u'Veuillez vous connecte', 'alert-danger')
+        return redirect('/login')
+    elif session['role'] != 'ROLE_client':
+        flash(u'Un admin n\'a pas de coordonnee', 'alert-danger')
+        return redirect('/')
 
     mycursor = get_db().cursor()
     id_client = session['id_user']
 
+    sql="""
+        SELECT login,nom,email
+        FROM utilisateur
+        WHERE id_utilisateur = %s; \
+        """
+    mycursor.execute(sql,id_client)
+    utilisateur=mycursor.fetchone()
+
+
+
     return render_template('client/coordonnee/edit_coordonnee.html'
-                           #,utilisateur=utilisateur
+                           ,utilisateur=utilisateur
                            )
 
 @client_coordonnee.route('/client/coordonnee/edit', methods=['POST'])
 def client_coordonnee_edit_valide():
+    if 'login' not in session:
+        flash(u'Veuillez vous connecte', 'alert-danger')
+        return redirect('/login')
+    elif session['role'] != 'ROLE_client':
+        flash(u'Un admin n\'a pas de coordonnee', 'alert-danger')
+        return redirect('/')
+
     mycursor = get_db().cursor()
     id_client = session['id_user']
     nom=request.form.get('nom')
     login = request.form.get('login')
     email = request.form.get('email')
 
-    utilisateur = None
-    if utilisateur:
-        flash(u'votre cet Email ou ce Login existe déjà pour un autre utilisateur', 'alert-warning')
-        return render_template('client/coordonnee/edit_coordonnee.html'
-                               #, user=user
-                               )
+    sql="""SELECT id_utilisateur
+    FROM utilisateur
+    WHERE (email like %s OR login like %s) AND id_utilisateur != %s;
+    """
+    mycursor.execute(sql,(email,login,id_client))
 
+    user = mycursor.fetchone()
+    if user:
+        sql = """SELECT nom,login,email
+        FROM utilisateur
+            WHERE id_utilisateur = %s;
+        """
+        mycursor.execute(sql,id_client)
+        utilisateur = mycursor.fetchone()
+        flash(u'votre Email ou ce Login existe déjà pour un autre utilisateur', 'alert-warning')
+        return render_template('client/coordonnee/edit_coordonnee.html'
+                               , utilisateur=utilisateur
+                               )
+    sql="""
+    UPDATE utilisateur SET login = %s , email = %s , nom = %s 
+    WHERE id_utilisateur = %s;"""
+    mycursor.execute(sql,(login,email,nom,id_client))
+    session['login'] = login
+    session['email'] = email
+    session['nom'] = nom
 
     get_db().commit()
     return redirect('/client/coordonnee/show')
@@ -86,6 +131,26 @@ def client_coordonnee_delete_adresse():
     mycursor = get_db().cursor()
     id_client = session['id_user']
     id_adresse= request.form.get('id_adresse')
+
+    sql="""SELECT id_commande
+    FROM commande 
+    WHERE adresse_livraison_id = %s or adresse_facturation_id = %s"""
+    mycursor.execute(sql,(id_adresse,id_adresse))
+    livraison = mycursor.fetchall()
+    if len(livraison) > 0:
+        sql="""
+        UPDATE adresse SET valide = false WHERE id_adresse = %s
+            """
+        mycursor.execute(sql,id_adresse)
+        get_db().commit()
+    else:
+        sql="""
+        DELETE FROM adresse WHERE id_adresse = %s
+        """
+        mycursor.execute(sql,id_adresse)
+        get_db().commit()
+
+
 
     return redirect('/client/coordonnee/show')
 

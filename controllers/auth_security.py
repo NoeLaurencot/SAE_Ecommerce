@@ -106,6 +106,7 @@ def auth_signup_post():
 
 @auth_security.route('/logout', methods=['GET'])
 def auth_logout():
+
     return render_template('auth/logout.html')
 
 @auth_security.route('/logout', methods=['POST'])
