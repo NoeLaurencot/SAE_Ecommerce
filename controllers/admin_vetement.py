@@ -13,12 +13,12 @@ admin_vetement = Blueprint('admin_vetement', __name__,
 
 @admin_vetement.route('/admin/vetement/show')
 def show_vetement():
-    if 'login' not in session or session['role'] != 'ROLE_admin':
+    if 'login' not in session and session['role'] != 'ROLE_admin':
         flash(u'Vous n\'avez pas les droits pour accéder à cette page','alert-danger')
         return redirect('/')
     mycursor = get_db().cursor()
     sql = '''  
-    SELECT id_vetement, prix_vetement, nom_vetement, description, SUM(stock) AS stock, COUNT(id_declinaison_vetement) AS nb_declinaison, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_type_vetement, id_type_vetement, GROUP_CONCAT(libelle_collection SEPARATOR ', ') AS collection
+    SELECT id_vetement, prix_vetement, nom_vetement, description, SUM(stock) AS stock, COUNT(DISTINCT(id_declinaison_vetement)) AS nb_declinaison, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_type_vetement, id_type_vetement, GROUP_CONCAT(DISTINCT(libelle_collection) SEPARATOR ', ') AS collection
     FROM vetement
     JOIN declinaison_vetement
         ON declinaison_vetement.vetement_id = vetement.id_vetement

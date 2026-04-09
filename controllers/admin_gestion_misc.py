@@ -8,7 +8,7 @@ admin_gestion_misc = Blueprint('admin_gestion_misc', __name__,
 
 
 def admin_required():
-    if 'login' not in session or session['role'] != 'ROLE_admin':
+    if 'login' not in session and session['role'] != 'ROLE_admin':
         flash(u'Vous n\'avez pas les droits pour accéder à cette page', 'alert-danger')
         return False
     return True
