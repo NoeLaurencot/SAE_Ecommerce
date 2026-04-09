@@ -152,7 +152,7 @@ CREATE TABLE IF NOT EXISTS ligne_commande
 
 CREATE TABLE IF NOT EXISTS ligne_panier
 (
-    ideclinaison_vetement_id INT,
+    declinaison_vetement_id INT,
     utilisateur_id           INT,
     date_ajout               DATE,
     quantite                 DECIMAL(15, 0),
@@ -570,35 +570,6 @@ VALUES (20, 1, 1),
        (27, 32, 6),
        (20, 32, 7),
 
-       (9, 33, 1),
-       (26, 33, 2),
-       (20, 33, 3),
-       (16, 33, 4),
-       (19, 33, 5),
-       (4, 33, 7),
-
-       (11, 34, 1),
-       (24, 34, 2),
-       (5, 34, 3),
-       (17, 34, 4),
-       (30, 34, 5),
-       (24, 34, 6),
-       (29, 34, 7),
-
-       (16, 35, 1),
-       (29, 35, 2),
-       (0, 35, 3),
-       (19, 35, 4),
-       (10, 35, 5),
-       (15, 35, 6),
-       (0, 35, 7),
-
-       (29, 36, 2),
-       (11, 36, 3),
-       (28, 36, 4),
-       (26, 36, 5),
-       (25, 36, 6),
-       (9, 36, 7);
 
 INSERT INTO adresse (nom_adresse, rue_adresse, code_postal, ville, date_utilisation, utilisateur_id, valide)
 VALUES ('3 Rue du Cerisier', 'Rue du Cerisier', '70000', 'Vesoul', '2026-02-23 00:00:00', 2, true),
@@ -655,7 +626,3 @@ VALUES (1, 2),
 
        (31, 2),
        (32, 2),
-       (33, 2),
-       (34, 1),
-       (35, 1),
-       (36, 1);
