@@ -22,8 +22,9 @@
                 <th>Fournisseur</th>
                 <th>Matiere</th>
                 <th>Collection</th>
-                <th style="color: green">Stock</th>
+                <th class="crud-stock-head">Stock</th>
                 <th>nb déclinaissons</th>
+                <th>Commentaires</th>
                 <th>Image</th>
                 <th>Opérations</th>
             </tr>
@@ -41,11 +42,20 @@
                 <td>{{ ligne.matiere }}</td>
                 <td class="td-truncate" title="{{ ligne.collection }}">{{ ligne.collection }}</td>
                 {% if ligne.stock > 0 %}
-                <td style="color: green"><strong>{{ ligne.stock }}</strong></td>
+                <td class="crud-stock-positive"><strong>{{ ligne.stock }}</strong></td>
                 {% else %}
-                <td style="color: red"><strong>{{ ligne.stock }}</strong></td>
+                <td class="crud-stock-negative"><strong>{{ ligne.stock }}</strong></td>
                 {% endif %}
                 <td>{{ ligne.nb_declinaison }}</td>
+                <td>
+                    <strong>{{ ligne.nb_commentaires_total }}</strong> total<br>
+                    <span>{{ ligne.nb_commentaires_valides }} lus</span><br>
+                    {% if ligne.nb_commentaires_non_valides > 0 %}
+                        <span class="crud-comment-new">{{ ligne.nb_commentaires_non_valides }} nouveau(x)</span>
+                    {% else %}
+                        <span class="crud-comment-none">Aucun nouveau</span>
+                    {% endif %}
+                </td>
                 <td>
                     <div class="crud-img">
                         {% if ligne.photo is not none %}
@@ -64,7 +74,7 @@
                     <a class="validate-button-white-outline"
                         href="/admin/vetement/edit?id={{ ligne.id_vetement }}">editer</a>
                     <a class="validate-button-white-outline"
-                        href="#">commentaires</a>
+                        href="/admin/vetement/commentaires?id_vetement={{ ligne.id_vetement }}">commentaires</a>
                 </td>
             </tr>
             {% endfor %}

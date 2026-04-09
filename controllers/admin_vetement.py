@@ -13,12 +13,24 @@ admin_vetement = Blueprint('admin_vetement', __name__,
 
 @admin_vetement.route('/admin/vetement/show')
 def show_vetement():
-    if 'login' not in session and session['role'] != 'ROLE_admin':
+    if 'login' not in session or session.get('role') != 'ROLE_admin':
         flash(u'Vous n\'avez pas les droits pour accéder à cette page','alert-danger')
         return redirect('/')
     mycursor = get_db().cursor()
     sql = '''  
-    SELECT id_vetement, prix_vetement, nom_vetement, description, SUM(stock) AS stock, COUNT(DISTINCT(id_declinaison_vetement)) AS nb_declinaison, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_type_vetement, id_type_vetement, GROUP_CONCAT(DISTINCT(libelle_collection) SEPARATOR ', ') AS collection
+    SELECT id_vetement,
+           prix_vetement,
+           nom_vetement,
+           description,
+           SUM(stock) AS stock,
+           COUNT(DISTINCT(id_declinaison_vetement)) AS nb_declinaison,
+           vetement.photo,
+           libelle_marque AS marque,
+           libelle_fournisseur AS fournisseur,
+           libelle_matiere AS matiere,
+           libelle_type_vetement,
+           id_type_vetement,
+                     GROUP_CONCAT(DISTINCT(libelle_collection) SEPARATOR ', ') AS collection
     FROM vetement
     JOIN declinaison_vetement
         ON declinaison_vetement.vetement_id = vetement.id_vetement
@@ -39,6 +51,43 @@ def show_vetement():
     '''
     mycursor.execute(sql)
     vetements = mycursor.fetchall()
+
+    sql = '''
+    SELECT c.vetement_id,
+           COUNT(*) AS nb_commentaires_total
+    FROM commentaire c
+    JOIN utilisateur u
+        ON u.id_utilisateur = c.utilisateur_id
+    WHERE u.role = 'ROLE_client'
+    GROUP BY c.vetement_id;
+    '''
+    mycursor.execute(sql)
+    stats_total = mycursor.fetchall()
+
+    sql = '''
+    SELECT c.vetement_id,
+           COUNT(*) AS nb_commentaires_valides
+    FROM commentaire c
+    JOIN utilisateur u
+        ON u.id_utilisateur = c.utilisateur_id
+    WHERE u.role = 'ROLE_client'
+      AND c.valide = 1
+    GROUP BY c.vetement_id;
+    '''
+    mycursor.execute(sql)
+    stats_valides = mycursor.fetchall()
+
+    commentaires_totaux_par_vetement = {}
+    commentaires_valides_par_vetement = {}
+    for ligne in stats_total:
+        commentaires_totaux_par_vetement[ligne['vetement_id']] = int(ligne['nb_commentaires_total'])
+    for ligne in stats_valides:
+        commentaires_valides_par_vetement[ligne['vetement_id']] = int(ligne['nb_commentaires_valides'])
+
+    for vetement in vetements:
+        vetement['nb_commentaires_total'] = commentaires_totaux_par_vetement.get(vetement['id_vetement'], 0)
+        vetement['nb_commentaires_valides'] = commentaires_valides_par_vetement.get(vetement['id_vetement'], 0)
+        vetement['nb_commentaires_non_valides'] = vetement['nb_commentaires_total'] - vetement['nb_commentaires_valides']
 
     return render_template('admin/vetement/show_vetement.html', vetements=vetements)
 
