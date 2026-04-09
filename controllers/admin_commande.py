@@ -11,7 +11,7 @@ admin_commande = Blueprint('admin_commande', __name__,
 
 @admin_commande.route('/admin/commande/show', methods=['get','post'])
 def admin_commande_show():
-    if 'login' not in session and session['role'] != 'ROLE_admin':
+    if 'login' not in session or session.get('role') != 'ROLE_admin':
         flash(u'Vous n\'avez pas les droits pour accéder à cette page', 'alert-danger')
         return redirect('/')
     mycursor = get_db().cursor()
@@ -47,7 +47,7 @@ def admin_commande_show():
 
 @admin_commande.route('/admin/commande/valider', methods=['get','post'])
 def admin_commande_valider():
-    if 'login' not in session and session['role'] != 'ROLE_admin':
+    if 'login' not in session or session.get('role') != 'ROLE_admin':
         flash(u'Vous n\'avez pas les droits pour accéder à cette page', 'alert-danger')
         return redirect('/')
     mycursor = get_db().cursor()
