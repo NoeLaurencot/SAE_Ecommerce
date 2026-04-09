@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS adresse
     rue_adresse      VARCHAR(255),
     code_postal      DECIMAL(5, 0),
     ville            VARCHAR(255),
-    date_utilisation DATE,
+    date_utilisation DATETIME,
     utilisateur_id   INT NOT NULL,
     valide           BOOLEAN,
     PRIMARY KEY (id_adresse),
@@ -443,10 +443,10 @@ VALUES (2, 1, 4),
        (2, 31, 2);
 
 INSERT INTO adresse (nom_adresse, rue_adresse, code_postal, ville, date_utilisation, utilisateur_id,valide)
-VALUES ("3 Rue du Cerisier", "Rue du Cerisier", "70000", "Vesoul", '2026-02-23', 2,true),
-       ("18 Rue Edouard Belin", "Rue Edouard Belin", "70000", "Vesoul", '2026-02-24', 2,true),
-       ("5 Rue de la 5eme DB", "Rue de la 5eme DB", "90000", "Belfort", '2025-02-24', 3,true),
-       ("2 Grande Rue", "Grande Rue", "90000", "Belfort", '2025-02-21', 3,true);
+VALUES ("3 Rue du Cerisier", "Rue du Cerisier", "70000", "Vesoul", '2026-02-23 00:00:00', 2,true),
+       ("18 Rue Edouard Belin", "Rue Edouard Belin", "70000", "Vesoul", '2026-02-24 00:00:00', 2,true),
+       ("5 Rue de la 5eme DB", "Rue de la 5eme DB", "90000", "Belfort", '2025-02-24 00:00:00', 3,true),
+       ("2 Grande Rue", "Grande Rue", "90000", "Belfort", '2025-02-21 00:00:00', 3,true);
 
 INSERT INTO commande (date_achat, utilisateur_id, etat_id, adresse_livraison_id, adresse_facturation_id)
 VALUES

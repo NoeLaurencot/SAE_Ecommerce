@@ -1,0 +1,38 @@
+{% extends('layout.html') %}
+
+{% block title %}
+    <title> | Gaullois</title>
+{% endblock %}
+
+{% block body %}
+    <main>
+        <form action="/client/coordonnee/add_adresse" method="post">
+            <div class="coordonne-container">
+                <table class="coordonnee-user-table">
+                    <tbody>
+                    <tr>
+                        <th>Utilisateur : nom : {{ utilisateur.nom }}, login : {{ utilisateur.login }}</th>
+                    </tr>
+                    <tr>
+                        <th>Nom Prénom : <input required type="text" value="" name="nom"></th>
+                    </tr>
+                    <tr>
+                        <th>Rue : <input required type="text" value="" name="rue"></th>
+                    </tr>
+                    <tr>
+                        <th>Code Postal : <input required  type="number" value="" name="code_postal"></th>
+                    </tr>
+                    <tr>
+                        <th>Ville : <input required  type="text" value="" name="ville"></th>
+                    </tr>
+                    <tr>
+                        <th><button class="validate-button-white-outline align-self-center width100p" type="submit">
+                            Confirmer
+                        </button></th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </main>
+{% endblock %}

@@ -19,7 +19,8 @@
                     <th>Email : {{ utilisateur.email }}</th>
                 </tr>
                 <tr>
-                    <th><a href="/client/coordonnee/edit" class="validate-button-white-outline align-self-center button-coordonnee" type="submit">
+                    <th><a href="/client/coordonnee/edit"
+                           class="validate-button-white-outline align-self-center button-coordonnee" type="submit">
                         Modifier
                     </a></th>
                 </tr>
@@ -31,13 +32,13 @@
         <div class="coordonne-container">
             <table class="coordonnee-adress-table">
                 <thead>
-                    <tr>
-                        <th>nom</th>
-                        <th>Rue</th>
-                        <th>Code Postal</th>
-                        <th>Ville</th>
-                        <th>nbr. utilisation commande</th>
-                    </tr>
+                <tr>
+                    <th>nom</th>
+                    <th>Rue</th>
+                    <th>Code Postal</th>
+                    <th>Ville</th>
+                    <th>nbr. utilisation commande</th>
+                </tr>
                 </thead>
                 <tbody>
                 {% for adresse in adresses %}
@@ -55,7 +56,7 @@
                                     <button class="validate-button-white-outline width100p font-1rem">Supprimer</button>
                                 </form>
                                 <a class="validate-button-white-outline"
-                                   href="/client/coordonnee/edit_adress?id_commande={{ adresse.id_adresse }}">Modifier</a>
+                                   href="/client/coordonnee/edit_adresse?id_adresse={{ adresse.id_adresse }}">Modifier</a>
                             </td>
                         </tr>
                     {% else %}
@@ -67,10 +68,18 @@
                             <td>{{ adresse.nb_utilisation }}</td>
                         </tr>
                     {% endif %}
-
-
                 {% endfor %}
+                <tr>
+                    <td colspan="5">
+                        <a class="validate-button-white-outline align-self-center"
+                           href="/client/coordonnee/add_adresse">Ajouter Une Adresse</a>
+                    </td>
+                    <td>
+                        {{ nb_adresses.nb }}/4 Total Adresse : {{ adresses|length }}
+                    </td>
+                </tr>
                 </tbody>
+
             </table>
         </div>
     </main>
