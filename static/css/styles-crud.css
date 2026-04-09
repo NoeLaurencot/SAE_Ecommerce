@@ -104,6 +104,129 @@
     max-width: 250px;
 }
 
+.crud-button-container form {
+    margin: 0;
+}
+
+.crud-button-container button {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    max-width: 250px;
+}
+
+.crud-comment-new {
+    color: var(--delete);
+    font-weight: 700;
+}
+
+.crud-comment-none {
+    color: var(--gray);
+}
+
+.crud-summary-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: solid 1px rgb(200, 200, 200);
+    padding: 20px;
+}
+
+.crud-accent-name {
+    color: var(--gold);
+}
+
+.crud-stock-head,
+.crud-stock-positive {
+    color: green;
+}
+
+.crud-stock-negative {
+    color: red;
+}
+
+.comment-row-valid {
+    background-color: #faf1d7;
+}
+
+.comment-row-admin {
+    background-color: #dff3df;
+}
+
+.comment-admin-tag {
+    font-weight: 700;
+}
+
+.crud-link {
+    color: var(--black);
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.crud-link:hover {
+    color: var(--gold);
+}
+
+.dataviz-filter-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.dataviz-filter-form select {
+    padding: 8px 10px;
+    border: solid 1px rgb(180, 180, 180);
+    font-family: "Nunito", sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+}
+
+.dataviz-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+}
+
+.dataviz-card {
+    border: solid 1px rgb(200, 200, 200);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    min-height: 360px;
+    box-sizing: border-box;
+}
+
+.dataviz-card canvas {
+    width: 100% !important;
+    height: 300px !important;
+}
+
+.dataviz-map-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+    border: solid 1px rgb(200, 200, 200);
+    margin-top: 20px;
+    box-sizing: border-box;
+}
+
+.dataviz-map-content {
+    max-width: 600px;
+    width: 100%;
+}
+
+.dataviz-link {
+    color: var(--black);
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.dataviz-link:hover {
+    color: var(--gold);
+}
+
 td, th {
     padding: 8px;
 }

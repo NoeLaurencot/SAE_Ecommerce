@@ -1,0 +1,108 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>Gestion commentaires | Admin</title>
+{% endblock %}
+
+{% block body %}
+<main class="crud-container">
+    <h2>Gestion des commentaires</h2>
+    <div class="crud-top-actions wrap">
+        <a class="validate-button-white-outline" href="/admin/dashboard">Retour</a>
+    </div>
+
+    <div class="crud-summary-card">
+        <p class="no-margin">
+            <strong>{{ total_commentaires }}</strong> commentaire(s) au total.
+        </p>
+        <p class="no-margin">
+            <strong class="crud-comment-new">{{ total_non_valides }}</strong> commentaire(s) client non validé(s).
+        </p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Vêtement</th>
+                <th>Auteur</th>
+                <th>Commentaire</th>
+                <th>Etat</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if commentaires | length >= 1 %}
+                {% for commentaire in commentaires %}
+                    {% if commentaire.role == 'ROLE_admin' %}
+                        <tr class="comment-row-admin">
+                    {% elif commentaire.valide == 1 %}
+                        <tr class="comment-row-valid">
+                    {% else %}
+                        <tr>
+                    {% endif %}
+                        <td>{{ commentaire.date_commentaire }}</td>
+                        <td>
+                            <a class="crud-link" href="/admin/vetement/commentaires?id_vetement={{ commentaire.vetement_id }}">
+                                {{ commentaire.nom_vetement }} ({{ commentaire.vetement_id }})
+                            </a>
+                        </td>
+                        <td>{{ commentaire.nom }} ({{ commentaire.login }})</td>
+                        <td>
+                            {% if commentaire.role == 'ROLE_admin' %}
+                                <span class="comment-admin-tag">Réponse admin:</span>
+                            {% endif %}
+                            {{ commentaire.commentaire }}
+                        </td>
+                        <td>
+                            {% if commentaire.role == 'ROLE_admin' %}
+                                Réponse admin
+                            {% elif commentaire.valide == 1 %}
+                                Validé (lu)
+                            {% else %}
+                                Non validé
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="crud-button-container">
+                                {% if commentaire.role != 'ROLE_admin' %}
+                                    <form action="/admin/vetement/commentaires/repondre" method="GET">
+                                        <input type="hidden" name="id_vetement" value="{{ commentaire.vetement_id }}">
+                                        <input type="hidden" name="id_utilisateur" value="{{ commentaire.utilisateur_id }}">
+                                        <input type="hidden" name="date_commentaire" value="{{ commentaire.date_commentaire }}">
+                                        <input type="hidden" name="return_url" value="/admin/commentaires/show">
+                                        <button type="submit" class="validate-button-white-outline">répondre</button>
+                                    </form>
+
+                                    {% if commentaire.valide != 1 %}
+                                        <form action="/admin/commentaires/valider-one" method="post">
+                                            <input type="hidden" name="id_vetement" value="{{ commentaire.vetement_id }}">
+                                            <input type="hidden" name="id_utilisateur" value="{{ commentaire.utilisateur_id }}">
+                                            <input type="hidden" name="date_commentaire" value="{{ commentaire.date_commentaire }}">
+                                            <input type="hidden" name="return_url" value="/admin/commentaires/show">
+                                            <button type="submit" class="validate-button-white-outline">valider</button>
+                                        </form>
+                                    {% endif %}
+                                {% endif %}
+
+                                <form action="/admin/vetement/commentaires/delete" method="post">
+                                    <input type="hidden" name="id_vetement" value="{{ commentaire.vetement_id }}">
+                                    <input type="hidden" name="id_utilisateur" value="{{ commentaire.utilisateur_id }}">
+                                    <input type="hidden" name="date_commentaire" value="{{ commentaire.date_commentaire }}">
+                                    <input type="hidden" name="return_url" value="/admin/commentaires/show">
+                                    <button type="submit" class="validate-button-white-outline">supprimer</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="6">Pas de commentaire.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</main>
+
+{% endblock %}

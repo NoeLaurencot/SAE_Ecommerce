@@ -1,27 +1,38 @@
-{% extends 'admin/layout_admin.html' %}
+{% extends 'layout.html' %}
 
 {% block title %}
-    <title>commentaire d'un vetement</title>
+    <title>Répondre à un commentaire | Admin</title>
 {% endblock %}
 
 {% block body %}
-<h3>vetement</h3>
-   <div class="row">
-            <div class="col-5 bg-light p-3">
-        <h3>répondre à un commentaire</h3>
-            </div>
-                 <form  action="/admin/vetement/commentaires/repondre"  style="display: inline-block;"  method="post" >
-                      <input type="hidden" name="id_vetement" value="{{ id_vetement }}">
-                      <input type="hidden" name="id_utilisateur" value="{{ id_utilisateur }}">
-                      <input type="hidden" name="date_publication" value="{{ date_publication }}">
-                      <div class="col">
-                       <label for="input_commentaire" class="form-label">Mettez un commentaire sur cet vetement : </label>
-                      <textarea name="commentaire" class="form-control" aria-label="Votre commentaire" id="input_commentaire"  placeholder="Votre commentaire"></textarea>
-                      </div>
-                      <button class="btn btn-primary mt-4 mb-4" href="/admin/vetement/commentaires/repondre"> répondre </button>
-                 </form>
-
-        <a class="btn btn-outline-primary btn-lg" href="/admin/vetement/show">Retour vers la page d'accueil</a>
+<main class="crud-container">
+    <h2>Répondre à un commentaire client</h2>
+    <div class="crud-top-actions wrap">
+        <a class="validate-button-white-outline" href="{{ return_url }}">
+            Retour aux commentaires
+        </a>
     </div>
+
+    <form action="/admin/vetement/commentaires/repondre" method="post" class="crud-input-list width100p">
+        <input type="hidden" name="id_vetement" value="{{ id_vetement }}">
+        <input type="hidden" name="id_utilisateur" value="{{ id_utilisateur }}">
+        <input type="hidden" name="date_commentaire" value="{{ date_commentaire }}">
+        <input type="hidden" name="return_url" value="{{ return_url }}">
+
+        <div class="crud-field">
+            <label for="input_commentaire">Votre réponse</label>
+            <textarea name="commentaire"
+                      id="input_commentaire"
+                      placeholder="Votre réponse"
+                      class="item-description-crud"
+                      rows="6"
+                      required></textarea>
+        </div>
+
+        <div class="crud-field-actions">
+            <button type="submit" class="validate-button-black">Envoyer la réponse</button>
+        </div>
+    </form>
+</main>
 
 {% endblock %}
