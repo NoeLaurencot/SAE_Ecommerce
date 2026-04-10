@@ -42,10 +42,15 @@
                 <td>{{ ligne.matiere }}</td>
                 <td class="td-truncate" title="{{ ligne.collection }}">{{ ligne.collection }}</td>
                 {% if ligne.stock > 0 %}
-                <td class="crud-stock-positive"><strong>{{ ligne.stock }}</strong></td>
+                <td class="crud-stock-positive"><strong>{{ ligne.stock }}
                 {% else %}
-                <td class="crud-stock-negative"><strong>{{ ligne.stock }}</strong></td>
+                <td class="crud-stock-negative"><strong>{{ ligne.stock }}
                 {% endif %}
+
+                {% if ligne.declinaisons_vide > 0 %}
+                <strong style="color: #f80;">Attention, une/des déclinaison(s) sont vide(s) </strong>
+                {% endif %}
+                </strong></td>
                 <td>{{ ligne.nb_declinaison }}</td>
                 <td>
                     <strong>{{ ligne.nb_commentaires_total }}</strong> total<br>
