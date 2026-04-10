@@ -178,7 +178,7 @@ def client_vetement_show():
         sql = """
         SELECT id_vetement, nom_vetement, vetement.photo, quantite, prix_vetement, libelle_taille, libelle_marque, ligne_panier.quantite, ligne_panier.date_ajout
         FROM ligne_panier
-        INNER JOIN declinaison_vetement ON ligne_panier.ideclinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
+        INNER JOIN declinaison_vetement ON ligne_panier.declinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
         INNER JOIN vetement ON vetement.id_vetement = declinaison_vetement.vetement_id
         INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
         INNER JOIN taille ON declinaison_vetement.taille_id = taille.id_taille
@@ -191,7 +191,7 @@ def client_vetement_show():
         sql = """
         SELECT SUM(prix_vetement * quantite) as prix_TTC, SUM(prix_vetement * 0.2 * quantite) AS prix_taxe, SUM(prix_vetement * quantite - prix_vetement * 0.2 * quantite) AS prix_HT
         FROM ligne_panier
-        INNER JOIN declinaison_vetement ON ligne_panier.ideclinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
+        INNER JOIN declinaison_vetement ON ligne_panier.declinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
         INNER JOIN vetement ON declinaison_vetement.vetement_id = vetement.id_vetement
         INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
         WHERE id_utilisateur = %s;

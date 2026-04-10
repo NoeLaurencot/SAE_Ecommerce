@@ -17,9 +17,9 @@ def client_commande_valide():
     mycursor = get_db().cursor()
 
     id_client = session['id_user']
-    sql = '''SELECT utilisateur_id, ligne_panier.ideclinaison_vetement_id, vetement.prix_vetement as prix, quantite
+    sql = '''SELECT utilisateur_id, ligne_panier.declinaison_vetement_id, vetement.prix_vetement as prix, quantite
              FROM ligne_panier
-                      JOIN declinaison_vetement on declinaison_vetement.id_declinaison_vetement = ligne_panier.ideclinaison_vetement_id
+                      JOIN declinaison_vetement on declinaison_vetement.id_declinaison_vetement = ligne_panier.declinaison_vetement_id
                       JOIN vetement on declinaison_vetement.vetement_id = vetement.id_vetement
              WHERE utilisateur_id = %s; \
           '''
@@ -56,9 +56,9 @@ def client_commande_add():
 
 
     id_client = session['id_user']
-    sql = '''SELECT utilisateur_id ,ligne_panier.ideclinaison_vetement_id,vetement.prix_vetement as prix,quantite
+    sql = '''SELECT utilisateur_id ,ligne_panier.declinaison_vetement_id,vetement.prix_vetement as prix,quantite
         FROM ligne_panier
-            JOIN declinaison_vetement on ligne_panier.ideclinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
+            JOIN declinaison_vetement on ligne_panier.declinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
         JOIN vetement on vetement.id_vetement = declinaison_vetement.vetement_id
         WHERE utilisateur_id = %s;
 '''
@@ -84,13 +84,13 @@ def client_commande_add():
 
     for item in items_ligne_panier:
         sql = '''DELETE FROM ligne_panier
-            WHERE utilisateur_id = %s and ideclinaison_vetement_id = %s'''
-        param = (item['utilisateur_id'],item['ideclinaison_vetement_id'])
+            WHERE utilisateur_id = %s and declinaison_vetement_id = %s'''
+        param = (item['utilisateur_id'],item['declinaison_vetement_id'])
         mycursor.execute(sql,param)
         get_db().commit()
         sql1 = '''INSERT INTO ligne_commande (commande_id,declinaison_vetement_id,prix,quantite)
                   VALUES (%s,%s,%s,%s)'''
-        param = (id_commande,item['ideclinaison_vetement_id'],item['prix'],item['quantite'])
+        param = (id_commande,item['declinaison_vetement_id'],item['prix'],item['quantite'])
         mycursor.execute(sql1,param)
         get_db().commit()
 
