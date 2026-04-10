@@ -13,10 +13,10 @@ client_coordonnee = Blueprint('client_coordonnee', __name__,
 @client_coordonnee.route('/client/coordonnee/show')
 def client_coordonnee_show():
     if 'login' not in session:
-        flash(u'Veuillez vous connecter.', 'alert-danger')
+        flash(u'Veuillez vous connecter', 'alert-danger')
         return redirect('/login')
     elif session['role'] != 'ROLE_client':
-        flash(u'Un administrateur n\'a pas de coordonées.', 'alert-danger')
+        flash(u'Un admin n\'a pas de coordonnées', 'alert-danger')
         return redirect('/')
 
     mycursor = get_db().cursor()
@@ -56,10 +56,10 @@ def client_coordonnee_show():
 @client_coordonnee.route('/client/coordonnee/edit', methods=['GET'])
 def client_coordonnee_edit():
     if 'login' not in session:
-        flash(u'Veuillez vous connecter.', 'alert-danger')
+        flash(u'Veuillez vous connecter', 'alert-danger')
         return redirect('/login')
     elif session['role'] != 'ROLE_client':
-        flash(u'Un administrateur n\'a pas de coordonées.', 'alert-danger')
+        flash(u'Un admin n\'a pas de coordonnées', 'alert-danger')
         return redirect('/')
 
     mycursor = get_db().cursor()
@@ -82,10 +82,10 @@ def client_coordonnee_edit():
 @client_coordonnee.route('/client/coordonnee/edit', methods=['POST'])
 def client_coordonnee_edit_valide():
     if 'login' not in session:
-        flash(u'Veuillez vous connecter.', 'alert-danger')
+        flash(u'Veuillez vous connecter', 'alert-danger')
         return redirect('/login')
     elif session['role'] != 'ROLE_client':
-        flash(u'Un administrateur n\'a pas de coordonées.', 'alert-danger')
+        flash(u'Un admin n\'a pas de coordonnées', 'alert-danger')
         return redirect('/')
 
     mycursor = get_db().cursor()
@@ -108,7 +108,7 @@ def client_coordonnee_edit_valide():
         """
         mycursor.execute(sql,id_client)
         utilisateur = mycursor.fetchone()
-        flash(u'Votre e-mail ou ce nom d\'utilisateur est déjà utilisé par un autre compte.', 'alert-warning')
+        flash(u'Votre email ou ce login existe déjà pour un autre utilisateur', 'alert-warning')
         return render_template('client/coordonnee/edit_coordonnee.html'
                                , utilisateur=utilisateur
                                )
@@ -184,7 +184,7 @@ def client_coordonnee_add_adresse_valide():
     nb_adresses = mycursor.fetchone()
 
     if nb_adresses['nb'] >= 4:
-        flash("Vous pouvez enregistrer au maximum 4 adresses.","alert-warning")
+        flash("4 adresses maximum","alert-warning")
         return redirect('/client/coordonnee/show')
 
     sql="""
@@ -208,7 +208,7 @@ def client_coordonnee_edit_adresse():
     valid_id = [row['id_adresse'] for row in adresse_user]
     print(valid_id ,id_adresse)
     if int(id_adresse) not in valid_id:
-        flash("Cette adresse ne vous appartient pas.","alert-warning")
+        flash("Ce n'est pas votre adresse","alert-warning")
         return redirect('/client/coordonnee/show')
 
 
@@ -251,7 +251,7 @@ def client_coordonnee_edit_adresse_valide():
     valid_id = [row['id_adresse'] for row in adresse_user]
     print(valid_id ,id_adresse)
     if int(id_adresse) not in valid_id:
-        flash("Cette adresse ne vous appartient pas.","alert-warning")
+        flash("Ce n'est pas votre adresse","alert-warning")
         return redirect('/client/coordonnee/show')
     sql="""
         SELECT COUNT(*) as nb
@@ -273,7 +273,7 @@ def client_coordonnee_edit_adresse_valide():
             """
         mycursor.execute(sql,id_adresse)
         get_db().commit()
-        flash("L'ancienne adresse n'a pas été modifiée car elle est liée à des commandes. Une nouvelle adresse a été créée.","alert-warning")
+        flash("L'ancienne adresse n'a pas été modifiée car elle a encore des commandes liés, mais une nouvelle a été créée","alert-warning")
         return redirect('/client/coordonnee/show')
     else:
         sql="""

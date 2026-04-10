@@ -248,28 +248,28 @@ def client_vetement_filtre():
     filter_matieres = request.form.getlist('filter_matieres', None)
     
     if filter_word and filter_word != '':
-        message = u'Filtre par mot : ' + filter_word
+        message = u'Filtre par mot: ' + filter_word
         flash(message, 'alert-success')
         session['filter_word'] = filter_word
     if filter_prix_min and filter_prix_max:
         min = str(filter_prix_min).replace(' ', '').replace(',', '.')
         max = str(filter_prix_max).replace(' ', '').replace(',', '.')
         if float(min) < float(max):
-            message = u'Filtre de prix : entre ' + min + ' € et ' + max + ' €.'
+            message = u'Filtre sur le prix entre: ' + min + '€ et ' + max + '€ '
             flash(message, 'alert-success')
             session['filter_prix_max'] = filter_prix_max
             session['filter_prix_min'] = filter_prix_min
         else:
-            message = u'La valeur minimale doit être inférieure à la valeur maximale.'
+            message = u'Valeur min plus grande que valeur max'
             flash(message, 'alert-warning')
     elif filter_prix_min:
         min = str(filter_prix_min).replace(' ', '').replace(',', '.')
-        message = u'Filtre de prix minimum : ' + min + ' €.'
+        message = u'Filtre sur le prix minimum: ' + min + '€'
         flash(message, 'alert-success')
         session['filter_prix_min'] = filter_prix_min
     elif filter_prix_max:
         max = str(filter_prix_max).replace(' ', '').replace(',', '.')
-        message = u'Filtre de prix maximum : ' + max + ' €.'
+        message = u'Filtre sur le prix maximum: ' + max + '€'
         flash(message, 'alert-success')
         session['filter_prix_max'] = filter_prix_max
     if filter_types and filter_types != []:
@@ -302,9 +302,9 @@ def client_vetement_filtre():
         WHERE id_collection = %s;
         """
         if len(filter_collections) == 1:
-            message = u'Collection sélectionnée : '
+            message = u'Collection sélectionné: '
         else:
-            message = u'Collections sélectionnées : '
+            message = u'Collections sélectionnés: '
             for i in range(len(filter_collections) - 1):
                 param = (filter_collections[i])
                 mycursor.execute(sql, param)

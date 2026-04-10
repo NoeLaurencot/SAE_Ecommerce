@@ -70,7 +70,7 @@ def auth_signup_post():
     user = mycursor.fetchone()
     print(user)
     if user is not None:
-        flash(u'Votre adresse e-mail ou votre nom d\'utilisateur existe déjà.', 'alert-warning')
+        flash(u'Votre adresse email ou votre nom d\'utilisateur existe déjà', 'alert-warning')
         return redirect('/signup')
 
     # ajouter un nouveau user
@@ -100,7 +100,7 @@ def auth_signup_post():
     session['nom'] = name
     session['email'] = email
     session['id_user'] = id_user
-    flash(u'Compte créé avec succès.', 'alert-success')
+    flash(u'Compte créé avec succès', 'alert-success')
     # return redirect('/client/vetement/show')
     return redirect('/')
 
@@ -122,5 +122,5 @@ def forget_password():
 
 @auth_security.route('/forget-password', methods=['POST'])
 def forget_password_post():
-    flash(u'Un e-mail sera envoyé si le compte existe (fonctionnalité non implémentée).','alert-warning')
+    flash(u'Email envoyé si le compte existe (pas implémenté)','alert-warning')
     return redirect('/login')

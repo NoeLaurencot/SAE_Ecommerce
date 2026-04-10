@@ -252,11 +252,11 @@ def client_comment_add():
         return redirect('/client/vetement/show')
 
     if commentaire == '':
-        flash(u'Le commentaire est vide.', 'alert-warning')
+        flash(u'Commentaire vide', 'alert-warning')
         return redirect('/client/vetement/details?id_vetement=' + str(id_vetement))
 
     if len(commentaire) < 3:
-        flash(u'Le commentaire doit contenir au moins 3 caractères.', 'alert-warning')
+        flash(u'Commentaire avec plus de 2 caractères', 'alert-warning')
         return redirect('/client/vetement/details?id_vetement=' + str(id_vetement))
 
     if not has_client_bought_vetement(mycursor, id_client, id_vetement):
@@ -273,7 +273,7 @@ def client_comment_add():
     nb_commentaires_utilisateur = mycursor.fetchone()['nb_commentaires_utilisateur']
 
     if nb_commentaires_utilisateur >= 3:
-        flash(u'Quota atteint : vous avez déjà 3 commentaires pour cet article.', 'alert-danger')
+        flash(u'Quota atteint: vous avez déjà 3 commentaires pour cet article', 'alert-danger')
         return redirect('/client/vetement/details?id_vetement=' + str(id_vetement))
 
     date_commentaire = get_available_comment_date(mycursor, id_vetement, id_client)
