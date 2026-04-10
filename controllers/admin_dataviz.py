@@ -232,8 +232,8 @@ def show_dataviz_map():
     if not admin_required():
         return redirect('/')
 
-    # mycursor = get_db().cursor()
-    # sql = '''    '''
+    mycursor = get_db().cursor()
+    sql = '''SUBSTRING(chaine, debut)'''
     # mycursor.execute(sql)
     # adresses = mycursor.fetchall()
 
