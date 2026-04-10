@@ -32,7 +32,7 @@ def admin_commande_show():
     if id_commande != None:
         sql = '''SELECT nom_vetement,quantite,prix,prix*quantite as prix_total
                  FROM ligne_commande
-                          JOIN sae_commerce.declinaison_vetement dv on ligne_commande.declinaison_vetement_id = dv.id_declinaison_vetement
+                          JOIN declinaison_vetement dv on ligne_commande.declinaison_vetement_id = dv.id_declinaison_vetement
                           JOIN vetement on dv.vetement_id = vetement.id_vetement
                  WHERE commande_id = %s;
               '''

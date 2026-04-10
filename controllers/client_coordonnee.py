@@ -190,6 +190,10 @@ def client_coordonnee_add_adresse_valide():
         flash("4 adresses maximum","alert-warning")
         return redirect('/client/coordonnee/show')
 
+    if len(code_postal) != 5:
+        flash("Code Postal Invalide","alert-warning")
+        return redirect('/client/coordonnee/add_adresse')
+
     sql="""
     INSERT INTO adresse (nom_adresse, rue_adresse, code_postal, ville, date_utilisation, utilisateur_id, valide) VALUE 
         (%s,%s,%s,%s,NOW(),%s,TRUE)"""
@@ -256,6 +260,12 @@ def client_coordonnee_edit_adresse_valide():
     if int(id_adresse) not in valid_id:
         flash("Ce n'est pas votre adresse","alert-warning")
         return redirect('/client/coordonnee/show')
+
+    if len(code_postal) != 5:
+        flash("Code Postal Invalide","alert-warning")
+        return redirect('/client/coordonnee/edit_adresse?id_adresse='+id_adresse)
+
+
     sql="""
         SELECT COUNT(*) as nb
         FROM commande
