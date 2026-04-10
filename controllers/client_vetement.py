@@ -16,7 +16,22 @@ def client_vetement_show():
         id_client = None
 
     sql = '''  
-    SELECT id_vetement, prix_vetement, nom_vetement, description, SUM(stock) AS stock, COUNT(id_declinaison_vetement) AS nb_declinaison, vetement.photo, libelle_marque AS marque, libelle_fournisseur AS fournisseur, libelle_matiere AS matiere, libelle_type_vetement, id_type_vetement, GROUP_CONCAT(libelle_collection SEPARATOR ', ') AS collection
+    SELECT id_vetement,
+           prix_vetement,
+           nom_vetement,
+           description,
+           SUM(stock) AS stock,
+           COUNT(DISTINCT id_declinaison_vetement) AS nb_declinaison,
+           vetement.photo,
+           libelle_marque AS marque,
+           libelle_fournisseur AS fournisseur,
+           libelle_matiere AS matiere,
+           libelle_type_vetement,
+           id_type_vetement,
+           GROUP_CONCAT(libelle_collection SEPARATOR ', ') AS collection,
+           note_stats.moyenne_note,
+           note_stats.nb_notes,
+           commentaire_stats.nb_commentaires
     FROM vetement
     JOIN declinaison_vetement
         ON declinaison_vetement.vetement_id = vetement.id_vetement
@@ -32,6 +47,24 @@ def client_vetement_show():
         ON vetement.id_vetement = vetement_collection.vetement_id
     JOIN collection
         ON collection.id_collection = vetement_collection.collection_id
+    LEFT JOIN (
+        SELECT vetement_id,
+               ROUND(AVG(note), 2) AS moyenne_note,
+               COUNT(*) AS nb_notes
+        FROM note
+        GROUP BY vetement_id
+    ) AS note_stats
+        ON note_stats.vetement_id = vetement.id_vetement
+    LEFT JOIN (
+        SELECT c.vetement_id,
+               COUNT(*) AS nb_commentaires
+        FROM commentaire c
+        JOIN utilisateur u
+            ON u.id_utilisateur = c.utilisateur_id
+        WHERE u.role = 'ROLE_client'
+        GROUP BY c.vetement_id
+    ) AS commentaire_stats
+        ON commentaire_stats.vetement_id = vetement.id_vetement
     '''
 
     list_param = []
@@ -41,7 +74,7 @@ def client_vetement_show():
         and_condition = ""
 
         if "filter_word" in session:
-            sql = sql + " nom_vetement LIKE %s OR libelle_marque LIKE %s"
+            sql = sql + " (nom_vetement LIKE %s OR libelle_marque LIKE %s)"
             recherche = "%" + session["filter_word"] + "%"
             list_param.append(recherche)
             list_param.append(recherche)
@@ -100,14 +133,38 @@ def client_vetement_show():
             sql = sql + ")"
             and_condition = " AND "
         sql = sql + """
-        GROUP BY id_vetement, prix_vetement, nom_vetement, description
+        GROUP BY id_vetement,
+                 prix_vetement,
+                 nom_vetement,
+                 description,
+                 vetement.photo,
+                 libelle_marque,
+                 libelle_fournisseur,
+                 libelle_matiere,
+                 libelle_type_vetement,
+                 id_type_vetement,
+                 note_stats.moyenne_note,
+                 note_stats.nb_notes,
+                 commentaire_stats.nb_commentaires
         ORDER BY id_vetement;
         """
         print(sql)
         mycursor.execute(sql, list_param)
     else:
         sql = sql + """
-        GROUP BY id_vetement, prix_vetement, nom_vetement, description
+        GROUP BY id_vetement,
+                 prix_vetement,
+                 nom_vetement,
+                 description,
+                 vetement.photo,
+                 libelle_marque,
+                 libelle_fournisseur,
+                 libelle_matiere,
+                 libelle_type_vetement,
+                 id_type_vetement,
+                 note_stats.moyenne_note,
+                 note_stats.nb_notes,
+                 commentaire_stats.nb_commentaires
         ORDER BY id_vetement;
         """
         mycursor.execute(sql)
@@ -121,7 +178,7 @@ def client_vetement_show():
         sql = """
         SELECT id_vetement, nom_vetement, vetement.photo, quantite, prix_vetement, libelle_taille, libelle_marque, ligne_panier.quantite, ligne_panier.date_ajout
         FROM ligne_panier
-        INNER JOIN declinaison_vetement ON ligne_panier.declinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
+        INNER JOIN declinaison_vetement ON ligne_panier.ideclinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
         INNER JOIN vetement ON vetement.id_vetement = declinaison_vetement.vetement_id
         INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
         INNER JOIN taille ON declinaison_vetement.taille_id = taille.id_taille
@@ -134,7 +191,7 @@ def client_vetement_show():
         sql = """
         SELECT SUM(prix_vetement * quantite) as prix_TTC, SUM(prix_vetement * 0.2 * quantite) AS prix_taxe, SUM(prix_vetement * quantite - prix_vetement * 0.2 * quantite) AS prix_HT
         FROM ligne_panier
-        INNER JOIN declinaison_vetement ON ligne_panier.declinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
+        INNER JOIN declinaison_vetement ON ligne_panier.ideclinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
         INNER JOIN vetement ON declinaison_vetement.vetement_id = vetement.id_vetement
         INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
         WHERE id_utilisateur = %s;

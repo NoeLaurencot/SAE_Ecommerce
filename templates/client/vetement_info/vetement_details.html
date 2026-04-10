@@ -1,170 +1,144 @@
+{% extends 'layout.html' %}
 
-{% extends "client/layout_client.html" %}
-{% block stylesheets%}
-    {{ super() }}
-     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/star_rating.css') }}" >
+{% block title %}
+<title>Détails article | Gaullois</title>
 {% endblock %}
 
-
 {% block body %}
-<div class="container">
-    <div class="text-center card w-auto">
-         <h2 class="card-title">
-             <span style="color: #0b2e13">{{ vetement.nom }}</span> &nbsp;{{ vetement.prix }} €
-         </h2>
-        <div class="card-body">
-        {%  if vetement.image is not none %}
-            <img class="card-img-top rounded mx-auto d-block"  style="width:100px;height:100px"  src="{{ url_for('static', filename = 'images/')}}{{ vetement.image }}"  alt="image  de {{ vetement.nom }}" >
-        {% else %} <img class="card-img-top rounded mx-auto d-block"   style="width:100px;height:100px"   src="{{ url_for('static', filename='images/no_photo.jpeg')}}"  alt="image  de {{ vetement.nom }}" >
-        {% endif %}
+<main class="container-boutique-param">
+    {% include('client/boutique/_panier.html') %}
 
+    <section class="vetement-detail-page">
+        <a class="validate-button-white-outline declinaison-back-link" href="/client/vetement/show">Retour boutique</a>
 
-       {% if commandes_vetements.nb_commandes_vetement is defined and commandes_vetements.nb_commandes_vetement > 0 %}
-                 <br>Vous avez commandé <strong>{{ commandes_vetements.nb_commandes_vetement }} </strong>fois  ce produit
-        {% endif %}
+        <div class="vetement-detail-card">
+            <div class="vetement-detail-media">
+                <div class="vetement-detail-image-frame">
+                    {% if vetement.photo %}
+                        <img src="{{ url_for('static', filename='assets/images/clothes/' + vetement.photo) }}"
+                             alt="image de {{ vetement.nom_vetement }}">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='assets/images/placeholder.svg') }}"
+                             alt="image de {{ vetement.nom_vetement }}">
+                    {% endif %}
+                </div>
+            </div>
 
-        </div>
-        <div class="card-footer text-left"><h6>Description : {{ vetement.description }}</h6></div>
-    </div>
+            <div class="vetement-detail-info text-box">
+                <h1 class="no-margin declinaison-title">{{ vetement.nom_vetement }}</h1>
+                <div class="vetement-detail-price-row">
+                    <p class="no-margin vetement-detail-price">{{ vetement.prix_vetement }} €</p>
+                    {% if vetement.nb_notes is not none and vetement.nb_notes > 0 and vetement.moyenne_notes is not none %}
+                        <p class="no-margin vetement-detail-note-badge">{{ vetement.moyenne_notes }}/5 · {{ vetement.nb_notes }} note(s)</p>
+                    {% endif %}
+                </div>
+                <p class="no-margin declinaison-description">{{ vetement.description }}</p>
+                <div class="divider"></div>
 
-    <hr>  <!-- les notes -->
+                {% if vetement.nb_notes is not none and vetement.nb_notes > 0 and vetement.moyenne_notes is not none %}
+                    <p class="no-margin">
+                        Note moyenne de l'article : <strong>{{ vetement.moyenne_notes }}/5</strong>
+                        ({{ vetement.nb_notes }} note(s))
+                    </p>
+                {% endif %}
 
-    <div class="row">
-
-    <div class="col-12">
-        {% if vetement.moyenne_notes is not defined or  vetement.nb_notes is not defined or  vetement.moyenne_notes == None %}
-            <strong>Pas de Note</strong>
-        {% else %}
-            <strong>Note moyenne de cet vetement : {{ vetement.moyenne_notes }}</strong>&nbsp;({{ vetement.nb_notes }} note(s))
-        {% endif %}
-    </div>
-        {% if commandes_vetements.nb_commandes_vetement is defined and commandes_vetements.nb_commandes_vetement > 0 %}
-            <div class="col-12">
-                {% if note is defined and note is number %}
-
-                    <form  action="/client/note/edit"   method="post" class="row">
-                    <input type="hidden" name="id_vetement" value="{{ vetement.id_vetement }}">
-                    <div class="col-md-3">
-                        <label for="input_note" class="d-flex justify-content-end align-items-end pe-3">Modifier votre note sur cet vetement : </label>
-                    </div>
-                    <div class="col-md-1">
-                        <input type="number" name="note" id="input_note" step="0.1" min="0" max="5" class="form-control col-md-2" value="{{ note }}" >
-                    </div>
-                     <div class="col-md-2">
-                         <button class="btn btn-primary" > Modifier votre note </button>
-                     </div>
-                    </form>
-                    <form  action="/client/note/delete"   method="post" class="row">
-                    <input type="hidden" name="id_vetement" value="{{ vetement.id_vetement }}">
-                     <div class="col-md-2">
-                         <button class="btn btn-primary" > Supprimer votre note </button>
-                     </div>
-                    </form>
+                {% if client_has_bought %}
+                    <p class="no-margin">Vous avez déjà acheté cet article.</p>
                 {% else %}
-                    <form  action="/client/note/add"   method="post" class="row">
-                    <input type="hidden" name="id_vetement" value="{{ vetement.id_vetement }}">
-                    <div class="col-md-3">
-                        <label for="input_note" class="d-flex justify-content-end align-items-end pe-3">Mettre une note  sur cet vetement : </label>
-                    </div>
-                    <div class="col-md-1">
-                        <input type="number" name="note" id="input_note" step="0.1" min="0" max="5" class="form-control col-md-2" value="" >
-                    </div>
-                     <div class="col-md-2">
-                        <button class="btn btn-primary" > Mettre une note </button></div>
-                    </form>
+                    <p class="no-margin vetement-detail-warning">Seuls les clients ayant acheté cet article peuvent noter et commenter.</p>
                 {% endif %}
             </div>
-        {% else %}
-            <small>(seul les clients qui ont acheté cet vetement peuvent le noter)</small>
-        {% endif %}
-    </div>
+        </div>
 
-    <br>
-    <hr>
-
-  <div class="row" style="background-color: #faf1d7">
-      <div class="col-12">
-      {% if nb_commentaires.nb_commentaires_total is not defined or nb_commentaires.nb_commentaires_utilisateur is not defined %}
-         <strong>NB commentaire(s) not defined</strong>
+        <div class="vetement-detail-grid">
+            <section class="vetement-detail-panel text-box">
+                <h2 class="no-margin">Votre note</h2>
+                {% if client_has_bought %}
+                    {% if note is not none %}
+                        <form action="/client/note/edit" method="post" class="vetement-detail-form">
+                            <input type="hidden" name="id_vetement" value="{{ vetement.id_vetement }}">
+                            <label for="input_note">Modifier votre note :</label>
+                            <input type="number" name="note" id="input_note" step="0.1" min="0" max="5" value="{{ note }}" required>
+                            <button class="validate-button-black" type="submit">Modifier</button>
+                        </form>
+                        <form action="/client/note/delete" method="post" class="vetement-detail-form-inline">
+                            <input type="hidden" name="id_vetement" value="{{ vetement.id_vetement }}">
+                            <button class="validate-button-white-outline" type="submit">Supprimer ma note</button>
+                        </form>
+                    {% else %}
+                        <form action="/client/note/add" method="post" class="vetement-detail-form">
+                            <input type="hidden" name="id_vetement" value="{{ vetement.id_vetement }}">
+                            <label for="input_note">Ajouter une note :</label>
+                            <input type="number" name="note" id="input_note" step="0.1" min="0" max="5" required>
+                            <button class="validate-button-black" type="submit">Ajouter</button>
+                        </form>
+                    {% endif %}
                 {% else %}
-            <strong>Nombre de commentaire(s) : {{ nb_commentaires.nb_commentaires_utilisateur }} commentaire(s) / 3 maxi pour un vetement acheté </strong><br>
-            <strong>Nombre de commentaire(s) total :  {{nb_commentaires.nb_commentaires_total }}</strong><br>
-          {% if nb_commentaires.nb_commentaires_utilisateur_valide is not defined or nb_commentaires.nb_commentaires_total_valide is not defined %}
-               <strong>NB commentaire(s) valide(s) not defined</strong>
-              {% else %}
-           Nombre de commentaire(s) validé(s) total de l'utilisateur :  {{nb_commentaires.nb_commentaires_utilisateur_valide }} /  Nombre de commentaire(s) validé(s) {{nb_commentaires.nb_commentaires_total_valide }}<br>
-          {% endif %}
-        {% endif %}
-      </div>
-      {% if commandes_vetements.nb_commandes_vetement is defined and commandes_vetements.nb_commandes_vetement > 0 and
-            ((nb_commentaires.nb_commentaires_utilisateur is defined and nb_commentaires.nb_commentaires_utilisateur <3) or nb_commentaires.nb_commentaires_utilisateur is not defined) %}
-          <form  action="/client/commentaire/add"   method="post">
-                <div class="col">
-                  <label for="input_commentaire" class="form-label">Mettez un commentaire sur cet vetement : </label>
-                     <textarea name="commentaire" class="form-control" aria-label="Votre commentaire" id="input_commentaire"  placeholder="Votre commentaire"></textarea>
+                    <p class="no-margin">Vous ne pouvez pas noter cet article.</p>
+                {% endif %}
+            </section>
+
+            <section class="vetement-detail-panel text-box">
+                <h2 class="no-margin">Statistiques commentaires</h2>
+                <p class="no-margin">Vos commentaires : <strong>{{ nb_commentaires.nb_commentaires_utilisateur }}</strong> / 3</p>
+                <p class="no-margin">Commentaires total article : <strong>{{ nb_commentaires.nb_commentaires_total }}</strong></p>
+                <p class="no-margin">Commentaires total validés : <strong>{{ nb_commentaires.nb_commentaires_total_valide }}</strong></p>
+                <p class="no-margin">Vos commentaires validés : <strong>{{ nb_commentaires.nb_commentaires_utilisateur_valide }}</strong></p>
+
+                {% if client_has_bought %}
+                    {% if nb_commentaires.nb_commentaires_utilisateur < 3 %}
+                        <form action="/client/commentaire/add" method="post" class="vetement-detail-form">
+                            <input type="hidden" name="id_vetement" value="{{ vetement.id_vetement }}">
+                            <label for="input_commentaire">Ajouter un commentaire :</label>
+                            <textarea name="commentaire" id="input_commentaire" minlength="3" required></textarea>
+                            <button class="validate-button-black" type="submit">Publier</button>
+                        </form>
+                    {% else %}
+                        <p class="no-margin vetement-detail-quota">Quota atteint : vous avez déjà 3 commentaires sur cet article.</p>
+                    {% endif %}
+                {% else %}
+                    <p class="no-margin">Vous ne pouvez pas commenter cet article.</p>
+                {% endif %}
+            </section>
+        </div>
+
+        <section class="vetement-detail-comments text-box">
+            <h2 class="no-margin">Commentaires (du plus récent au plus ancien)</h2>
+            {% if commentaires_affichage | length >= 1 %}
+                <div class="vetement-comment-list">
+                    {% for ligne in commentaires_affichage %}
+                        {% if ligne.type_ligne == 'client' %}
+                            <article class="vetement-comment-item {% if ligne.commentaire.valide == 1 %}vetement-comment-valid{% endif %}">
+                                <div class="vetement-comment-meta">
+                                    <span><strong>{{ ligne.commentaire.login }}</strong> ({{ ligne.commentaire.nom }})</span>
+                                    <span>ID : {{ ligne.commentaire.id_commentaire }}</span>
+                                    <span>{{ ligne.commentaire.date_commentaire }}</span>
+                                </div>
+                                <p class="no-margin">{{ ligne.commentaire.commentaire }}</p>
+                                {% if ligne.commentaire.utilisateur_id == session['id_user'] %}
+                                    <form action="/client/commentaire/delete" method="post" class="vetement-detail-form-inline">
+                                        <input type="hidden" name="id_vetement" value="{{ ligne.commentaire.vetement_id }}">
+                                        <input type="hidden" name="date_commentaire" value="{{ ligne.commentaire.date_commentaire }}">
+                                        <button class="validate-button-white-outline" type="submit">Supprimer mon commentaire</button>
+                                    </form>
+                                {% endif %}
+                            </article>
+                        {% else %}
+                            <article class="vetement-comment-item vetement-comment-admin">
+                                <div class="vetement-comment-meta">
+                                    <span><strong>{{ ligne.commentaire.login }}</strong> (admin)</span>
+                                    <span>ID : {{ ligne.commentaire.id_commentaire }}</span>
+                                    <span>{{ ligne.commentaire.date_commentaire }}</span>
+                                </div>
+                                <p class="no-margin"><strong>Réponse admin :</strong> {{ ligne.commentaire.commentaire }}</p>
+                            </article>
+                        {% endif %}
+                    {% endfor %}
                 </div>
-              <input type="hidden" name="action" value="add_commentaire">
-              <input type="hidden" name="id_vetement" value="{{ vetement.id_vetement }}">
-                <form  action="/client/comment/add"  style="display: inline-block;"  method="post" >
-                        <button class="btn btn-primary mt-2" > Ajouter un commentaire </button>
-                </form>
-            </form>
-        {% else %}
-            <small>(seul les clients qui ont acheté cet vetement peuvent le commenter ou nombre maxi de commentaires sur cet vetement (5) atteind)</small>
-        {% endif %}
-
-    </div>
-
-    <div class="row">
-            <div class="col-5 bg-light p-3">
-        <h3>Les commentaires</h3>
-            </div>
-        <table class="table" style="border: solid #8959A8 1px ">
-        {% if commentaires %}
-            <thead class="thead-dark">
-            <tr>
-                <th>nom(pseudo)</th>
-                <th>Commentaires</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-
-                {% for commentaire in commentaires %}
-                    <tr>
-                        <td>{{ commentaire.nom }}({{ commentaire.id_utilisateur }})</td>
-                        <td>{% if commentaire.utilisateur_id == 1 %}
-                            <span style="color: red">(réponse de l'administrateur du site (webmaster) ) :</span>
-                            {% endif %}
-                            {{ commentaire.commentaire }}
-                            {% if commentaire.valider == 1 %}
-                            <span style="color: red">(v)</span>
-                            {% endif %}
-                        </td>
-{#                        <td>{{ commentaire.note }}#}
-{#                        {{ commentaire.__dict__ }}#}
-{#                        </td>#}
-                        <td>
-                            {% if commentaire.id_utilisateur == session['id_user'] %}
-                                  <form  action="/client/commentaire/delete"  style="display: inline-block;"  method="post" >
-                                      <input type="hidden" name="id_vetement" value="{{ commentaire.id_vetement }}">
-                                      <input type="hidden" name="id_utilisateur" value="{{ commentaire.id_utilisateur }}">
-                                      <input type="hidden" name="date_publication" value="{{ commentaire.date_publication }}">
-                                      <button class="btn btn-primary" > supprimer </button>
-                                  </form>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
             {% else %}
-                <tr class="table-warning"><td>Pas de commentaire</td><td></td></tr>
+                <p class="no-margin">Aucun commentaire pour cet article.</p>
             {% endif %}
-            </tbody>
-        </table>
-        <a class="btn btn-outline-primary btn-lg" href="/client/vetement/show">Retour vers la page d'accueil</a>
-    </div>
-</div>
-
-
-
+        </section>
+    </section>
+</main>
 {% endblock %}
