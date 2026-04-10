@@ -28,6 +28,9 @@
                 {% endfor %}
                 </tbody>
                 </table>
+                <span>Adresse Livraison : {{ commande_adresses.adresse_shipping.nom }} {{ commande_adresses.adresse_shipping.rue }} {{ commande_adresses.adresse_shipping.code_postal }} {{ commande_adresses.adresse_shipping.ville }}</span>
+                <span>Adresse Payement : {{ commande_adresses.adresse_payment.nom }} {{ commande_adresses.adresse_payment.rue }} {{ commande_adresses.adresse_payment.code_postal }} {{ commande_adresses.adresse_payment.ville }}</span>
+
             {% endif %}
         </div>
         {% if commandes | length > 0 %}

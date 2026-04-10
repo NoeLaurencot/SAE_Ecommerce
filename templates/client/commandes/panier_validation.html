@@ -69,7 +69,10 @@
                         {% endif %}
                     {% endfor %}
                 </select>
+
                 <label for="payment_adress_id">Adresse de facturation :</label>
+                <label for="same_adress">Same adresse ? <input type="checkbox" name="same_adress" id="same_adress"></label>
+
                 <select name="payment_adress_id" id="payment_adress_id">
                     <option>Sélectionner une adresse de facturation</option>
                     {% for adresse in adresses %}

@@ -41,7 +41,7 @@ def client_commande_valide():
                        INNER JOIN declinaison_vetement on ligne_panier.declinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
                        INNER JOIN vetement ON declinaison_vetement.vetement_id = vetement.id_vetement
                        INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
-              WHERE id_utilisateur = %s; \
+              WHERE id_utilisateur = %s;
               """
         mycursor.execute(sql, id_client)
         panier_prix = mycursor.fetchone()
@@ -79,12 +79,29 @@ def client_commande_add():
 
 
     id_client = session['id_user']
+    shipping_adress_id = request.form.get('shipping_adress_id')
+    payment_adress_id = request.form.get('payment_adress_id')
+    same_adress = request.form.get('same_adress')
+    if same_adress:
+        payment_adress_id = shipping_adress_id
+
+    sql="""SELECT id_adresse
+           FROM adresse
+           WHERE utilisateur_id = %s
+        """
+    mycursor.execute(sql,id_client)
+    adresse_user = mycursor.fetchall()
+    valid_id = [row['id_adresse'] for row in adresse_user]
+    if int(shipping_adress_id) not in valid_id or int(payment_adress_id) not in valid_id:
+        flash("Ce n'est pas votre adresse","alert-warning")
+        return redirect('/client/coordonnee/show')
+
     sql = '''SELECT utilisateur_id ,ligne_panier.declinaison_vetement_id,vetement.prix_vetement as prix,quantite
         FROM ligne_panier
             JOIN declinaison_vetement on ligne_panier.declinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
         JOIN vetement on vetement.id_vetement = declinaison_vetement.vetement_id
         WHERE utilisateur_id = %s;
-'''
+    '''
     mycursor.execute(sql,id_client)
     items_ligne_panier = mycursor.fetchall()
     if items_ligne_panier is None or len(items_ligne_panier) < 1:
@@ -93,9 +110,9 @@ def client_commande_add():
                                            # https://pynative.com/python-mysql-transaction-management-using-commit-rollback/
     a = datetime.now()
 
-    sql = ''' INSERT INTO commande (utilisateur_id,date_achat,etat_id) 
-              VALUES (%s,%s,%s)'''
-    param = (id_client,a,1)
+    sql = ''' INSERT INTO commande (utilisateur_id,date_achat,etat_id,adresse_livraison_id,adresse_facturation_id) 
+              VALUES (%s,%s,%s,%s,%s)'''
+    param = (id_client,a,1,shipping_adress_id,payment_adress_id)
     mycursor.execute(sql,param)
     get_db().commit()
 
@@ -168,15 +185,27 @@ def client_commande_show():
         vetement_commandes = mycursor.fetchall()
 
         sql = """
-              SELECT valide,nom_adresse as nom,rue_adresse as rue,code_postal,ville,id_adresse,
-                     (SELECT COUNT(*)
-                      FROM commande
-                      WHERE adresse_livraison_id = id_adresse
-                         OR adresse_facturation_id = id_adresse) as nb_utilisation
-              FROM adresse
-              WHERE adresse.utilisateur_id = %s
-              ORDER BY valide DESC , date_utilisation DESC;
+              SELECT nom_adresse as nom,rue_adresse as rue,code_postal,ville,id_adresse
+              FROM commande
+                  JOIN adresse on commande.adresse_livraison_id = adresse.id_adresse
+              WHERE commande.id_commande = %s;
               """
+        mycursor.execute(sql,id_commande)
+        commande_adresses = {}
+        commande_adresses['adresse_shipping'] = mycursor.fetchone()
+
+
+        sql = """
+              SELECT nom_adresse as nom,rue_adresse as rue,code_postal,ville,id_adresse
+              FROM commande
+                       JOIN adresse on commande.adresse_facturation_id = adresse.id_adresse
+              WHERE commande.id_commande = %s;
+              """
+        mycursor.execute(sql,id_commande)
+        commande_adresses['adresse_payment'] = mycursor.fetchone()
+
+
+
 
     return render_template('client/commandes/show.html'
                            , commandes=commandes
