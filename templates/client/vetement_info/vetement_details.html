@@ -32,6 +32,28 @@
                         <p class="no-margin vetement-detail-note-badge">{{ vetement.moyenne_notes }}/5 · {{ vetement.nb_notes }} note(s)</p>
                     {% endif %}
                 </div>
+                <div class="card-price-button">
+                    {% if vetement.stock == 0 %}
+                        <span class="vetement-stock-warning">Rupture de stock</span>
+                    {% else %}
+                        <form class="input-vetement-container" action="/client/panier/add" method="post">
+                            <input type="hidden" name="id_vetement" id="id_vetement" value="{{ vetement.id_vetement }}">
+                            <div class="input-vetement">
+                                <button class="material-symbols-outlined card-button" type="submit">shopping_cart</button>
+                                <div class="input-vetement-wrapper">
+                                    <input class="card-input" type="number" name="quantite" id="quantite" value="1" min="1" max="{{ vetement.stock }}">
+                                    <span class="material-symbols-outlined input-vetement-up">arrow_drop_up</span>
+                                    <span class="material-symbols-outlined input-vetement-down">arrow_drop_down</span>
+                                </div>
+                            </div>
+                            {% if vetement.stock <= 4 %}
+                                <span class="vetement-stock-warning">Plus que {{ vetement.stock }} vetements</span>
+                            {% else %}
+                                <span class="vetement-stock">{{ vetement.stock }} vetements restants</span>
+                            {% endif %}
+                        </form>
+                    {% endif %}
+                </div>
                 <p class="no-margin declinaison-description">{{ vetement.description }}</p>
                 <div class="divider"></div>
 

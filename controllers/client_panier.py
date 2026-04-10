@@ -58,11 +58,15 @@ def client_panier_add():
 
     mycursor = get_db().cursor()
     id_client = session['id_user']
-    id_vetement = request.form.get('id_vetement')
-    quantite = request.form.get('quantite')
-    id_declinaison_vetement=request.form.get('id_declinaison_vetement', '')
+    id_vetement = request.form.get('id_vetement', type=int)
+    quantite = request.form.get('quantite', type=int)
+    id_declinaison_vetement = request.form.get('id_declinaison_vetement', type=int)
 
-    if (id_vetement):
+    if quantite is None or quantite < 1:
+        flash(u'Quantite invalide', 'alert-warning')
+        return redirect('/client/vetement/show')
+
+    if id_vetement:
         sql = '''
         SELECT SUM(stock) AS stock
         FROM vetement
@@ -70,11 +74,10 @@ def client_panier_add():
             ON vetement.id_vetement = declinaison_vetement.vetement_id
         WHERE id_vetement = %s
         '''
-        print(id_vetement)
 
-        mycursor.execute(sql, id_vetement)
+        mycursor.execute(sql, (id_vetement,))
         tmp = mycursor.fetchone()
-        if tmp['stock'] < int(quantite):
+        if tmp is None or tmp['stock'] < quantite:
             flash(u'Pas assez de stock','alert-warning')
             return redirect('/client/vetement/show')
 
@@ -87,18 +90,36 @@ def client_panier_add():
         INNER JOIN taille ON taille.id_taille = declinaison_vetement.taille_id
         WHERE vetement_id = %s
         '''
-        mycursor.execute(sql, (id_vetement))
+        mycursor.execute(sql, (id_vetement,))
         declinaisons = mycursor.fetchall()
 
-    else: 
+    else:
+        if not id_declinaison_vetement:
+            flash(u'Veuillez choisir une taille', 'alert-warning')
+            return redirect('/client/vetement/show')
         declinaisons = [{'id_declinaison_vetement': id_declinaison_vetement}]
 
     if len(declinaisons) == 1:
         id_declinaison_vetement = declinaisons[0]['id_declinaison_vetement']
+
+        sql = '''
+        SELECT stock
+        FROM declinaison_vetement
+        WHERE id_declinaison_vetement = %s
+        '''
+        mycursor.execute(sql, (id_declinaison_vetement,))
+        declinaison = mycursor.fetchone()
+
+        if declinaison is None or declinaison['stock'] < quantite:
+            flash(u'Pas assez de stock', 'alert-warning')
+            return redirect('/client/vetement/show')
         
         sql = '''
         INSERT INTO ligne_panier(declinaison_vetement_id, utilisateur_id, date_ajout, quantite)
         VALUES (%s, %s, %s, %s)
+        ON DUPLICATE KEY UPDATE
+            quantite = quantite + VALUES(quantite),
+            date_ajout = VALUES(date_ajout)
         '''
         mycursor.execute(sql, (id_declinaison_vetement, id_client, '2026-05-05', quantite))
 
@@ -211,23 +232,22 @@ def client_panier_delete():
 def client_panier_vider():
     mycursor = get_db().cursor()
     client_id = session['id_user']
-    sql = '''SELECT quantite,vetement_id
+    sql = '''SELECT quantite, declinaison_vetement_id
         FROM ligne_panier
         WHERE utilisateur_id = %s;'''
-    mycursor.execute(sql,client_id)
+    mycursor.execute(sql, (client_id,))
     items_panier = mycursor.fetchall()
     for item in items_panier:
         sql = '''DELETE FROM ligne_panier
-                WHERE utilisateur_id = %s AND vetement_id = %s;'''
-        param = (client_id,item['vetement_id'])
+                WHERE utilisateur_id = %s AND declinaison_vetement_id = %s;'''
+        param = (client_id, item['declinaison_vetement_id'])
         mycursor.execute(sql,param)
-        get_db().commit()
 
-        sql2='''UPDATE vetement SET stock = stock + %s 
-                WHERE id_vetement = %s;'''
-        param2 = (item['quantite'],item['vetement_id'])
+        sql2='''UPDATE declinaison_vetement SET stock = stock + %s
+                WHERE id_declinaison_vetement = %s;'''
+        param2 = (item['quantite'], item['declinaison_vetement_id'])
         mycursor.execute(sql2,param2)
-        get_db().commit()
+    get_db().commit()
     return redirect('/client/panier')
 
 
@@ -235,31 +255,37 @@ def client_panier_vider():
 def client_panier_delete_line():
     mycursor = get_db().cursor()
     id_client = session['id_user']
-    #id_declinaison_vetement = request.form.get('id_declinaison_vetement')
-    id_vetement = request.form.get("id-ligne")
+    id_declinaison_vetement = request.form.get("id-ligne", type=int)
 
-    param = (id_client, id_vetement)
+    if id_declinaison_vetement is None:
+        flash(u'Article introuvable', 'alert-warning')
+        return redirect('/client/panier')
+
+    param = (id_client, id_declinaison_vetement)
 
     sql = """
-    SELECT vetement_id, utilisateur_id, quantite, date_ajout
+    SELECT declinaison_vetement_id, utilisateur_id, quantite, date_ajout
     FROM ligne_panier
-    WHERE utilisateur_id = %s AND vetement_id = %s;
+    WHERE utilisateur_id = %s AND declinaison_vetement_id = %s;
     """
     mycursor.execute(sql, param)
     ligne_to_delete = mycursor.fetchone()
 
+    if ligne_to_delete is None:
+        flash(u'Article introuvable', 'alert-warning')
+        return redirect('/client/panier')
+
     sql = """
     DELETE FROM ligne_panier
-    WHERE utilisateur_id = %s AND vetement_id = %s;
+    WHERE utilisateur_id = %s AND declinaison_vetement_id = %s;
     """
     mycursor.execute(sql, param)
-    get_db().commit()
 
-    param_quantite = (ligne_to_delete['quantite'], id_vetement)
+    param_quantite = (ligne_to_delete['quantite'], id_declinaison_vetement)
 
     sql = """
-    UPDATE vetement SET stock = (stock + %s)
-    WHERE id_vetement = %s;
+    UPDATE declinaison_vetement SET stock = (stock + %s)
+    WHERE id_declinaison_vetement = %s;
     """
     mycursor.execute(sql, param_quantite)
     get_db().commit()

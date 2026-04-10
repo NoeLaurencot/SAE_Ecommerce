@@ -118,6 +118,15 @@ def client_vetement_details():
         abort(404, 'vetement introuvable')
 
     sql = '''
+    SELECT IFNULL(SUM(stock), 0) AS stock
+    FROM declinaison_vetement
+    WHERE vetement_id = %s;
+    '''
+    mycursor.execute(sql, (id_vetement,))
+    stock_row = mycursor.fetchone()
+    vetement['stock'] = stock_row['stock'] if stock_row is not None else 0
+
+    sql = '''
     SELECT IFNULL(SUM(lc.quantite), 0) AS nb_commandes_vetement
     FROM commande c
     JOIN ligne_commande lc
