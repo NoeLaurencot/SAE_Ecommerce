@@ -396,19 +396,12 @@ def client_note_edit():
         return redirect('/client/vetement/details?id_vetement=' + str(id_vetement))
 
     sql = '''
-    UPDATE note
-    SET note = %s
-    WHERE utilisateur_id = %s
-      AND vetement_id = %s;
+    INSERT INTO note (vetement_id, utilisateur_id, note)
+    VALUES (%s, %s, %s)
+    ON DUPLICATE KEY UPDATE
+        note = VALUES(note);
     '''
-    mycursor.execute(sql, (note, id_client, id_vetement))
-
-    if mycursor.rowcount == 0:
-        sql = '''
-        INSERT INTO note (vetement_id, utilisateur_id, note)
-        VALUES (%s, %s, %s);
-        '''
-        mycursor.execute(sql, (id_vetement, id_client, note))
+    mycursor.execute(sql, (id_vetement, id_client, note))
 
     get_db().commit()
     flash(u'Note enregistrée', 'alert-success')
