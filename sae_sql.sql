@@ -152,12 +152,12 @@ CREATE TABLE IF NOT EXISTS ligne_commande
 
 CREATE TABLE IF NOT EXISTS ligne_panier
 (
-    ideclinaison_vetement_id INT,
+    declinaison_vetement_id INT,
     utilisateur_id           INT,
     date_ajout               DATE,
     quantite                 DECIMAL(15, 0),
-    PRIMARY KEY (ideclinaison_vetement_id, utilisateur_id),
-    CONSTRAINT fk_ligne_panier_decvetement FOREIGN KEY (ideclinaison_vetement_id) REFERENCES declinaison_vetement (id_declinaison_vetement),
+    PRIMARY KEY (declinaison_vetement_id, utilisateur_id),
+    CONSTRAINT fk_ligne_panier_decvetement FOREIGN KEY (declinaison_vetement_id) REFERENCES declinaison_vetement (id_declinaison_vetement),
     CONSTRAINT fk_ligne_panier_utilisateur FOREIGN KEY (utilisateur_id) REFERENCES utilisateur (id_utilisateur)
 );
 
@@ -344,33 +344,17 @@ VALUES ('Chemise de bureau bleue', 370, 'Chemise d''élégance intemporelle pour
         3);
 
 INSERT INTO declinaison_vetement (stock, vetement_id, taille_id)
-VALUES (20, 1, 1),
-       (3, 1, 2),
-       (0, 1, 3),
-       (23, 1, 4),
-       (8, 1, 5),
-       (7, 1, 6),
-       (7, 1, 7),
+VALUES (4, 1, 4)
 
-       (23, 2, 2),
-       (3, 2, 3),
-       (21, 2, 4),
-       (23, 2, 5),
-       (28, 2, 6),
-       (17, 2, 7),
+       (0, 2, 5),
 
        (2, 3, 1),
-       (18, 3, 2),
-       (13, 3, 3),
-       (1, 3, 4),
-       (0, 3, 5),
+       (1, 3, 2),
 
-       (7, 4, 1),
-       (16, 4, 2),
-       (19, 4, 3),
+       (0, 4, 2),
+       (0, 4, 3),
        (0, 4, 4),
-       (6, 4, 6),
-       (22, 4, 7),
+
 
        (20, 5, 1),
        (22, 5, 2),
