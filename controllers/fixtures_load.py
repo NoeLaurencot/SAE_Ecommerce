@@ -11,7 +11,7 @@ def fct_fixtures_load():
      mycursor = get_db().cursor()
 
      # Récupère les lignes du fichier .sql
-     with open("sae_sql2.sql", "r") as sql_file:
+     with open("sae_sql.sql", "r") as sql_file:
           commands = sql_file.read().replace("\n", "").split(";")
           commands.pop()
 
