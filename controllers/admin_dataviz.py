@@ -14,8 +14,8 @@ def admin_required():
     return True
 
 
-@admin_dataviz.route('/admin/dataviz/articles')
-def show_type_vetement_articles():
+@admin_dataviz.route('/admin/dataviz/vetements')
+def show_type_vetement():
     if not admin_required():
         return redirect('/')
 
@@ -32,7 +32,7 @@ def show_type_vetement_articles():
     ORDER BY t.id_type_vetement;
     '''
     mycursor.execute(sql)
-    datas_types_articles = mycursor.fetchall()
+    datas_types_vetement = mycursor.fetchall()
 
     sql = '''
     SELECT COUNT(*) AS nb
@@ -41,14 +41,14 @@ def show_type_vetement_articles():
     mycursor.execute(sql)
     nb_vetements = mycursor.fetchone()
 
-    labels_articles = [str(row['libelle_type_vetement']) for row in datas_types_articles]
-    values_articles = [int(row['nb_vetements']) if row['nb_vetements'] is not None else 0 for row in datas_types_articles]
+    labels_vetements = [str(row['libelle_type_vetement']) for row in datas_types_vetement]
+    values_vetements = [int(row['nb_vetements']) if row['nb_vetements'] is not None else 0 for row in datas_types_vetement]
 
-    return render_template('admin/dataviz/dataviz_articles.html',
-                           datas_types_articles=datas_types_articles,
+    return render_template('admin/dataviz/dataviz_vetements.html',
+                           datas_types_vetement=datas_types_vetement,
                            nb_vetements=nb_vetements,
-                           labels_articles=labels_articles,
-                           values_articles=values_articles)
+                           labels_vetements=labels_vetements,
+                           values_vetements=values_vetements)
 
 @admin_dataviz.route('/admin/dataviz/etat1')
 def show_type_vetement_commentaires_notes():
