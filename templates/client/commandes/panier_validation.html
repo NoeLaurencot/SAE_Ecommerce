@@ -5,13 +5,15 @@
 {% endblock %}
 
 {% block body %}
-    <main class="main-container-row">
-        <div class="semi-container-payment">
-            <div class="panier-section-container width100p">
-                <div class="panier-section panier-vetements">
+    <main>
+        <div class="panier-main-container">
+            <h1 class="tile-title no-margin">Paiement</h1>
+            <div class="panier-section-container">
+                <div class="semi-container-payment panier-section panier-vetements">
+                    <h2 class="no-margin">Votre panier</h2>
+                    <div class="divider"></div>
                     {% if lignes_panier %}
                         {% for ligne_panier in lignes_panier %}
-                            <div class="divider"></div>
                             <div class="panier-tile">
                                 <div class="panier-img-container">
                                     <img src="{{ url_for('static', filename='assets/images/clothes/') }}{{ ligne_panier.photo }}"
@@ -29,63 +31,106 @@
                                     <button class="material-symbols-outlined panier-item-delete" type="submit">delete</button>
                                 </form>
                             </div>
+                            <div class="divider"></div>
                         {% endfor %}
                         <form action="/client/panier/vider" class="panier-boutique-footer" method="post">
-                            <div class="divider"></div>
-                            <button class="validate-button-black panier-boutique-link font-1rem" >
-                                Vider le panier </button>
-                            <a href="/client/vetement/show" class="validate-button-black">
-                                Continuer ma commande
+                            <button class="validate-button-black panier-boutique-link font-1rem" type="submit">
+                                Vider le panier
+                            </button>
+                            <a href="/client/vetement/show" class="validate-button-white-outline panier-boutique-link">
+                                Continuer mes achats
                             </a>
                         </form>
-
                     {% else %}
-                        <div class="divider"></div>
                         <span>Le panier est vide</span>
+                    {% endif %}
+                </div>
+
+                <div class="semi-container-payment panier-section panier-paiement">
+                    <h2 class="no-margin">Adresses</h2>
+                    <div class="divider"></div>
+                    {% if adresses|length > 0 %}
+                        <form class="form-payment" action="/client/commande/add" method="post">
+                            <h3 class="form-title no-margin">Finaliser votre commande</h3>
+
+                            <label for="shipping_adress_id">Adresse de livraison :</label>
+                            <select name="shipping_adress_id" id="shipping_adress_id">
+                                <option>Sélectionner une adresse</option>
+                                {% for adresse in adresses %}
+                                    {% if adresse.id_adresse == id_adresse_fav %}
+                                        <option selected value="{{ adresse.id_adresse }}">(f) {{ adresse.nom }}
+                                            ({{ adresse.code_postal }}) {{ adresse.ville }} {{ adresse.rue }}</option>
+                                    {% else %}
+                                        <option value="{{ adresse.id_adresse }}">{{ adresse.nom }}
+                                            ({{ adresse.code_postal }}) {{ adresse.ville }} {{ adresse.rue }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+
+                            <label for="payment_adress_id">Adresse de facturation :</label>
+                            <label for="same_address">Utiliser la même adresse
+                                <input type="checkbox" name="same_address" id="same_address">
+                            </label>
+
+                            <select name="payment_adress_id" id="payment_adress_id">
+                                <option>Sélectionner une adresse de facturation</option>
+                                {% for adresse in adresses %}
+                                    {% if adresse.id_adresse == id_adresse_fav %}
+                                        <option selected value="{{ adresse.id_adresse }}">(f) {{ adresse.nom }}
+                                            ({{ adresse.code_postal }}) {{ adresse.ville }} {{ adresse.rue }}</option>
+                                    {% else %}
+                                        <option value="{{ adresse.id_adresse }}">{{ adresse.nom }}
+                                            ({{ adresse.code_postal }}) {{ adresse.ville }} {{ adresse.rue }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+
+                            <input class="validate-button-white font-1rem width40p" type="submit" value="Valider">
+                        </form>
+                    {% else %}
+                        <p class="panier-info-gray no-margin">Il n'y a aucune adresse pour l'instant.</p>
+                        <a href="/client/coordonnee/show" class="validate-button-black">
+                            Créer une adresse
+                        </a>
                     {% endif %}
                 </div>
             </div>
         </div>
-        <div class="semi-container-payment">
-        {% if adresses|length > 0 %}
-            <form class="form-payment" action="/client/commande/add" method="post">
-                <label for="shipping_adress_id">Adresse de livraison :</label>
-                <select name="shipping_adress_id" id="shipping_adress_id">
-                    <option>Sélectionner une adresse</option>
-                    {% for adresse in adresses %}
-                        {% if adresse.id_adresse == id_adresse_fav %}
-                            <option selected value="{{ adresse.id_adresse }}">(f) {{ adresse.nom }}
-                                ({{ adresse.code_postal }}) {{ adresse.ville }} {{ adresse.rue }}</option>
-                        {% else %}
-                            <option value="{{ adresse.id_adresse }}">{{ adresse.nom }}
-                                ({{ adresse.code_postal }}) {{ adresse.ville }} {{ adresse.rue }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
-
-                <label for="payment_adress_id">Adresse de facturation :</label>
-                <label for="same_adress">Same adresse ? <input type="checkbox" name="same_adress" id="same_adress"></label>
-
-                <select name="payment_adress_id" id="payment_adress_id">
-                    <option>Sélectionner une adresse de facturation</option>
-                    {% for adresse in adresses %}
-                        {% if adresse.id_adresse == id_adresse_fav %}
-                            <option selected value="{{ adresse.id_adresse }}">(f) {{ adresse.nom }}
-                                ({{ adresse.code_postal }}) {{ adresse.ville }} {{ adresse.rue }}</option>
-                        {% else %}
-                            <option value="{{ adresse.id_adresse }}">{{ adresse.nom }}
-                                ({{ adresse.code_postal }}) {{ adresse.ville }} {{ adresse.rue }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
-                <input class="validate-button-white font-1rem width40p" type="submit" value="Valider">
-            </form>
-        {% else %}
-            <a href="/client/coordonnee/show" class="validate-button-black">
-            ( Il n'y a Aucune adresse pour l'instant ) : Crée un adresse
-            </a>
-        {% endif %}
-        </div>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sameAddressCheckbox = document.getElementById('same_address');
+            const shippingAddressSelect = document.getElementById('shipping_adress_id');
+            const paymentAddressSelect = document.getElementById('payment_adress_id');
+
+            if (!sameAddressCheckbox || !paymentAddressSelect) {
+                return;
+            }
+
+            function togglePaymentAddress() {
+                if (sameAddressCheckbox.checked) {
+                    if (shippingAddressSelect) {
+                        paymentAddressSelect.value = shippingAddressSelect.value;
+                    }
+                    paymentAddressSelect.disabled = true;
+                } else {
+                    paymentAddressSelect.disabled = false;
+                }
+            }
+
+            sameAddressCheckbox.addEventListener('change', togglePaymentAddress);
+
+            if (shippingAddressSelect) {
+                shippingAddressSelect.addEventListener('change', function () {
+                    if (sameAddressCheckbox.checked) {
+                        paymentAddressSelect.value = shippingAddressSelect.value;
+                    }
+                });
+            }
+
+            togglePaymentAddress();
+        });
+    </script>
 
 {% endblock %}

@@ -1,35 +1,70 @@
 .semi-container-payment {
-    padding: 10px;
+    padding: 20px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: calc(50% - 20px);
+    justify-content: flex-start;
+    align-items: stretch;
+    width: 50%;
+    border: solid 1px rgb(218, 218, 218);
+    background-color: rgb(252, 252, 252);
 }
 .form-payment{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: stretch;
     background: var(--black);
-    width: calc(100% - 100px);
+    width: 100%;
+    box-sizing: border-box;
     color: var(--white);
-    font-size: 1.2rem;
+    font-size: 1.05rem;
     font-family: Playfair, serif;
     height: fit-content;
-    padding: 20px 50px 50px 50px;
-    gap: 0.9rem;
+    padding: 20px;
+    gap: 0.7rem;
 }
 .form-payment select {
-    width: 80%;
-    padding: 3px 40px 3px 5px;
-    margin: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 0;
     border-radius: 0;
     border: none;
     color: var(--black);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    cursor: pointer;
 }
 .form-payment label {
     justify-self: start;
     align-self: start;
+}
+
+.form-payment label[for='same_address'] {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    color: rgb(230, 230, 230);
+}
+
+.form-payment label[for='same_address'] input {
+    margin: 0;
+}
+
+.form-payment select:disabled {
+    background-color: rgb(225, 225, 225);
+    color: var(--gray);
+    cursor: not-allowed;
+}
+
+.form-payment .validate-button-white {
+    margin-top: 8px;
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .semi-container-payment {
+        width: 100%;
+    }
 }
