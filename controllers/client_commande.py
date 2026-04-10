@@ -17,30 +17,53 @@ def client_commande_valide():
     mycursor = get_db().cursor()
 
     id_client = session['id_user']
-    sql = '''SELECT utilisateur_id, ligne_panier.declinaison_vetement_id, vetement.prix_vetement as prix, quantite
-             FROM ligne_panier
-                      JOIN declinaison_vetement on declinaison_vetement.id_declinaison_vetement = ligne_panier.declinaison_vetement_id
-                      JOIN vetement on declinaison_vetement.vetement_id = vetement.id_vetement
-             WHERE utilisateur_id = %s; \
-          '''
+    sql = """
+          SELECT id_declinaison_vetement, nom_vetement, vetement.photo, stock, prix_vetement, libelle_taille, libelle_marque, ligne_panier.quantite, ligne_panier.date_ajout
+          FROM ligne_panier
+                   INNER JOIN declinaison_vetement on ligne_panier.declinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
+                   INNER JOIN vetement ON declinaison_vetement.vetement_id = vetement.id_vetement
+                   INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
+                   INNER JOIN taille ON declinaison_vetement.taille_id = taille.id_taille
+                   INNER JOIN marque ON vetement.marque_id = marque.id_marque
+          WHERE id_utilisateur = %s;
+          """
     mycursor.execute(sql, id_client)
-    vetements_panier = mycursor.fetchall()
-    if len(vetements_panier) < 1:
+    lignes_panier = mycursor.fetchall()
+    if len(lignes_panier) < 1:
         flash(u'Panier vide', 'alert-danger')
         return redirect('/')
 
 
-    if len(vetements_panier) >= 1:
-        sql = ''' calcul du prix total du panier '''
-        prix_total = None
+    if len(lignes_panier) >= 1:
+        sql = """
+              SELECT SUM(prix_vetement * quantite) as prix_TTC, SUM(prix_vetement * 0.2 * quantite) AS prix_taxe, SUM(prix_vetement * quantite - prix_vetement * 0.2 * quantite) AS prix_HT
+              FROM ligne_panier
+                       INNER JOIN declinaison_vetement on ligne_panier.declinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
+                       INNER JOIN vetement ON declinaison_vetement.vetement_id = vetement.id_vetement
+                       INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
+              WHERE id_utilisateur = %s; \
+              """
+        mycursor.execute(sql, id_client)
+        panier_prix = mycursor.fetchone()
     else:
-        prix_total = None
+        panier_prix = None
+
+    sql="""
+    SELECT valide,nom_adresse as nom,rue_adresse as rue, code_postal, ville ,id_adresse
+    FROM adresse
+    WHERE adresse.utilisateur_id = %s AND valide = true
+    ORDER BY valide DESC , date_utilisation DESC;
+    """
+    mycursor.execute(sql,id_client)
+    adresses = mycursor.fetchall()
+    id_adresse_fav = adresses[0]['id_adresse']
+
     return render_template('client/commandes/panier_validation.html'
-                           #, adresses=adresses
-                           , vetements_panier=vetements_panier
-                           , prix_total= prix_total
+                           , adresses=adresses
                            , validation=1
-                           #, id_adresse_fav=id_adresse_fav
+                           , id_adresse_fav=id_adresse_fav
+                           , lignes_panier = lignes_panier
+                           , panier_prix = panier_prix
                            )
 
 
@@ -144,7 +167,16 @@ def client_commande_show():
         mycursor.execute(sql,id_commande)
         vetement_commandes = mycursor.fetchall()
 
-        sql = ''' selection des adressses '''
+        sql = """
+              SELECT valide,nom_adresse as nom,rue_adresse as rue,code_postal,ville,id_adresse,
+                     (SELECT COUNT(*)
+                      FROM commande
+                      WHERE adresse_livraison_id = id_adresse
+                         OR adresse_facturation_id = id_adresse) as nb_utilisation
+              FROM adresse
+              WHERE adresse.utilisateur_id = %s
+              ORDER BY valide DESC , date_utilisation DESC;
+              """
 
     return render_template('client/commandes/show.html'
                            , commandes=commandes

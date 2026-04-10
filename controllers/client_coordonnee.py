@@ -35,7 +35,7 @@ def client_coordonnee_show():
     WHERE adresse_livraison_id = id_adresse OR adresse_facturation_id = id_adresse) as nb_utilisation
     FROM adresse
     WHERE adresse.utilisateur_id = %s
-    ORDER BY date_utilisation DESC , valide;
+    ORDER BY valide DESC , date_utilisation DESC ;
     """
     mycursor.execute(sql,id_client)
     adresses=mycursor.fetchall()
@@ -45,12 +45,13 @@ def client_coordonnee_show():
     """
     mycursor.execute(sql,id_client)
     nb_adresses = mycursor.fetchone()
-
+    id_adresse_fav = adresses[0]['id_adresse']
 
     return render_template('client/coordonnee/show_coordonnee.html'
                            , utilisateur=utilisateur
                            , adresses=adresses
                            , nb_adresses=nb_adresses
+                           , id_adresse_fav=id_adresse_fav
                            )
 
 @client_coordonnee.route('/client/coordonnee/edit', methods=['GET'])

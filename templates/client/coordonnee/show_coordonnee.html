@@ -43,7 +43,8 @@
                 <tbody>
                 {% for adresse in adresses %}
                     {% if adresse.valide %}
-                        <tr>
+                        {% if adresse.id_adresse == id_adresse_fav %}
+                        <tr class="coordonnee-fav-adresse">
                             <td>{{ adresse.nom }}</td>
                             <td>{{ adresse.rue }}</td>
                             <td>{{ adresse.code_postal }}</td>
@@ -59,6 +60,24 @@
                                    href="/client/coordonnee/edit_adresse?id_adresse={{ adresse.id_adresse }}">Modifier</a>
                             </td>
                         </tr>
+                        {% else %}
+                            <tr>
+                                <td>{{ adresse.nom }}</td>
+                                <td>{{ adresse.rue }}</td>
+                                <td>{{ adresse.code_postal }}</td>
+                                <td>{{ adresse.ville }}</td>
+                                <td>{{ adresse.nb_utilisation }}</td>
+                                <td class="coordonnee-button-container ">
+                                    <form action="/client/coordonnee/delete_adresse" method="post">
+                                        <input type="hidden" name="id_adresse" id="id_adresse"
+                                               value="{{ adresse.id_adresse }}">
+                                        <button class="validate-button-white-outline width100p font-1rem">Supprimer</button>
+                                    </form>
+                                    <a class="validate-button-white-outline"
+                                       href="/client/coordonnee/edit_adresse?id_adresse={{ adresse.id_adresse }}">Modifier</a>
+                                </td>
+                            </tr>
+                        {% endif %}
                     {% else %}
                         <tr class="coordonnee-adress-invalid">
                             <td>{{ adresse.nom }}</td>

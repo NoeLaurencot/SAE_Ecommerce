@@ -21,6 +21,9 @@
 .coordonnee-adress-invalid {
     color: orange;
 }
+.coordonnee-fav-adresse{
+    color: blue;
+}
 .button-coordonnee {
     width: calc(100% - 80px);
     height: calc(100% - 20px);

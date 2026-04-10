@@ -5,26 +5,87 @@
 {% endblock %}
 
 {% block body %}
-    <main>
-        <div class="main-container-row">
-            <div class="semi-container-payment"></div>
-            <div class="semi-container-payment">
+    <main class="main-container-row">
+        <div class="semi-container-payment">
+            <div class="panier-section-container width100p">
+                <div class="panier-section panier-vetements">
+                    {% if lignes_panier %}
+                        {% for ligne_panier in lignes_panier %}
+                            <div class="divider"></div>
+                            <div class="panier-tile">
+                                <div class="panier-img-container">
+                                    <img src="{{ url_for('static', filename='assets/images/clothes/') }}{{ ligne_panier.photo }}"
+                                         alt="Chemise">
+                                </div>
+                                <div class="panier-info-container">
+                                    <h3 class="no-margin">{{ ligne_panier.nom_vetement }}</h3>
+                                    <span>{{ ligne_panier.libelle_marque }}</span>
+                                    <span class="panier-info-gray">Taille {{ ligne_panier.libelle_taille }}</span>
+                                    <span class="panier-info-gray">Quantité: {{ ligne_panier.quantite }}</span>
+                                    <span><b>{{ ligne_panier.prix_vetement }}€</b></span>
+                                </div>
+                                <form action="/client/panier/delete/line" method="post">
+                                    <input hidden type="text" value="{{ ligne_panier.id_declinaison_vetement }}" name="id-ligne">
+                                    <button class="material-symbols-outlined panier-item-delete" type="submit">delete</button>
+                                </form>
+                            </div>
+                        {% endfor %}
+                        <form action="/client/panier/vider" class="panier-boutique-footer" method="post">
+                            <div class="divider"></div>
+                            <button class="validate-button-black panier-boutique-link font-1rem" >
+                                Vider le panier </button>
+                            <a href="/client/vetement/show" class="validate-button-black">
+                                Continuer ma commande
+                            </a>
+                        </form>
 
-                <form class="form-payment">
-                    <label for="shiping_adress_id">Adresse de livraison :</label>
-                    <select name="shiping_adress_id" id="shiping_adress_id">
-                        <option>Sélectionner une adresse</option>
-
-                    </select>
-                    <label for="payment_adress_id">Adresse de facturation :</label>
-                    <select name="payment_adress_id" id="payment_adress_id">
-                        <option>Sélectionner une adresse de facturation</option>
-
-                    </select>
-                    <input class="validate-button-white font-1rem width40p" type="submit" value="Valider">
-                </form>
-
+                    {% else %}
+                        <div class="divider"></div>
+                        <span>Le panier est vide</span>
+                    {% endif %}
+                </div>
             </div>
+
+
+
+
+
+
+
+        </div>
+        <div class="semi-container-payment">
+
+            <form class="form-payment" action="/client/commande/add" method="post">
+                <label for="shipping_adress_id">Adresse de livraison :</label>
+                <select name="shipping_adress_id" id="shipping_adress_id">
+                    <option>Sélectionner une adresse</option>
+                    {% for adresse in adresses %}
+                        {% if adresse.id_adresse == id_adresse_fav %}
+                            <option selected value="{{ adresse.id_adresse }}">(f) {{ adresse.nom }}
+                                ({{ adresse.code_postal }}) {{ adresse.ville }} {{ adresse.rue }}</option>
+                        {% else %}
+                            <option value="{{ adresse.id_adresse }}">{{ adresse.nom }}
+                                ({{ adresse.code_postal }}) {{ adresse.ville }} {{ adresse.rue }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <label for="payment_adress_id">Adresse de facturation :</label>
+                <select name="payment_adress_id" id="payment_adress_id">
+                    <option>Sélectionner une adresse de facturation</option>
+                    {% for adresse in adresses %}
+                        {% if adresse.id_adresse == id_adresse_fav %}
+                            <option selected value="{{ adresse.id_adresse }}">(f) {{ adresse.nom }}
+                                ({{ adresse.code_postal }}) {{ adresse.ville }} {{ adresse.rue }}</option>
+                        {% else %}
+                            <option value="{{ adresse.id_adresse }}">{{ adresse.nom }}
+                                ({{ adresse.code_postal }}) {{ adresse.ville }} {{ adresse.rue }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <input class="validate-button-white font-1rem width40p" type="submit" value="Valider">
+            </form>
+
         </div>
     </main>
+
 {% endblock %}
