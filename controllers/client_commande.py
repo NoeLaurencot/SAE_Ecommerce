@@ -56,7 +56,10 @@ def client_commande_valide():
     """
     mycursor.execute(sql,id_client)
     adresses = mycursor.fetchall()
-    id_adresse_fav = adresses[0]['id_adresse']
+    id_adresse_fav = None
+    if len(adresses) > 0:
+        id_adresse_fav = adresses[0]['id_adresse']
+
 
     return render_template('client/commandes/panier_validation.html'
                            , adresses=adresses
@@ -120,6 +123,9 @@ def client_commande_add():
     FROM commande'''
     mycursor.execute(sql)
     id_commande = mycursor.fetchone()['last_insert_id']
+
+    sql="""UPDATE adresse SET date_utilisation = NOW() where id_adresse=%s;"""
+    mycursor.execute(sql,shipping_adress_id)
 
 
     for item in items_ligne_panier:

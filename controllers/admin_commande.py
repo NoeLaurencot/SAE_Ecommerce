@@ -32,12 +32,32 @@ def admin_commande_show():
     if id_commande != None:
         sql = '''SELECT nom_vetement,quantite,prix,prix*quantite as prix_total
                  FROM ligne_commande
-                          JOIN vetement on ligne_commande.vetement_id = vetement.id_vetement
+                          JOIN sae_commerce.declinaison_vetement dv on ligne_commande.declinaison_vetement_id = dv.id_declinaison_vetement
+                          JOIN vetement on dv.vetement_id = vetement.id_vetement
                  WHERE commande_id = %s;
               '''
         mycursor.execute(sql,id_commande)
         vetement_commandes = mycursor.fetchall()
-        commande_adresses = []
+
+        sql = """
+              SELECT nom_adresse as nom,rue_adresse as rue,code_postal,ville,id_adresse
+              FROM commande
+                       JOIN adresse on commande.adresse_livraison_id = adresse.id_adresse
+              WHERE commande.id_commande = %s;
+              """
+        mycursor.execute(sql,id_commande)
+        commande_adresses = {}
+        commande_adresses['adresse_shipping'] = mycursor.fetchone()
+
+
+        sql = """
+              SELECT nom_adresse as nom,rue_adresse as rue,code_postal,ville,id_adresse
+              FROM commande
+                       JOIN adresse on commande.adresse_facturation_id = adresse.id_adresse
+              WHERE commande.id_commande = %s;
+              """
+        mycursor.execute(sql,id_commande)
+        commande_adresses['adresse_payment'] = mycursor.fetchone()
     return render_template('admin/commandes/show.html'
                            , commandes=commandes
                            , vetement_commandes=vetement_commandes

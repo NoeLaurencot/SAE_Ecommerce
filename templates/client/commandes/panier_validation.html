@@ -45,16 +45,9 @@
                     {% endif %}
                 </div>
             </div>
-
-
-
-
-
-
-
         </div>
         <div class="semi-container-payment">
-
+        {% if adresses|length > 0 %}
             <form class="form-payment" action="/client/commande/add" method="post">
                 <label for="shipping_adress_id">Adresse de livraison :</label>
                 <select name="shipping_adress_id" id="shipping_adress_id">
@@ -87,7 +80,11 @@
                 </select>
                 <input class="validate-button-white font-1rem width40p" type="submit" value="Valider">
             </form>
-
+        {% else %}
+            <a href="/client/coordonnee/show" class="validate-button-black">
+            ( Il n'y a Aucune adresse pour l'instant ) : Crée un adresse
+            </a>
+        {% endif %}
         </div>
     </main>
 

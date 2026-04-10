@@ -45,7 +45,9 @@ def client_coordonnee_show():
     """
     mycursor.execute(sql,id_client)
     nb_adresses = mycursor.fetchone()
-    id_adresse_fav = adresses[0]['id_adresse']
+    id_adresse_fav = None
+    if len(adresses) > 0:
+        id_adresse_fav = adresses[0]['id_adresse']
 
     return render_template('client/coordonnee/show_coordonnee.html'
                            , utilisateur=utilisateur

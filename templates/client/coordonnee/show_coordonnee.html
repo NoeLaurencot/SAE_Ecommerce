@@ -40,7 +40,9 @@
                     <th>nbr. utilisation commande</th>
                 </tr>
                 </thead>
+                {% if adresses|length > 0 %}
                 <tbody>
+
                 {% for adresse in adresses %}
                     {% if adresse.valide %}
                         {% if adresse.id_adresse == id_adresse_fav %}
@@ -88,6 +90,9 @@
                         </tr>
                     {% endif %}
                 {% endfor %}
+                {% else %}
+                    <td colspan="6"><span>Il n'y a aucune adresse</span></td>
+                {% endif %}
                 <tr>
                     <td colspan="5">
                         <a class="validate-button-white-outline align-self-center"
@@ -98,6 +103,7 @@
                     </td>
                 </tr>
                 </tbody>
+
 
             </table>
         </div>
