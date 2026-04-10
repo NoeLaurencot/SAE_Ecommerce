@@ -233,35 +233,39 @@ def show_dataviz_map():
         return redirect('/')
 
     mycursor = get_db().cursor()
-    sql = '''SUBSTRING(chaine, debut)'''
-    # mycursor.execute(sql)
-    # adresses = mycursor.fetchall()
 
-    #exemples de tableau "résultat" de la requête
-    adresses =  [{'dep': '25', 'nombre': 1}, {'dep': '83', 'nombre': 1}, {'dep': '90', 'nombre': 3}]
+    sql = "SELECT SUBSTR(code_postal,1,2) as dep, count(id_adresse) as nombre FROM adresse GROUP BY dep;"
+    mycursor.execute(sql)
+    adresses = mycursor.fetchall()
+    max_adr = max([a['nombre'] for a in adresses], default=0)
+    for a in adresses:
+        a['indice'] = round(a['nombre'] / max_adr, 2) if max_adr > 0 else 0
 
-    # recherche de la valeur maxi "nombre" dans les départements
-    # maxAddress = 0
-    # for element in adresses:
-    #     if element['nbr_dept'] > maxAddress:
-    #         maxAddress = element['nbr_dept']
-    # calcul d'un coefficient de 0 à 1 pour chaque département
-    # if maxAddress != 0:
-    #     for element in adresses:
-    #         indice = element['nbr_dept'] / maxAddress
-    #         element['indice'] = round(indice,2)
+    sql = """SELECT SUBSTR(code_postal,1,2) as dep, SUM(ligne_commande.quantite) as quantite
+             FROM adresse
+                      JOIN commande on adresse.id_adresse = commande.adresse_livraison_id
+                      JOIN ligne_commande on commande.id_commande = ligne_commande.commande_id
+             GROUP BY dep;"""
+    mycursor.execute(sql)
+    nb_ventes_par_dep = mycursor.fetchall()
+    max_v = max([v['quantite'] for v in nb_ventes_par_dep], default=0)
+    for v in nb_ventes_par_dep:
+        v['indice'] = round(v['quantite'] / max_v, 2) if max_v > 0 else 0
 
-    max_adresse = 0
-    for element in adresses:
-        if element['nombre'] > max_adresse:
-            max_adresse = element['nombre']
-    if max_adresse != 0:
-        for element in adresses:
-            indice = element['nombre'] / max_adresse
-            element['indice'] = round(indice, 2)
+    sql = """SELECT SUBSTR(code_postal,1,2) as dep, SUM(ligne_commande.quantite * prix) as prix
+             FROM adresse
+                      JOIN commande on adresse.id_adresse = commande.adresse_facturation_id
+                      JOIN ligne_commande on commande.id_commande = ligne_commande.commande_id
+             GROUP BY dep;"""
+    mycursor.execute(sql)
+    chiffres_par_dep = mycursor.fetchall()
+    max_c = max([c['prix'] for c in chiffres_par_dep], default=0)
+    for c in chiffres_par_dep:
+        c['indice'] = round(c['prix'] / max_c, 2) if max_c > 0 else 0
 
-    return render_template('admin/dataviz/dataviz_etat_map.html'
-                           , adresses=adresses
-                          )
+    return render_template('admin/dataviz/dataviz_etat_2.html',
+                           adresses=adresses,
+                           nb_ventes_par_dep=nb_ventes_par_dep,
+                           chiffres_par_dep=chiffres_par_dep)
 
 

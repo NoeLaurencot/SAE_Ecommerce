@@ -611,3 +611,102 @@ VALUES (1, 1),
        (31, 2),
        (31, 3),
        (32, 1);
+
+
+
+
+INSERT INTO adresse (nom_adresse, rue_adresse, code_postal, ville, date_utilisation, utilisateur_id, valide)
+VALUES
+
+('Maison Doubs', '10 Rue de la Paix', 25000, 'Besançon', NOW(), 2, true),
+
+('Appart Strasbourg', '22 Place de la Cathédrale', 67000, 'Strasbourg', NOW(), 2, true),
+
+('Bureau Paris', '105 Boulevard Haussmann', 75008, 'Paris', NOW(), 2, true),
+
+('Villa Marseille', '5 Avenue du Prado', 13000, 'Marseille', NOW(), 2, true);
+
+
+INSERT INTO commande (date_achat, utilisateur_id, etat_id, adresse_livraison_id, adresse_facturation_id)
+VALUES ('2026-03-01', 2, 2, 5, 5);
+
+
+INSERT INTO commande (date_achat, utilisateur_id, etat_id, adresse_livraison_id, adresse_facturation_id)
+VALUES ('2026-03-02', 2, 2, 6, 6);
+
+INSERT INTO commande (date_achat, utilisateur_id, etat_id, adresse_livraison_id, adresse_facturation_id)
+VALUES ('2026-03-03', 2, 2, 7, 7);
+
+INSERT INTO commande (date_achat, utilisateur_id, etat_id, adresse_livraison_id, adresse_facturation_id)
+VALUES ('2026-03-04', 2, 2, 8, 8);
+
+
+INSERT INTO ligne_commande (declinaison_vetement_id, commande_id, quantite, prix)
+VALUES
+    (1, 5, 2, 370.00),
+    (8, 6, 1, 710.00),
+    (15, 7, 3, 2100.00),
+    (22, 8, 1, 1320.00);
+
+
+INSERT INTO adresse (nom_adresse, rue_adresse, code_postal, ville, date_utilisation, utilisateur_id, valide)
+VALUES
+    ('Maison Paris', '12 Rue de la Paix', 75001, 'Paris', NOW(), 2, true),
+    ('Bureau Lyon', '45 Rue de la République', 69002, 'Lyon', NOW(), 2, true),
+    ('Villa Marseille', '5 Avenue du Prado', 13008, 'Marseille', NOW(), 2, true),
+    ('Maison Bordeaux', '22 Quai des Chartrons', 33000, 'Bordeaux', NOW(), 2, true),
+    ('Appart Nantes', '8 Chaussée de la Madeleine', 44000, 'Nantes', NOW(), 2, true),
+    ('Maison Lille', '101 Rue Nationale', 59000, 'Lille', NOW(), 2, true),
+    ('Gite Toulouse', '3 Place du Capitole', 31000, 'Toulouse', NOW(), 2, true),
+    ('Maison Nice', '12 Promenade des Anglais', 06000, 'Nice', NOW(), 2, true),
+    ('Bureau Strasbourg', '1 Place Kléber', 67000, 'Strasbourg', NOW(), 2, true),
+    ('Maison Rennes', '4 Rue de la Monnaie', 35000, 'Rennes', NOW(), 2, true),
+    ('Maison Montpellier', '9 Rue de la Loge', 34000, 'Montpellier', NOW(), 2, true),
+    ('Maison Dijon', '14 Rue de la Liberté', 21000, 'Dijon', NOW(), 2, true);
+
+INSERT INTO commande (date_achat, utilisateur_id, etat_id, adresse_livraison_id, adresse_facturation_id)
+VALUES
+    ('2026-03-01', 2, 4, 9, 9),
+    ('2026-03-02', 2, 4, 9, 9),
+    ('2026-03-03', 2, 4, 10, 10),
+    ('2026-03-04', 2, 4, 11, 11),
+    ('2026-03-05', 2, 4, 12, 12),
+    ('2026-03-06', 2, 4, 13, 13),
+    ('2026-03-07', 2, 4, 14, 14),
+    ('2026-03-08', 2, 4, 15, 15),
+    ('2026-03-09', 2, 4, 16, 16),
+    ('2026-03-10', 2, 4, 17, 17),
+    ('2026-03-11', 2, 4, 18, 18),
+    ('2026-03-12', 2, 4, 19, 19),
+    ('2026-03-13', 2, 4, 20, 20),
+    ('2026-03-14', 2, 4, 9, 9),
+    ('2026-03-15', 2, 4, 10, 10),
+    ('2026-03-16', 2, 4, 12, 12),
+    ('2026-03-17', 2, 4, 14, 14),
+    ('2026-03-18', 2, 4, 9, 9),
+    ('2026-03-19', 2, 4, 11, 11),
+    ('2026-03-20', 2, 4, 15, 15);
+
+INSERT INTO ligne_commande (declinaison_vetement_id, commande_id, quantite, prix)
+VALUES
+    (1, 9, 5, 370.00),
+    (15, 9, 2, 2100.00),
+    (8, 10, 3, 710.00),
+    (22, 11, 4, 950.00),
+    (30, 12, 1, 830.00),
+    (45, 13, 10, 1640.00),
+    (50, 14, 2, 1200.00),
+    (60, 15, 6, 550.00),
+    (70, 16, 1, 1900.00),
+    (80, 17, 3, 1320.00),
+    (90, 18, 2, 3700.00),
+    (100, 19, 1, 6200.00),
+    (110, 20, 4, 710.00),
+    (1, 21, 2, 370.00),
+    (15, 22, 1, 2100.00),
+    (45, 23, 3, 1640.00),
+    (60, 24, 2, 550.00),
+    (8, 25, 5, 710.00),
+    (30, 26, 2, 830.00),
+    (1, 27, 8, 370.00),
+    (15, 28, 1, 2100.00);
