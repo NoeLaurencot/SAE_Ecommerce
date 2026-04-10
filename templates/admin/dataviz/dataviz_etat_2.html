@@ -1,9 +1,111 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-    <title>DataViz commentaires et notes | Admin</title>
+    <title>DataViz Addresse | Admin</title>
 {% endblock %}
 
 {% block body %}
 
+
+
+    <main class="dv-container">
+        <h2 class="dv-header">Analyse Géographique des Ventes</h2>
+
+        <div class="crud-top-actions wrap">
+            <a class="validate-button-white-outline" href="/admin/dashboard">Retour</a>
+        </div>
+        <div class="dv-section">
+            <div class="dv-card">
+                <h3 style="margin-top: 0;">Quantités par département</h3>
+                <canvas id="chartVentes"></canvas>
+            </div>
+            <div class="dv-table-side">
+                <table class="width100p">
+                    <thead>
+                    <tr><th>Département</th><th>Ventes</th></tr>
+                    </thead>
+                    <tbody>
+                    {% for nb in nb_ventes_par_dep %}
+                        <tr><td>{{ nb.dep }}</td><td>{{ nb.quantite }}</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="dv-section">
+            <div class="dv-card">
+                <h3 style="margin-top: 0;">Chiffre d'Affaires par département</h3>
+                <canvas id="chartCA"></canvas>
+            </div>
+            <div class="dv-table-side">
+                <table class="width100p">
+                    <thead>
+                    <tr><th>Département</th><th>Chiffre d'Affaire (€)</th></tr>
+                    </thead>
+                    <tbody>
+                    {% for nb in chiffres_par_dep %}
+                        <tr><td>{{ nb.dep }}</td><td>{{ nb.prix }}</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="dv-map-box">
+            <div style="margin-bottom: 25px;">
+                <label style="font-weight: bold;">Métrique carte : </label>
+                <select id="metric-selector" class="validate-button-white-outline" style="padding: 10px; cursor: pointer;">
+                    <option value="ventes">Nombre de ventes</option>
+                    <option value="ca">Chiffre d'affaires</option>
+                </select>
+            </div>
+            <div class="dv-map-svg">
+                {% include 'admin/dataviz/franceMap.html' %}
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/Chart.js') }}"></script>
+    <script>
+        const dataVentes = { {% for v in nb_ventes_par_dep %} "{{ v.dep }}": {{ v.indice }}, {% endfor %} };
+        const dataCA = { {% for c in chiffres_par_dep %} "{{ c.dep }}": {{ c.indice }}, {% endfor %} };
+
+        const labelsVentes = [{% for v in nb_ventes_par_dep %} "{{ v.dep }}", {% endfor %}];
+        const valuesVentes = [{% for v in nb_ventes_par_dep %} {{ v.quantite }}, {% endfor %}];
+        const labelsCA = [{% for c in chiffres_par_dep %} "{{ c.dep }}", {% endfor %}];
+        const valuesCA = [{% for c in chiffres_par_dep %} {{ c.prix }}, {% endfor %}];
+
+        const chartConfig = (id, label, labels, data, color) => {
+            new Chart(document.getElementById(id), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{ label: label, data: data, backgroundColor: color }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+            });
+        };
+
+        chartConfig('chartVentes', 'Quantité', labelsVentes, valuesVentes, 'rgba(62, 149, 205, 0.8)');
+        chartConfig('chartCA', 'CA (€)', labelsCA, valuesCA, 'rgba(60, 186, 159, 0.8)');
+
+        const selector = document.getElementById('metric-selector');
+        function updateMap() {
+            const data = (selector.value === 'ventes') ? dataVentes : dataCA;
+            document.querySelectorAll('.dv-map-svg svg path').forEach(path => {
+                if (path.id !== "corsica_separating_line") path.setAttribute("fill-opacity", "0");
+            });
+            for (const [dep, indice] of Object.entries(data)) {
+                const el = document.getElementById(dep);
+                if (el) {
+                    el.setAttribute("fill", "#000000");
+                    el.setAttribute("fill-opacity", indice);
+                }
+            }
+        }
+
+        if(selector) selector.addEventListener('change', updateMap);
+        window.onload = updateMap;
+    </script>
 {% endblock %}

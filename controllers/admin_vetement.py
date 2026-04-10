@@ -24,33 +24,40 @@ def show_vetement():
            description,
            SUM(stock) AS stock,
            COUNT(DISTINCT(id_declinaison_vetement)) AS nb_declinaison,
-           vetement.photo,
+           v.photo,
            libelle_marque AS marque,
            libelle_fournisseur AS fournisseur,
            libelle_matiere AS matiere,
            libelle_type_vetement,
            id_type_vetement,
-                     GROUP_CONCAT(DISTINCT(libelle_collection) SEPARATOR ', ') AS collection
-    FROM vetement
+           GROUP_CONCAT(DISTINCT(libelle_collection) SEPARATOR ', ') AS collection,
+           (
+            SELECT COUNT(id_declinaison_vetement)
+            FROM declinaison_vetement
+            JOIN vetement ON declinaison_vetement.vetement_id = v.id_vetement
+            WHERE declinaison_vetement.stock = 0
+            ) AS declinaisons_vide
+    FROM vetement v
     JOIN declinaison_vetement
-        ON declinaison_vetement.vetement_id = vetement.id_vetement
+        ON declinaison_vetement.vetement_id = v.id_vetement
     JOIN matiere
-        ON matiere.id_matiere = vetement.matiere_id
+        ON matiere.id_matiere = v.matiere_id
     JOIN fournisseur
-        ON fournisseur.id_fournisseur = vetement.fournisseur_id
+        ON fournisseur.id_fournisseur = v.fournisseur_id
     JOIN marque
-        ON marque.id_marque = vetement.marque_id
+        ON marque.id_marque = v.marque_id
     JOIN type_vetement
-        ON type_vetement.id_type_vetement = vetement.type_vetement_id
+        ON type_vetement.id_type_vetement = v.type_vetement_id
     JOIN vetement_collection
-        ON vetement.id_vetement = vetement_collection.vetement_id
+        ON v.id_vetement = vetement_collection.vetement_id
     JOIN collection
         ON collection.id_collection = vetement_collection.collection_id
-    GROUP BY id_vetement, prix_vetement, nom_vetement, description, vetement.photo, marque, fournisseur, matiere, libelle_type_vetement, id_type_vetement
+    GROUP BY id_vetement, prix_vetement, nom_vetement, description, v.photo, marque, fournisseur, matiere, libelle_type_vetement, id_type_vetement
     ORDER BY id_type_vetement;
     '''
     mycursor.execute(sql)
     vetements = mycursor.fetchall()
+    print(vetements)
 
     sql = '''
     SELECT c.vetement_id,
