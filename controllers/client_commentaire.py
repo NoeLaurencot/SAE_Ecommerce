@@ -53,10 +53,21 @@ def parse_admin_reply(comment_text):
 
 
 def sanitize_note(note_value):
-    try:
-        note_float = float(note_value)
-    except (TypeError, ValueError):
+    if note_value is None:
         return None
+
+    texte_note = str(note_value).strip().replace(',', '.')
+    if texte_note == '':
+        return None
+
+    if texte_note.count('.') > 1:
+        return None
+
+    texte_sans_point = texte_note.replace('.', '', 1)
+    if not texte_sans_point.isdigit():
+        return None
+
+    note_float = float(texte_note)
 
     if note_float < 0 or note_float > 5:
         return None
