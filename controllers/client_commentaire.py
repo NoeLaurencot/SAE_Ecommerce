@@ -47,27 +47,9 @@ def parse_admin_reply(comment_text):
 
     return {
         'target_user_id': parties[1],
-        'target_date': parties[2],
+        'target_date': parties[2].strip().replace('T', ' ').split('.')[0],
         'message': parties[3].strip()
     }
-
-
-def get_available_comment_date(mycursor, id_vetement, id_utilisateur):
-    date_commentaire = datetime.date.today()
-
-    sql = '''
-    SELECT COUNT(*) AS nb
-    FROM commentaire
-    WHERE vetement_id = %s
-      AND utilisateur_id = %s
-      AND date_commentaire = %s;
-    '''
-
-    while True:
-        mycursor.execute(sql, (id_vetement, id_utilisateur, date_commentaire))
-        if mycursor.fetchone()['nb'] == 0:
-            return date_commentaire
-        date_commentaire = date_commentaire + datetime.timedelta(days=1)
 
 
 def sanitize_note(note_value):
@@ -118,16 +100,19 @@ def client_vetement_details():
         abort(404, 'vetement introuvable')
 
     sql = '''
-    SELECT IFNULL(SUM(stock), 0) AS stock
+    SELECT SUM(stock) AS stock
     FROM declinaison_vetement
     WHERE vetement_id = %s;
     '''
     mycursor.execute(sql, (id_vetement,))
     stock_row = mycursor.fetchone()
-    vetement['stock'] = stock_row['stock'] if stock_row is not None else 0
+    if stock_row is not None and stock_row['stock'] is not None:
+        vetement['stock'] = stock_row['stock']
+    else:
+        vetement['stock'] = 0
 
     sql = '''
-    SELECT IFNULL(SUM(lc.quantite), 0) AS nb_commandes_vetement
+    SELECT SUM(lc.quantite) AS nb_commandes_vetement
     FROM commande c
     JOIN ligne_commande lc
         ON lc.commande_id = c.id_commande
@@ -138,6 +123,8 @@ def client_vetement_details():
     '''
     mycursor.execute(sql, (id_client, id_vetement))
     commandes_vetements = mycursor.fetchone()
+    if commandes_vetements is None or commandes_vetements['nb_commandes_vetement'] is None:
+        commandes_vetements = {'nb_commandes_vetement': 0}
     client_has_bought = commandes_vetements['nb_commandes_vetement'] > 0
 
     sql = '''
@@ -151,24 +138,64 @@ def client_vetement_details():
     note = note_row['note'] if note_row is not None else None
 
     sql = '''
-    SELECT IFNULL(SUM(CASE WHEN c.utilisateur_id = %s THEN 1 END), 0) AS nb_commentaires_utilisateur,
-           COUNT(*) AS nb_commentaires_total,
-           IFNULL(SUM(CASE WHEN c.valide = 1 THEN 1 END), 0) AS nb_commentaires_total_valide,
-           IFNULL(SUM(CASE WHEN c.utilisateur_id = %s AND c.valide = 1 THEN 1 END), 0) AS nb_commentaires_utilisateur_valide
+    SELECT COUNT(*) AS nb
+    FROM commentaire c
+    JOIN utilisateur u
+        ON u.id_utilisateur = c.utilisateur_id
+    WHERE c.vetement_id = %s
+      AND u.role = 'ROLE_client'
+      AND c.utilisateur_id = %s;
+    '''
+    mycursor.execute(sql, (id_vetement, id_client))
+    nb_commentaires_utilisateur = mycursor.fetchone()['nb']
+
+    sql = '''
+    SELECT COUNT(*) AS nb
     FROM commentaire c
     JOIN utilisateur u
         ON u.id_utilisateur = c.utilisateur_id
     WHERE c.vetement_id = %s
       AND u.role = 'ROLE_client';
     '''
-    mycursor.execute(sql, (id_client, id_client, id_vetement))
-    nb_commentaires = mycursor.fetchone()
+    mycursor.execute(sql, (id_vetement,))
+    nb_commentaires_total = mycursor.fetchone()['nb']
+
+    sql = '''
+    SELECT COUNT(*) AS nb
+    FROM commentaire c
+    JOIN utilisateur u
+        ON u.id_utilisateur = c.utilisateur_id
+    WHERE c.vetement_id = %s
+      AND u.role = 'ROLE_client'
+      AND c.valide = 1;
+    '''
+    mycursor.execute(sql, (id_vetement,))
+    nb_commentaires_total_valide = mycursor.fetchone()['nb']
+
+    sql = '''
+    SELECT COUNT(*) AS nb
+    FROM commentaire c
+    JOIN utilisateur u
+        ON u.id_utilisateur = c.utilisateur_id
+    WHERE c.vetement_id = %s
+      AND u.role = 'ROLE_client'
+      AND c.utilisateur_id = %s
+      AND c.valide = 1;
+    '''
+    mycursor.execute(sql, (id_vetement, id_client))
+    nb_commentaires_utilisateur_valide = mycursor.fetchone()['nb']
+
+    nb_commentaires = {
+        'nb_commentaires_utilisateur': nb_commentaires_utilisateur,
+        'nb_commentaires_total': nb_commentaires_total,
+        'nb_commentaires_total_valide': nb_commentaires_total_valide,
+        'nb_commentaires_utilisateur_valide': nb_commentaires_utilisateur_valide,
+    }
 
     sql = '''
     SELECT c.vetement_id,
            c.utilisateur_id,
-           CONCAT(c.vetement_id, '-', c.utilisateur_id, '-', DATE_FORMAT(c.date_commentaire, '%%Y-%%m-%%d')) AS id_commentaire,
-           c.date_commentaire,
+           DATE_FORMAT(c.date_commentaire, '%%Y-%%m-%%d %%H:%%i:%%s') AS date_commentaire,
            c.commentaire,
            c.valide,
            u.nom,
@@ -186,8 +213,7 @@ def client_vetement_details():
     sql = '''
     SELECT c.vetement_id,
            c.utilisateur_id,
-           CONCAT(c.vetement_id, '-', c.utilisateur_id, '-', DATE_FORMAT(c.date_commentaire, '%%Y-%%m-%%d')) AS id_commentaire,
-           c.date_commentaire,
+            DATE_FORMAT(c.date_commentaire, '%%Y-%%m-%%d %%H:%%i:%%s') AS date_commentaire,
            c.commentaire,
            c.valide,
            u.nom,
@@ -256,7 +282,7 @@ def client_comment_add():
         return redirect('/client/vetement/details?id_vetement=' + str(id_vetement))
 
     if len(commentaire) < 3:
-        flash(u'Commentaire avec plus de 2 caractères', 'alert-warning')
+        flash(u'Commentaire avec moins de 3 caractères', 'alert-warning')
         return redirect('/client/vetement/details?id_vetement=' + str(id_vetement))
 
     if not has_client_bought_vetement(mycursor, id_client, id_vetement):
@@ -276,7 +302,7 @@ def client_comment_add():
         flash(u'Quota atteint: vous avez déjà 3 commentaires pour cet article', 'alert-danger')
         return redirect('/client/vetement/details?id_vetement=' + str(id_vetement))
 
-    date_commentaire = get_available_comment_date(mycursor, id_vetement, id_client)
+    date_commentaire = datetime.datetime.now().replace(microsecond=0)
 
     sql = '''
     INSERT INTO commentaire (vetement_id, utilisateur_id, date_commentaire, commentaire, valide)
@@ -307,17 +333,34 @@ def client_comment_detete():
     DELETE FROM commentaire
     WHERE utilisateur_id = %s
       AND vetement_id = %s
-      AND date_commentaire = %s;
+            AND date_commentaire = %s;
     '''
     mycursor.execute(sql, (id_client, id_vetement, date_commentaire))
+    nb_commentaires_supprimes = mycursor.rowcount
+
+    nb_reponses_supprimees = 0
+    if nb_commentaires_supprimes > 0:
+        sql = '''
+        DELETE c
+        FROM commentaire c
+        JOIN utilisateur u
+            ON u.id_utilisateur = c.utilisateur_id
+        WHERE c.vetement_id = %s
+          AND u.role = 'ROLE_admin'
+          AND c.commentaire LIKE %s;
+        '''
+        motif_reponse = 'REPONSE_ADMIN|' + str(id_client) + '|' + str(date_commentaire) + '|%'
+        mycursor.execute(sql, (id_vetement, motif_reponse))
+        nb_reponses_supprimees = mycursor.rowcount
+
     get_db().commit()
 
-    if mycursor.rowcount > 0:
+    if nb_commentaires_supprimes > 0:
         flash(u'Commentaire supprimé', 'alert-success')
     else:
         flash(u'Impossible de supprimer ce commentaire', 'alert-warning')
 
-    return redirect('/client/vetement/details?id_vetement=' + str(id_vetement))
+    return redirect('/client/vetement/details?id_vetement=' + id_vetement)
 
 
 @client_commentaire.route('/client/note/add', methods=['POST'])

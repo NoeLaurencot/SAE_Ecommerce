@@ -68,12 +68,23 @@
                                         <input type="hidden" name="id_vetement" value="{{ ligne.commentaire.vetement_id }}">
                                         <input type="hidden" name="id_utilisateur" value="{{ ligne.commentaire.utilisateur_id }}">
                                         <input type="hidden" name="date_commentaire" value="{{ ligne.commentaire.date_commentaire }}">
+                                        <input type="hidden" name="return_url" value="/admin/vetement/commentaires?id_vetement={{ vetement.id_vetement }}">
                                         <button type="submit" class="validate-button-white-outline">répondre</button>
                                     </form>
+                                    {% if ligne.commentaire.valide != 1 %}
+                                        <form action="/admin/commentaires/valider-one" method="post">
+                                            <input type="hidden" name="id_vetement" value="{{ ligne.commentaire.vetement_id }}">
+                                            <input type="hidden" name="id_utilisateur" value="{{ ligne.commentaire.utilisateur_id }}">
+                                            <input type="hidden" name="date_commentaire" value="{{ ligne.commentaire.date_commentaire }}">
+                                            <input type="hidden" name="return_url" value="/admin/vetement/commentaires?id_vetement={{ vetement.id_vetement }}">
+                                            <button type="submit" class="validate-button-white-outline">valider</button>
+                                        </form>
+                                    {% endif %}
                                     <form action="/admin/vetement/commentaires/delete" method="post">
                                         <input type="hidden" name="id_vetement" value="{{ ligne.commentaire.vetement_id }}">
                                         <input type="hidden" name="id_utilisateur" value="{{ ligne.commentaire.utilisateur_id }}">
                                         <input type="hidden" name="date_commentaire" value="{{ ligne.commentaire.date_commentaire }}">
+                                        <input type="hidden" name="return_url" value="/admin/vetement/commentaires?id_vetement={{ vetement.id_vetement }}">
                                         <button type="submit" class="validate-button-white-outline">supprimer</button>
                                     </form>
                                 </div>
@@ -94,6 +105,7 @@
                                         <input type="hidden" name="id_vetement" value="{{ ligne.commentaire.vetement_id }}">
                                         <input type="hidden" name="id_utilisateur" value="{{ ligne.commentaire.utilisateur_id }}">
                                         <input type="hidden" name="date_commentaire" value="{{ ligne.commentaire.date_commentaire }}">
+                                        <input type="hidden" name="return_url" value="/admin/vetement/commentaires?id_vetement={{ vetement.id_vetement }}">
                                         <button type="submit" class="validate-button-white-outline">supprimer</button>
                                     </form>
                                 </div>

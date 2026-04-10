@@ -36,7 +36,7 @@ def parse_admin_reply(comment_text):
 
 	return {
 		'target_user_id': parties[1],
-		'target_date': parties[2],
+		'target_date': parties[2].strip().replace('T', ' ').split('.')[0],
 		'message': parties[3].strip()
 	}
 
@@ -52,7 +52,7 @@ def admin_commentaires_show():
 	SELECT c.vetement_id,
 		   v.nom_vetement,
 		   c.utilisateur_id,
-		   c.date_commentaire,
+		   DATE_FORMAT(c.date_commentaire, '%Y-%m-%d %H:%i:%s') AS date_commentaire,
 		   c.commentaire,
 		   c.valide,
 		   u.nom,
@@ -68,19 +68,48 @@ def admin_commentaires_show():
 	mycursor.execute(sql)
 	commentaires = mycursor.fetchall()
 
-	total_commentaires = len(commentaires)
 	total_non_valides = 0
+	commentaires_clients = []
+	reponses_par_commentaire = {}
+	reponses_orphelines = []
 
 	for commentaire in commentaires:
 		if commentaire['role'] == 'ROLE_admin':
 			parsed_reply = parse_admin_reply(commentaire['commentaire'])
-			if parsed_reply is not None:
-				commentaire['commentaire'] = parsed_reply['message']
-		elif commentaire['valide'] != 1:
+			if parsed_reply is None:
+				reponses_orphelines.append(commentaire)
+				continue
+
+			commentaire['commentaire'] = parsed_reply['message']
+			cle = str(commentaire['vetement_id']) + '|' + str(parsed_reply['target_user_id']) + '|' + str(parsed_reply['target_date'])
+			if cle not in reponses_par_commentaire:
+				reponses_par_commentaire[cle] = []
+			reponses_par_commentaire[cle].append(commentaire)
+			continue
+
+		commentaires_clients.append(commentaire)
+		if commentaire['valide'] != 1:
 			total_non_valides = total_non_valides + 1
 
+	commentaires_affichage = []
+	for commentaire_client in commentaires_clients:
+		commentaires_affichage.append({'type_ligne': 'client', 'commentaire': commentaire_client})
+		cle = str(commentaire_client['vetement_id']) + '|' + str(commentaire_client['utilisateur_id']) + '|' + str(commentaire_client['date_commentaire'])
+		if cle in reponses_par_commentaire:
+			for reponse in reponses_par_commentaire.pop(cle):
+				commentaires_affichage.append({'type_ligne': 'admin_reponse', 'commentaire': reponse})
+
+	for reponses_non_rattachees in reponses_par_commentaire.values():
+		for reponse in reponses_non_rattachees:
+			commentaires_affichage.append({'type_ligne': 'admin_reponse', 'commentaire': reponse})
+
+	for reponse in reponses_orphelines:
+		commentaires_affichage.append({'type_ligne': 'admin_reponse', 'commentaire': reponse})
+
+	total_commentaires = len(commentaires_affichage)
+
 	return render_template('admin/vetement/show_commentaires_all.html',
-						   commentaires=commentaires,
+						   commentaires_affichage=commentaires_affichage,
 						   total_commentaires=total_commentaires,
 						   total_non_valides=total_non_valides)
 
@@ -159,7 +188,7 @@ def admin_vetement_details():
 	sql = '''
 	SELECT c.vetement_id,
 		   c.utilisateur_id,
-		   c.date_commentaire,
+		   DATE_FORMAT(c.date_commentaire, '%%Y-%%m-%%d %%H:%%i:%%s') AS date_commentaire,
 		   c.commentaire,
 		   c.valide,
 		   u.nom,
@@ -178,7 +207,7 @@ def admin_vetement_details():
 	sql = '''
 	SELECT c.vetement_id,
 		   c.utilisateur_id,
-		   c.date_commentaire,
+		   DATE_FORMAT(c.date_commentaire, '%%Y-%%m-%%d %%H:%%i:%%s') AS date_commentaire,
 		   c.commentaire,
 		   c.valide,
 		   u.nom,
@@ -199,7 +228,7 @@ def admin_vetement_details():
 	sql = '''
 	SELECT c.vetement_id,
 		   c.utilisateur_id,
-		   c.date_commentaire,
+		   DATE_FORMAT(c.date_commentaire, '%%Y-%%m-%%d %%H:%%i:%%s') AS date_commentaire,
 		   c.commentaire,
 		   c.valide,
 		   u.nom,
@@ -258,15 +287,50 @@ def admin_comment_delete():
 	return_url = request.form.get('return_url', None)
 
 	sql = '''
+	SELECT u.role
+	FROM commentaire c
+	JOIN utilisateur u
+		ON u.id_utilisateur = c.utilisateur_id
+	WHERE c.utilisateur_id = %s
+	  AND c.vetement_id = %s
+	  AND c.date_commentaire = %s;
+	'''
+	mycursor.execute(sql, (id_utilisateur, id_vetement, date_commentaire))
+	commentaire_cible = mycursor.fetchone()
+
+	sql = '''
 	DELETE FROM commentaire
 	WHERE utilisateur_id = %s
 	  AND vetement_id = %s
 	  AND date_commentaire = %s;
 	'''
 	mycursor.execute(sql, (id_utilisateur, id_vetement, date_commentaire))
+	nb_commentaires_supprimes = mycursor.rowcount
+	nb_reponses_supprimees = 0
+
+	if nb_commentaires_supprimes > 0 and commentaire_cible is not None and commentaire_cible['role'] == 'ROLE_client':
+		sql = '''
+		DELETE c
+		FROM commentaire c
+		JOIN utilisateur u
+			ON u.id_utilisateur = c.utilisateur_id
+		WHERE c.vetement_id = %s
+		  AND u.role = 'ROLE_admin'
+		  AND c.commentaire LIKE %s;
+		'''
+		motif_reponse = 'REPONSE_ADMIN|' + str(id_utilisateur) + '|' + str(date_commentaire) + '|%'
+		mycursor.execute(sql, (id_vetement, motif_reponse))
+		nb_reponses_supprimees = mycursor.rowcount
+
 	get_db().commit()
 
-	flash(u'Commentaire supprimé', 'alert-success')
+	if nb_commentaires_supprimes > 0:
+		if nb_reponses_supprimees > 0:
+			flash(u'Commentaire supprimé avec ses réponses admin', 'alert-success')
+		else:
+			flash(u'Commentaire supprimé', 'alert-success')
+	else:
+		flash(u'Commentaire introuvable', 'alert-warning')
 	default_url = '/admin/vetement/commentaires?id_vetement=' + id_vetement
 	return redirect(get_safe_return_url(return_url, default_url))
 
@@ -314,20 +378,7 @@ def admin_comment_add():
 			+ commentaire
 		)
 
-	date_reponse = datetime.date.today()
-	sql = '''
-	SELECT COUNT(*) AS nb
-	FROM commentaire
-	WHERE vetement_id = %s
-	  AND utilisateur_id = %s
-	  AND date_commentaire = %s;
-	'''
-
-	while True:
-		mycursor.execute(sql, (id_vetement, id_utilisateur_admin, date_reponse))
-		if mycursor.fetchone()['nb'] == 0:
-			break
-		date_reponse = date_reponse + datetime.timedelta(days=1)
+	date_reponse = datetime.datetime.now().replace(microsecond=0)
 
 	sql = '''
 	INSERT INTO commentaire (vetement_id, utilisateur_id, date_commentaire, commentaire, valide)
@@ -365,7 +416,10 @@ def admin_comment_valider_one():
 	mycursor.execute(sql, (id_utilisateur, id_vetement, date_commentaire))
 	get_db().commit()
 
-	flash(u'Commentaire validé', 'alert-success')
+	if mycursor.rowcount > 0:
+		flash(u'Commentaire validé', 'alert-success')
+	else:
+		flash(u'Commentaire introuvable', 'alert-warning')
 	default_url = '/admin/vetement/commentaires?id_vetement=' + id_vetement
 	return redirect(get_safe_return_url(return_url, default_url))
 

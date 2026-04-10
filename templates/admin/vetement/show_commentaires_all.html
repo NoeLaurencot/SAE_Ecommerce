@@ -32,69 +32,86 @@
             </tr>
         </thead>
         <tbody>
-            {% if commentaires | length >= 1 %}
-                {% for commentaire in commentaires %}
-                    {% if commentaire.role == 'ROLE_admin' %}
-                        <tr class="comment-row-admin">
-                    {% elif commentaire.valide == 1 %}
-                        <tr class="comment-row-valid">
-                    {% else %}
-                        <tr>
-                    {% endif %}
-                        <td>{{ commentaire.date_commentaire }}</td>
-                        <td>
-                            <a class="crud-link" href="/admin/vetement/commentaires?id_vetement={{ commentaire.vetement_id }}">
-                                {{ commentaire.nom_vetement }} ({{ commentaire.vetement_id }})
-                            </a>
-                        </td>
-                        <td>{{ commentaire.nom }} ({{ commentaire.login }})</td>
-                        <td>
-                            {% if commentaire.role == 'ROLE_admin' %}
-                                <span class="comment-admin-tag">Réponse admin:</span>
-                            {% endif %}
-                            {{ commentaire.commentaire }}
-                        </td>
-                        <td>
-                            {% if commentaire.role == 'ROLE_admin' %}
-                                Réponse admin
-                            {% elif commentaire.valide == 1 %}
-                                Validé (lu)
-                            {% else %}
-                                Non validé
-                            {% endif %}
-                        </td>
-                        <td>
-                            <div class="crud-button-container">
-                                {% if commentaire.role != 'ROLE_admin' %}
+            {% if commentaires_affichage | length >= 1 %}
+                {% for ligne in commentaires_affichage %}
+                    {% if ligne.type_ligne == 'client' %}
+                        {% if ligne.commentaire.valide == 1 %}
+                            <tr class="comment-row-valid">
+                        {% else %}
+                            <tr>
+                        {% endif %}
+                            <td>{{ ligne.commentaire.date_commentaire }}</td>
+                            <td>
+                                <a class="crud-link" href="/admin/vetement/commentaires?id_vetement={{ ligne.commentaire.vetement_id }}">
+                                    {{ ligne.commentaire.nom_vetement }} ({{ ligne.commentaire.vetement_id }})
+                                </a>
+                            </td>
+                            <td>{{ ligne.commentaire.nom }} ({{ ligne.commentaire.login }})</td>
+                            <td>{{ ligne.commentaire.commentaire }}</td>
+                            <td>
+                                {% if ligne.commentaire.valide == 1 %}
+                                    Validé (lu)
+                                {% else %}
+                                    Non validé
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="crud-button-container">
                                     <form action="/admin/vetement/commentaires/repondre" method="GET">
-                                        <input type="hidden" name="id_vetement" value="{{ commentaire.vetement_id }}">
-                                        <input type="hidden" name="id_utilisateur" value="{{ commentaire.utilisateur_id }}">
-                                        <input type="hidden" name="date_commentaire" value="{{ commentaire.date_commentaire }}">
+                                        <input type="hidden" name="id_vetement" value="{{ ligne.commentaire.vetement_id }}">
+                                        <input type="hidden" name="id_utilisateur" value="{{ ligne.commentaire.utilisateur_id }}">
+                                        <input type="hidden" name="date_commentaire" value="{{ ligne.commentaire.date_commentaire }}">
                                         <input type="hidden" name="return_url" value="/admin/commentaires/show">
                                         <button type="submit" class="validate-button-white-outline">répondre</button>
                                     </form>
 
-                                    {% if commentaire.valide != 1 %}
+                                    {% if ligne.commentaire.valide != 1 %}
                                         <form action="/admin/commentaires/valider-one" method="post">
-                                            <input type="hidden" name="id_vetement" value="{{ commentaire.vetement_id }}">
-                                            <input type="hidden" name="id_utilisateur" value="{{ commentaire.utilisateur_id }}">
-                                            <input type="hidden" name="date_commentaire" value="{{ commentaire.date_commentaire }}">
+                                            <input type="hidden" name="id_vetement" value="{{ ligne.commentaire.vetement_id }}">
+                                            <input type="hidden" name="id_utilisateur" value="{{ ligne.commentaire.utilisateur_id }}">
+                                            <input type="hidden" name="date_commentaire" value="{{ ligne.commentaire.date_commentaire }}">
                                             <input type="hidden" name="return_url" value="/admin/commentaires/show">
                                             <button type="submit" class="validate-button-white-outline">valider</button>
                                         </form>
                                     {% endif %}
-                                {% endif %}
 
-                                <form action="/admin/vetement/commentaires/delete" method="post">
-                                    <input type="hidden" name="id_vetement" value="{{ commentaire.vetement_id }}">
-                                    <input type="hidden" name="id_utilisateur" value="{{ commentaire.utilisateur_id }}">
-                                    <input type="hidden" name="date_commentaire" value="{{ commentaire.date_commentaire }}">
-                                    <input type="hidden" name="return_url" value="/admin/commentaires/show">
-                                    <button type="submit" class="validate-button-white-outline">supprimer</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
+                                    <form action="/admin/vetement/commentaires/delete" method="post">
+                                        <input type="hidden" name="id_vetement" value="{{ ligne.commentaire.vetement_id }}">
+                                        <input type="hidden" name="id_utilisateur" value="{{ ligne.commentaire.utilisateur_id }}">
+                                        <input type="hidden" name="date_commentaire" value="{{ ligne.commentaire.date_commentaire }}">
+                                        <input type="hidden" name="return_url" value="/admin/commentaires/show">
+                                        <button type="submit" class="validate-button-white-outline">supprimer</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr class="comment-row-admin">
+                            <td>{{ ligne.commentaire.date_commentaire }}</td>
+                            <td>
+                                <a class="crud-link" href="/admin/vetement/commentaires?id_vetement={{ ligne.commentaire.vetement_id }}">
+                                    {{ ligne.commentaire.nom_vetement }} ({{ ligne.commentaire.vetement_id }})
+                                </a>
+                            </td>
+                            <td>{{ ligne.commentaire.nom }} ({{ ligne.commentaire.login }})</td>
+                            <td>
+                                <span class="comment-admin-tag">Réponse admin:</span>
+                                {{ ligne.commentaire.commentaire }}
+                            </td>
+                            <td>Réponse admin</td>
+                            <td>
+                                <div class="crud-button-container">
+                                    <form action="/admin/vetement/commentaires/delete" method="post">
+                                        <input type="hidden" name="id_vetement" value="{{ ligne.commentaire.vetement_id }}">
+                                        <input type="hidden" name="id_utilisateur" value="{{ ligne.commentaire.utilisateur_id }}">
+                                        <input type="hidden" name="date_commentaire" value="{{ ligne.commentaire.date_commentaire }}">
+                                        <input type="hidden" name="return_url" value="/admin/commentaires/show">
+                                        <button type="submit" class="validate-button-white-outline">supprimer</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             {% else %}
                 <tr>

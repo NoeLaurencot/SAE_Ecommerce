@@ -133,7 +133,6 @@
                             <article class="vetement-comment-item {% if ligne.commentaire.valide == 1 %}vetement-comment-valid{% endif %}">
                                 <div class="vetement-comment-meta">
                                     <span><strong>{{ ligne.commentaire.login }}</strong> ({{ ligne.commentaire.nom }})</span>
-                                    <span>ID : {{ ligne.commentaire.id_commentaire }}</span>
                                     <span>{{ ligne.commentaire.date_commentaire }}</span>
                                 </div>
                                 <p class="no-margin">{{ ligne.commentaire.commentaire }}</p>
@@ -149,7 +148,6 @@
                             <article class="vetement-comment-item vetement-comment-admin">
                                 <div class="vetement-comment-meta">
                                     <span><strong>{{ ligne.commentaire.login }}</strong> (admin)</span>
-                                    <span>ID : {{ ligne.commentaire.id_commentaire }}</span>
                                     <span>{{ ligne.commentaire.date_commentaire }}</span>
                                 </div>
                                 <p class="no-margin"><strong>Réponse admin :</strong> {{ ligne.commentaire.commentaire }}</p>

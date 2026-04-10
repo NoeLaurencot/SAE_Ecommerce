@@ -636,6 +636,7 @@
 .vetement-comment-admin {
     background-color: #dff3df;
     border-left-color: rgb(88, 130, 92);
+    margin-left: 24px;
 }
 
 .vetement-comment-meta {

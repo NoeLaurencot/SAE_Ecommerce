@@ -28,10 +28,7 @@ def client_vetement_show():
            libelle_matiere AS matiere,
            libelle_type_vetement,
            id_type_vetement,
-           GROUP_CONCAT(libelle_collection SEPARATOR ', ') AS collection,
-           note_stats.moyenne_note,
-           note_stats.nb_notes,
-           commentaire_stats.nb_commentaires
+            GROUP_CONCAT(libelle_collection SEPARATOR ', ') AS collection
     FROM vetement
     JOIN declinaison_vetement
         ON declinaison_vetement.vetement_id = vetement.id_vetement
@@ -47,24 +44,6 @@ def client_vetement_show():
         ON vetement.id_vetement = vetement_collection.vetement_id
     JOIN collection
         ON collection.id_collection = vetement_collection.collection_id
-    LEFT JOIN (
-        SELECT vetement_id,
-               ROUND(AVG(note), 2) AS moyenne_note,
-               COUNT(*) AS nb_notes
-        FROM note
-        GROUP BY vetement_id
-    ) AS note_stats
-        ON note_stats.vetement_id = vetement.id_vetement
-    LEFT JOIN (
-        SELECT c.vetement_id,
-               COUNT(*) AS nb_commentaires
-        FROM commentaire c
-        JOIN utilisateur u
-            ON u.id_utilisateur = c.utilisateur_id
-        WHERE u.role = 'ROLE_client'
-        GROUP BY c.vetement_id
-    ) AS commentaire_stats
-        ON commentaire_stats.vetement_id = vetement.id_vetement
     '''
 
     list_param = []
@@ -142,10 +121,7 @@ def client_vetement_show():
                  libelle_fournisseur,
                  libelle_matiere,
                  libelle_type_vetement,
-                 id_type_vetement,
-                 note_stats.moyenne_note,
-                 note_stats.nb_notes,
-                 commentaire_stats.nb_commentaires
+                 id_type_vetement
         ORDER BY id_vetement;
         """
         print(sql)
@@ -161,15 +137,53 @@ def client_vetement_show():
                  libelle_fournisseur,
                  libelle_matiere,
                  libelle_type_vetement,
-                 id_type_vetement,
-                 note_stats.moyenne_note,
-                 note_stats.nb_notes,
-                 commentaire_stats.nb_commentaires
+                 id_type_vetement
         ORDER BY id_vetement;
         """
         mycursor.execute(sql)
 
     vetements = mycursor.fetchall()
+
+    sql = '''
+    SELECT vetement_id,
+           ROUND(AVG(note), 2) AS moyenne_note,
+           COUNT(*) AS nb_notes
+    FROM note
+    GROUP BY vetement_id;
+    '''
+    mycursor.execute(sql)
+    notes_stats = mycursor.fetchall()
+
+    notes_par_vetement = {}
+    for ligne in notes_stats:
+        notes_par_vetement[ligne['vetement_id']] = ligne
+
+    sql = '''
+    SELECT c.vetement_id,
+           COUNT(*) AS nb_commentaires
+    FROM commentaire c
+    JOIN utilisateur u
+        ON u.id_utilisateur = c.utilisateur_id
+    WHERE u.role = 'ROLE_client'
+    GROUP BY c.vetement_id;
+    '''
+    mycursor.execute(sql)
+    commentaires_stats = mycursor.fetchall()
+
+    commentaires_par_vetement = {}
+    for ligne in commentaires_stats:
+        commentaires_par_vetement[ligne['vetement_id']] = int(ligne['nb_commentaires'])
+
+    for vetement in vetements:
+        stats_note = notes_par_vetement.get(vetement['id_vetement'])
+        if stats_note is None:
+            vetement['moyenne_note'] = None
+            vetement['nb_notes'] = 0
+        else:
+            vetement['moyenne_note'] = stats_note['moyenne_note']
+            vetement['nb_notes'] = int(stats_note['nb_notes'])
+
+        vetement['nb_commentaires'] = commentaires_par_vetement.get(vetement['id_vetement'], 0)
     
     mycursor = get_db().cursor()
     if 'login' in session:

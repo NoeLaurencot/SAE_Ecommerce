@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS commentaire
 (
     vetement_id      INT,
     utilisateur_id   INT,
-    date_commentaire DATE,
+    date_commentaire DATETIME,
     commentaire      TEXT,
     valide           BOOLEAN,
     PRIMARY KEY (vetement_id, utilisateur_id, date_commentaire),
