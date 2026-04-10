@@ -296,7 +296,6 @@ VALUES ('Chemise de bureau bleue', 370, 'Chemise d''élégance intemporelle pour
         'pants_classic.avif', 4, 3),
        ('Pantalon à trous', 1600, 'Pantalon au design avant-gardiste avec découpes stratégiques.', 1, 2,
         'pants_holes.avif', 4, 2),
-       ('Pantalon jean', 410, 'Pantalon en denim authentique au tombé impeccable.', 6, 2, 'pants_jeans.avif', 4, 1),
        ('Pantalon de ski', 525, 'Pantalon alliant performance et élégance pour vos escapades alpines.', 3, 2,
         'pants_ski.avif', 5, 1),
        ('Pantalon en tweed', 830, 'Pantalon en tweed raffiné tissé à la main, héritage britannique.', 4, 2,
@@ -311,12 +310,9 @@ VALUES ('Chemise de bureau bleue', 370, 'Chemise d''élégance intemporelle pour
        ('Polo à paternes', 550, 'Polo aux motifs géométriques délicats tissés main.', 1, 3, 'polo_patern.avif', 3, 2),
 
        ('Robe bleue', 570, 'Robe en bleu azur profond pour une féminité éclatante.', 1, 4, 'dress_blue.avif', 2, 1),
-       ('Robe Grise Designer', 1880, 'Robe création exclusive alliant audace et raffinement.', 5, 4,
-        'dress_designer.avif', 1, 1),
        ('Robe à points', 120, 'Robe au motif pois rétro revisité avec modernité.', 1, 4, 'dress_dots.avif', 2, 3),
        ('Robe pencil blanche', 1900, 'Robe à silhouette sculptée en soie blanche immaculée.', 5, 4,
         'dress_pencil_white.avif', 5, 3),
-       ('Robe rouge', 380, 'Robe rouge passion pour une présence magnétique.', 1, 4, 'dress_red.avif', 1, 2),
        ('Robe à rose', 1560, 'Robe ornée d''une rose brodée, romantisme absolu.', 1, 4, 'dress_rose.avif', 1, 3),
 
        ('Manteau vert', 1320, 'Manteau vert émeraude profond, élégance végétale.', 1, 5, 'coat_designer.avif', 6, 3),
@@ -336,8 +332,6 @@ VALUES ('Chemise de bureau bleue', 370, 'Chemise d''élégance intemporelle pour
         7, 6, 'shoes_glass.avif', 6, 1),
        ('Chaussures de randonnée', 2600, 'Chaussures de randonnée en cuir robuste pour explorer avec distinction.', 2,
         6, 'shoes_hike.avif', 4, 1),
-       ('Chaussures de ville', 980, 'Chaussures de ville à patine artisanale sur cuir de veau.', 2, 6,
-        'shoes_leather.avif', 2, 2),
        ('Chaussure sneakers', 710, 'Sneakers à conception moderne alliant confort et style.', 8, 6,
         'shoes_sneaker.avif', 3, 3),
        ('Chaussures baskets', 1200, 'Baskets de performance technique habillées de luxe.', 8, 6, 'shoes_sport.avif', 3,
@@ -552,37 +546,7 @@ VALUES (4, 1, 4),
        (29, 32, 4),
        (3, 32, 5),
        (27, 32, 6),
-       (20, 32, 7),
-
-       (9, 33, 1),
-       (26, 33, 2),
-       (20, 33, 3),
-       (16, 33, 4),
-       (19, 33, 5),
-       (4, 33, 7),
-
-       (11, 34, 1),
-       (24, 34, 2),
-       (5, 34, 3),
-       (17, 34, 4),
-       (30, 34, 5),
-       (24, 34, 6),
-       (29, 34, 7),
-
-       (16, 35, 1),
-       (29, 35, 2),
-       (0, 35, 3),
-       (19, 35, 4),
-       (10, 35, 5),
-       (15, 35, 6),
-       (0, 35, 7),
-
-       (29, 36, 2),
-       (11, 36, 3),
-       (28, 36, 4),
-       (26, 36, 5),
-       (25, 36, 6),
-       (9, 36, 7);
+       (20, 32, 7);
 
 
 INSERT INTO adresse (nom_adresse, rue_adresse, code_postal, ville, date_utilisation, utilisateur_id, valide)
@@ -596,6 +560,12 @@ VALUES ('2026-02-20', 2, 1, 1, 1),
        ('2026-02-20', 2, 1, 1, 2),
        ('2026-02-21', 3, 2, 3, 3),
        ('2026-02-22', 3, 3, 3, 4);
+
+INSERT INTO ligne_panier (declinaison_vetement_id, utilisateur_id, date_ajout, quantite)
+VALUES (2, 2, '2026-02-20', 2),
+       (45, 2, '2026-02-20', 1),
+       (1, 3, '2026-02-21', 1),
+       (5, 3, '2026-02-21', 2);
 
 INSERT INTO vetement_collection (vetement_id, collection_id)
 VALUES (1, 2),
@@ -639,8 +609,4 @@ VALUES (1, 2),
        (30, 2),
 
        (31, 2),
-       (32, 2),
-       (33, 2),
-       (34, 1),
-       (35, 1),
-       (36, 1);
+       (32, 2);
