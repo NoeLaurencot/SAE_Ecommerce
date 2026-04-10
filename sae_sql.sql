@@ -344,7 +344,7 @@ VALUES ('Chemise de bureau bleue', 370, 'Chemise d''élégance intemporelle pour
         3);
 
 INSERT INTO declinaison_vetement (stock, vetement_id, taille_id)
-VALUES (4, 1, 4)
+VALUES (4, 1, 4),
 
        (0, 2, 5),
 
