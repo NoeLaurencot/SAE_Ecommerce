@@ -1,1 +1,18 @@
-La page n'existe pas en sah
+{% extends 'layout.html' %}
+
+{% block title %}
+<title>Erreur 404 | Gaullois</title>
+{% endblock %}
+
+{% block body %}
+<main>
+	<div class="main-container error404-wrapper">
+		<section class="error404-card">
+			<p class="error404-label">Erreur 404</p>
+			<h1 class="error404-title">Page introuvable</h1>
+			<p class="error404-text">La page que vous cherchez n'existe pas ou a été deplacée.</p>
+			<a class="validate-button-black" href="/">Retour a l'accueil</a>
+		</section>
+	</div>
+</main>
+{% endblock %}

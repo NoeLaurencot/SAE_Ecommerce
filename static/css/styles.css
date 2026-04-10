@@ -185,6 +185,38 @@ body {
     align-items: center;
 }
 
+.error404-wrapper {
+    min-height: 70vh;
+    padding: 2rem 1rem;
+}
+
+.error404-card {
+    width: 100%;
+    max-width: 620px;
+    text-align: center;
+    border: 1px solid var(--gray);
+    padding: 2rem 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.error404-label {
+    margin: 0 0 0.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+}
+
+.error404-title {
+    margin: 0 0 0.7rem 0;
+}
+
+.error404-text {
+    margin: 0 0 1rem 0;
+}
+
+.error404-card .validate-button-black {
+    display: inline-flex;
+}
+
 .main-container-row {
     padding: 20px;
     display: flex;
