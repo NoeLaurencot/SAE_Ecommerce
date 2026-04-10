@@ -38,7 +38,7 @@ input.addEventListener("keyup", function () {
                     let item = data[i];
                     let itemLink = document.createElement('a');
                     itemLink.className = 'search-suggestion-item';
-                    itemLink.href = '/client/vetement/show?vetement=' + item.id_vetement;
+                    itemLink.href = '/client/vetement/details?id_vetement=' + item.id_vetement;
                     itemLink.innerHTML = '<img src="/static/assets/images/clothes/' + item.photo + '" alt="' + item.nom_vetement + '">'
                         + '<div class="search-suggestion-text">'
                         + '<span class="search-suggestion-name">' + item.nom_vetement + '</span>'
