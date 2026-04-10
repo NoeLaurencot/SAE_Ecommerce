@@ -601,6 +601,12 @@ VALUES (1, 1),
        (31, 3),
        (32, 1);
 
+INSERT INTO ligne_panier (declinaison_vetement_id, utilisateur_id, date_ajout, quantite)
+VALUES (2, 2, '2026-02-20', 2),
+       (45, 2, '2026-02-20', 1),
+       (1, 3, '2026-02-21', 1),
+       (5, 3, '2026-02-21', 2);
+
 INSERT INTO commande (date_achat, utilisateur_id, etat_id, adresse_livraison_id, adresse_facturation_id)
 VALUES ('2026-02-20', 2, 3, 1, 1),
        ('2026-02-20', 2, 3, 1, 2),
