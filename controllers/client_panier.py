@@ -49,10 +49,10 @@ def client_panier_show():
 @client_panier.route('/client/panier/add', methods=['POST'])
 def client_panier_add():
     if 'login' not in session:
-        flash(u'Veuillez vous connecter pour ajouter au panier','alert-warning')
+        flash(u'Veuillez vous connecter pour ajouter un article au panier.', 'alert-warning')
         return redirect('/login')
     if session['role'] == 'ROLE_admin':
-        flash(u'Un admin ne peut pas acheter', 'alert-warning')
+        flash(u'Un administrateur ne peut pas effectuer d\'achat.', 'alert-warning')
         return redirect('/')
 
 
@@ -63,7 +63,7 @@ def client_panier_add():
     id_declinaison_vetement = request.form.get('id_declinaison_vetement', type=int)
 
     if quantite is None or quantite < 1:
-        flash(u'Quantite invalide', 'alert-warning')
+        flash(u'Quantité invalide.', 'alert-warning')
         return redirect('/client/vetement/show')
 
     if id_vetement:

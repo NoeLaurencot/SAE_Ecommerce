@@ -62,7 +62,7 @@ def valid_add_declinaison_vetement():
 
         get_db().commit()
 
-        message = u'Une déclinaison avec cette taille existe déjà pour ce vêtement, mise à jour du stock : ' + stock
+        message = u"Une déclinaison existe déjà pour cette taille. Stock mis à jour à " + str(stock) + u" (vêtement ID " + str(id_vetement) + u", taille ID " + str(id_taille) + u")."
         flash(message, 'alert-warning')
 
     else:
@@ -77,7 +77,7 @@ def valid_add_declinaison_vetement():
 
         get_db().commit()
 
-        message = u'Déclinaison ajoutée : stock : ' + stock + ', vetement_id : ' + id_vetement + ', taille_id : ' + id_taille
+        message = u"Déclinaison ajoutée (vêtement ID " + str(id_vetement) + u", taille ID " + str(id_taille) + u", stock " + str(stock) + u")."
         flash(message, 'alert-success')
 
     return redirect('/admin/vetement/edit?id=' + id_vetement)
@@ -141,7 +141,7 @@ def valid_edit_declinaison_vetement():
     mycursor.execute(sql, (stock, taille_id, id_declinaison_vetement))
     get_db().commit()
 
-    message = u'declinaison_vetement modifié , id:' + str(id_declinaison_vetement) + '- stock :' + str(stock) + ' - taille_id:' + str(taille_id)
+    message = u"Déclinaison modifiée (ID " + str(id_declinaison_vetement) + u", taille ID " + str(taille_id) + u", stock " + str(stock) + u")."
     flash(message, 'alert-success')
     return redirect('/admin/vetement/edit?id=' + str(id_vetement))
 
@@ -160,5 +160,5 @@ def admin_delete_declinaison_vetement():
 
     get_db().commit()
 
-    flash(u'declinaison supprimée, id_declinaison_vetement : ' + str(id_declinaison_vetement),  'alert-success')
+    flash(u'Déclinaison supprimée (ID ' + str(id_declinaison_vetement) + u').',  'alert-success')
     return redirect('/admin/vetement/edit?id=' + str(id_vetement))

@@ -184,7 +184,7 @@ def valid_add_vetement():
 
     get_db().commit()
 
-    message = u'vetement ajouté , nom:' + nom + ' - description:' + description + ' - prix:' + prix + ' - matiere_id:' + matiere_id + ' - type_vetement:' + type_vetement_id + ' - photo:' + str(photo) + ' - marque_id:' + marque_id + ' - id_fournisseur:' + fournisseur_id + ' - taille_id:' + taille_id + ' - collection_ids:' + ', '.join(collection_ids) + ' - stock:' + stock 
+    message = u"Vêtement ajouté (ID " + str(id_vetement) + u", nom : " + nom + u", prix : " + str(prix) + u" €)."
     flash(message, 'alert-success')
     return redirect('/admin/vetement/show')
 
@@ -253,7 +253,7 @@ def delete_vetement():
             pass
 
         print("Vêtement supprimé, id : ", id_vetement)
-        message = u'un Vêtement supprimé, id : ' + id_vetement
+        message = u'Vêtement supprimé (ID ' + str(id_vetement) + u').'
         flash(message, 'alert-success')
 
     return redirect('/admin/vetement/show')
@@ -303,7 +303,7 @@ def cascade_delete_vetement():
     mycursor.execute(sql, id_vetement)
     get_db().commit()
 
-    message = u'Vêtement supprimé, id : ' + id_vetement
+    message = u'Vêtement supprimé (ID ' + str(id_vetement) + u').'
     flash(message, 'alert-success')
 
     return redirect(redirect_url)
@@ -454,7 +454,7 @@ def valid_edit_vetement():
     get_db().commit()
     #if image_nom is None:
     #    image_nom = ''
-    message = u'Vêtement modifié , nom:' + nom + ' - description:' + description + ' - prix:' + prix + ' - matiere_id:' + matiere_id + ' - type_vetement:' + type_vetement_id + ' - photo:' + str(photo) + ' - marque_id:' + marque_id + ' - id_fournisseur:' + fournisseur_id + ' - taille_id:' + taille_id + ' - collection_ids:' + ', '.join(collection_ids) + ' - stock:' + stock 
+    message = u"Vêtement modifié (ID " + str(id_vetement) + u", nom : " + nom + u", prix : " + str(prix) + u" €)."
     flash(message, 'alert-success')
     return redirect('/admin/vetement/show')
 

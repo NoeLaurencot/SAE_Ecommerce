@@ -9,10 +9,10 @@ client_commande = Blueprint('client_commande', __name__,
 @client_commande.route('/client/commande/valide', methods=['POST'])
 def client_commande_valide():
     if 'login' not in session:
-        flash(u'Veuillez vous connecte', 'alert-danger')
+        flash(u'Veuillez vous connecter.', 'alert-danger')
         return redirect('/login')
     elif session['role'] != 'ROLE_client':
-        flash(u'Un admin ne peut pas commander', 'alert-danger')
+        flash(u'Un administrateur ne peut pas passer de commande.', 'alert-danger')
         return redirect('/')
     mycursor = get_db().cursor()
 
@@ -26,7 +26,7 @@ def client_commande_valide():
     mycursor.execute(sql, id_client)
     vetements_panier = mycursor.fetchall()
     if len(vetements_panier) < 1:
-        flash(u'Panier vide', 'alert-danger')
+        flash(u'Votre panier est vide.', 'alert-danger')
         return redirect('/')
 
 
@@ -47,10 +47,10 @@ def client_commande_valide():
 @client_commande.route('/client/commande/add', methods=['POST'])
 def client_commande_add():
     if 'login' not in session:
-        flash(u'Veuillez vous connecte', 'alert-danger')
+        flash(u'Veuillez vous connecter.', 'alert-danger')
         return redirect('/login')
     elif session['role'] != 'ROLE_client':
-        flash(u'Un admin ne peut pas commander', 'alert-danger')
+        flash(u'Un administrateur ne peut pas passer de commande.', 'alert-danger')
         return redirect('/')
     mycursor = get_db().cursor()
 
@@ -103,10 +103,10 @@ def client_commande_add():
 @client_commande.route('/client/commande/show', methods=['get','post'])
 def client_commande_show():
     if 'login' not in session:
-        flash(u'Veuillez vous connecte', 'alert-danger')
+        flash(u'Veuillez vous connecter.', 'alert-danger')
         return redirect('/login')
     elif session['role'] != 'ROLE_client':
-        flash(u'Un admin ne peut pas commander', 'alert-danger')
+        flash(u'Un administrateur ne peut pas passer de commande.', 'alert-danger')
         return redirect('/')
     mycursor = get_db().cursor()
     id_client = session['id_user']
