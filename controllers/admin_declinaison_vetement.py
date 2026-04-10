@@ -1,6 +1,3 @@
-#! /usr/bin/python
-# -*- coding:utf-8 -*-
-
 from flask import Blueprint
 from flask import request, render_template, redirect, flash
 from connexion_db import get_db
