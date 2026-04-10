@@ -1,0 +1,113 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>DataViz articles | Admin</title>
+{% endblock %}
+
+{% block body %}
+<main class="crud-container">
+    <h2>DataViz articles</h2>
+    <div class="crud-top-actions wrap">
+        <a class="validate-button-white-outline" href="/admin/dashboard">Retour</a>
+    </div>
+
+    <h3>Répartition des articles par type de vêtement</h3>
+
+    <div class="crud-summary-card">
+        <p class="no-margin">
+            Nombre total de vêtements: <strong>{{ nb_vetements.nb }}</strong>
+        </p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Type de vêtement</th>
+                <th>ID</th>
+                <th>Nombre d'articles</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if datas_types_articles | length >= 1 %}
+                {% for ligne in datas_types_articles %}
+                    <tr>
+                        <td>{{ ligne.libelle_type_vetement }}</td>
+                        <td>{{ ligne.id_type_vetement }}</td>
+                        <td>{{ ligne.nb_vetements if ligne.nb_vetements is not none else 0 }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3">Aucune donnée.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <div class="dataviz-grid">
+        <div class="dataviz-card">
+            <h3>Nombre d'articles par type (barres)</h3>
+            <canvas id="chartArticlesBar"></canvas>
+        </div>
+
+        <div class="dataviz-card">
+            <h3>Nombre d'articles par type (secteurs)</h3>
+            <canvas id="chartArticlesPie"></canvas>
+        </div>
+    </div>
+</main>
+
+<script src="{{ url_for('static', filename='js/Chart.js') }}"></script>
+<script>
+    var labelsArticles = {{ labels_articles | tojson }};
+    var valuesArticles = {{ values_articles | tojson }};
+
+    new Chart(document.getElementById('chartArticlesBar'), {
+        type: 'bar',
+        data: {
+            labels: labelsArticles,
+            datasets: [{
+                label: "Nombre d'articles",
+                data: valuesArticles,
+                backgroundColor: 'rgba(178, 164, 56, 0.85)'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('chartArticlesPie'), {
+        type: 'pie',
+        data: {
+            labels: labelsArticles,
+            datasets: [{
+                label: "Nombre d'articles",
+                data: valuesArticles,
+                backgroundColor: [
+                    '#3e95cd',
+                    '#8e5ea2',
+                    '#3cba9f',
+                    '#e8c3b9',
+                    '#c45850',
+                    '#faf24c',
+                    '#6a6ce7',
+                    '#55f68f',
+                    '#d0c309',
+                    '#c45000'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+</script>
+{% endblock %}

@@ -1,28 +1,18 @@
-{% extends 'admin/layout_admin.html' %}
-
-
-{% block javascripts %}
-{#    attention il faut importer la bibliotheque chart.js avant de définir l'objet chart#}
-    {{ super() }}
-   {# <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.js') }}" ></script>#}
-{% endblock %}
-
-{% block javascripts_head %}
-{#    attention il faut importer la bibliotheque chart.js avant de définir l'objet chart#}
-{#    <script src="{{ url_for('static', filename='chart.js') }}" ></script>#}
-      <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
-{% endblock %}
+{% extends 'layout.html' %}
 
 {% block title %}
-    <title>test carte</title>
+    <title>DataViz carte adresses | Admin</title>
 {% endblock %}
 
 {% block body %}
 <main class="crud-container">
     <h2>Données sur les adresses clients</h2>
+    <div class="crud-top-actions">
+        <a class="validate-button-white-outline" href="/admin/dashboard">Retour</a>
+    </div>
 
-    <div style="display: flex; justify-content: center; padding: 40px; border: solid 1px rgb(200, 200, 200); margin-top: 20px;">
-        <div style="max-width: 600px; width: 100%;">
+    <div class="dataviz-map-wrapper">
+        <div class="dataviz-map-content">
             {% include 'admin/dataviz/franceMap.html' %}
         </div>
     </div>
@@ -30,7 +20,7 @@
 
 <script>
     {% for element in adresses %}
-        document.getElementById("{{ element['dep'] }}").style.fill= "#000000";
+        document.getElementById("{{ element['dep'] }}").setAttribute("fill", "#000000");
         document.getElementById("{{ element['dep'] }}").setAttribute("fill-opacity", {{ element['indice'] }});
     {% endfor %}
 </script>

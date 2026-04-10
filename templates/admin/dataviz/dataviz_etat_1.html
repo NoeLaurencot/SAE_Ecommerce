@@ -1,91 +1,151 @@
 {% extends 'layout.html' %}
 
-
-{% block javascripts %}
-{#    attention il faut importer la bibliotheque chart.js avant de définir l'objet chart#}
-
-   <script src="{{ url_for('static', filename='js/bootstrap.js') }}" ></script>
-
-{% endblock %}
-
-{% block javascripts_head %}
-{#    attention il faut importer la bibliotheque chart.js avant de définir l'objet chart#}
-    <script src="{{ url_for('static', filename='js/Chart.js') }}" ></script>
-{#<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>#}
-
-{% endblock %}
-
-
 {% block title %}
-    <title>Afficher les types de vetements</title>
+    <title>DataViz commentaires et notes | Admin</title>
 {% endblock %}
 
 {% block body %}
 <main class="crud-container">
-    <h2>Statistiques des types de vêtements</h2>
-
-    <div style="margin-bottom: 20px;">
-        <h3>Nombre total de vêtements : <strong>{{ nb_vetements.nb }}</strong></h3>
+    <h2>DataViz commentaires et notes</h2>
+    <div class="crud-top-actions wrap">
+        <a class="validate-button-white-outline" href="/admin/dashboard">Retour</a>
     </div>
+
+    <h3>Vue globale par type de vêtement</h3>
 
     <table>
         <thead>
             <tr>
-               <th>Type de vêtement</th> 
-               <th>(ID)</th>
-               <th>Nombre de vêtements</th>
+                <th>Type</th>
+                <th>ID</th>
+                <th>Nombre de notes</th>
+                <th>Note moyenne</th>
+                <th>Nombre de commentaires</th>
             </tr>
         </thead>
         <tbody>
-        {% if datas_show | length >= 1 %}
-            {% for ligne in datas_show %}
-               <tr>
-                      <td>{{ ligne.libelle_type_vetement }}</td>
-                      <td>{{ ligne.id_type_vetement }}</td>
-                       <td>
-                           {% if ligne.nbr_vetements is not none %} {{ ligne.nbr_vetements }} {% else %} 0 {% endif %}
-                       </td>
-               </tr>
-            {% endfor %}
-        {% else %}
-            <tr>
-                <td colspan="3">Pas de stock</td>
-            </tr>
-        {% endif %}
+            {% if datas_types | length >= 1 %}
+                {% for ligne in datas_types %}
+                    <tr>
+                        <td>
+                            <a class="dataviz-link" href="/admin/dataviz/etat1?type_id={{ ligne.id_type_vetement }}">
+                                {{ ligne.libelle_type_vetement }}
+                            </a>
+                        </td>
+                        <td>{{ ligne.id_type_vetement }}</td>
+                        <td>{{ ligne.nb_notes if ligne.nb_notes is not none else 0 }}</td>
+                        <td>{{ ligne.moyenne_notes if ligne.moyenne_notes is not none else 0 }}</td>
+                        <td>{{ ligne.nb_commentaires if ligne.nb_commentaires is not none else 0 }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="5">Aucune donnée.</td>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
 
-    <div style="display: flex; gap: 40px; margin-top: 40px; flex-wrap: wrap;">
-        <div style="flex: 1; min-width: 400px; padding: 20px; border: solid 1px rgb(200, 200, 200);">
-            <h3 style="margin-bottom: 20px;">Répartition par type (Barres)</h3>
-            <canvas id="Chart1"></canvas>
+    <form method="GET" action="/admin/dataviz/etat1" class="dataviz-filter-form">
+        <label for="type_id">Choisir un type:</label>
+        <select id="type_id" name="type_id">
+            {% for ligne in datas_types %}
+                <option value="{{ ligne.id_type_vetement }}" {% if selected_type_id == ligne.id_type_vetement %}selected{% endif %}>
+                    {{ ligne.libelle_type_vetement }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="validate-button-black">Afficher</button>
+    </form>
+
+    <div class="dataviz-grid">
+        <div class="dataviz-card">
+            <h3>Note moyenne par type</h3>
+            <canvas id="chartMoyenneType"></canvas>
         </div>
 
-        <div style="flex: 1; min-width: 400px; padding: 20px; border: solid 1px rgb(200, 200, 200);">
-            <h3 style="margin-bottom: 20px;">Répartition par type (Secteurs)</h3>
-            <canvas id="pie-chart"></canvas>
+        <div class="dataviz-card">
+            <h3>Nombre de commentaires par type</h3>
+            <canvas id="chartCommentaireType"></canvas>
+        </div>
+
+        <div class="dataviz-card">
+            <h3>Nombre de notes par type</h3>
+            <canvas id="chartNoteType"></canvas>
         </div>
     </div>
+
+    {% if selected_type_libelle is not none %}
+        <h3>Détail par article: {{ selected_type_libelle }}</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Article</th>
+                    <th>ID</th>
+                    <th>Nombre de notes</th>
+                    <th>Note moyenne</th>
+                    <th>Nombre de commentaires</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if datas_vetements_type | length >= 1 %}
+                    {% for ligne in datas_vetements_type %}
+                        <tr>
+                            <td>{{ ligne.nom_vetement }}</td>
+                            <td>{{ ligne.id_vetement }}</td>
+                            <td>{{ ligne.nb_notes if ligne.nb_notes is not none else 0 }}</td>
+                            <td>{{ ligne.moyenne_notes if ligne.moyenne_notes is not none else 0 }}</td>
+                            <td>{{ ligne.nb_commentaires if ligne.nb_commentaires is not none else 0 }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5">Aucun article trouvé pour ce type.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <div class="dataviz-grid">
+            <div class="dataviz-card">
+                <h3>Note moyenne par article</h3>
+                <canvas id="chartMoyenneArticle"></canvas>
+            </div>
+
+            <div class="dataviz-card">
+                <h3>Nombre de commentaires par article</h3>
+                <canvas id="chartCommentaireArticle"></canvas>
+            </div>
+
+            <div class="dataviz-card">
+                <h3>Nombre de notes par article</h3>
+                <canvas id="chartNoteArticle"></canvas>
+            </div>
+        </div>
+    {% endif %}
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/Chart.js') }}"></script>
 <script>
-    var ctx1 = document.getElementById("Chart1").getContext("2d");
-    var Chart1 = new Chart( ctx1, {
+    var labelsTypes = {{ labels_types | tojson }};
+    var valuesMoyennesTypes = {{ values_moyennes_types | tojson }};
+    var valuesNbCommentairesTypes = {{ values_nb_commentaires_types | tojson }};
+    var valuesNbNotesTypes = {{ values_nb_notes_types | tojson }};
+
+    var chartMoyenneType = new Chart(document.getElementById("chartMoyenneType"), {
         type: "bar",
         data: {
-            labels: {{ labels | safe }},
-            datasets: [
-                {
-                label: "Nombre de vêtements",
-                data: {{ values | safe }},
-                backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850", "#faf24c", "#6a6ce7","#55f68f","#D0c309","#c45000"],
-                }
-            ]
+            labels: labelsTypes,
+            datasets: [{
+                label: "Note moyenne",
+                data: valuesMoyennesTypes,
+                backgroundColor: "rgba(46, 82, 102, 0.85)"
+            }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
             scales: {
                 y: {
                     beginAtZero: true
@@ -94,20 +154,120 @@
         }
     });
 
-    var Chart2 = new Chart(document.getElementById("pie-chart"), {
-        type: 'pie',
+    var chartCommentaireType = new Chart(document.getElementById("chartCommentaireType"), {
+        type: "bar",
         data: {
-          labels: {{ labels | safe }},
-          datasets: [{
-            label: "Type de vêtements",
-            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850", "#faf24c", "#6a6ce7","#55f68f","#D0c309","#c45000"],
-            data: {{ values | safe }},
-          }]
+            labels: labelsTypes,
+            datasets: [{
+                label: "Nombre de commentaires",
+                data: valuesNbCommentairesTypes,
+                backgroundColor: "rgba(178, 164, 56, 0.85)"
+            }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
         }
     });
+
+    var chartNoteType = new Chart(document.getElementById("chartNoteType"), {
+        type: "bar",
+        data: {
+            labels: labelsTypes,
+            datasets: [{
+                label: "Nombre de notes",
+                data: valuesNbNotesTypes,
+                backgroundColor: "rgba(88, 130, 92, 0.85)"
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    var labelsVetements = {{ labels_vetements | tojson }};
+    var valuesMoyennesVetements = {{ values_moyennes_vetements | tojson }};
+    var valuesNbCommentairesVetements = {{ values_nb_commentaires_vetements | tojson }};
+    var valuesNbNotesVetements = {{ values_nb_notes_vetements | tojson }};
+
+    if (document.getElementById("chartMoyenneArticle")) {
+        new Chart(document.getElementById("chartMoyenneArticle"), {
+            type: "bar",
+            data: {
+                labels: labelsVetements,
+                datasets: [{
+                    label: "Note moyenne",
+                    data: valuesMoyennesVetements,
+                    backgroundColor: "rgba(46, 82, 102, 0.85)"
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    if (document.getElementById("chartCommentaireArticle")) {
+        new Chart(document.getElementById("chartCommentaireArticle"), {
+            type: "bar",
+            data: {
+                labels: labelsVetements,
+                datasets: [{
+                    label: "Nombre de commentaires",
+                    data: valuesNbCommentairesVetements,
+                    backgroundColor: "rgba(178, 164, 56, 0.85)"
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    if (document.getElementById("chartNoteArticle")) {
+        new Chart(document.getElementById("chartNoteArticle"), {
+            type: "bar",
+            data: {
+                labels: labelsVetements,
+                datasets: [{
+                    label: "Nombre de notes",
+                    data: valuesNbNotesVetements,
+                    backgroundColor: "rgba(88, 130, 92, 0.85)"
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
 </script>
 {% endblock %}
