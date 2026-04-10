@@ -1,0 +1,28 @@
+<section class="declinaison-comments text-box">
+    <div class="declinaison-comments-header">
+        <h3 class="no-margin">Avis clients</h3>
+        {% if note_vetement is defined and note_vetement.nb_notes > 0 %}
+            <p class="no-margin">{{ note_vetement.moyenne_note }}/5 de moyenne sur {{ note_vetement.nb_notes }} note(s)</p>
+        {% else %}
+            <p class="no-margin">Aucune note enregistrée pour le moment.</p>
+        {% endif %}
+    </div>
+
+    {% if commentaires_vetement is defined and commentaires_vetement|length > 0 %}
+        <div class="declinaison-comment-list">
+            {% for commentaire in commentaires_vetement %}
+                <article class="declinaison-comment-item">
+                    <div class="declinaison-comment-meta">
+                        <strong>{{ commentaire.nom }}</strong>
+                        <span>{{ commentaire.date_commentaire }}</span>
+                    </div>
+                    <p class="no-margin">{{ commentaire.commentaire }}</p>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="declinaison-comment-empty">
+            <p class="no-margin">Aucun commentaire validé pour cet article.</p>
+        </div>
+    {% endif %}
+</section>

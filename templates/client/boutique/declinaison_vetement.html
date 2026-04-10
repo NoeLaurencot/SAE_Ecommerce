@@ -1,0 +1,91 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+<title>Choix de taille | Gaullois</title>
+{% endblock %}
+
+{% block body %}
+<main class="container-boutique-param">
+    {% include('client/boutique/_panier.html') %}
+
+    <section class="declinaison-page">
+        <a class="validate-button-white-outline declinaison-back-link" href="/client/vetement/show">Retour boutique</a>
+
+        <div class="declinaison-card">
+            <div class="declinaison-media">
+                <div class="declinaison-image-frame">
+                    {% if vetement.photo %}
+                        <img src="{{ url_for('static', filename='assets/images/clothes/' + vetement.photo) }}"
+                             alt="image de {{ vetement.nom_vetement }}">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='assets/images/placeholder.svg') }}"
+                             alt="image de {{ vetement.nom_vetement }}">
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="declinaison-details text-box">
+                <h1 class="declinaison-title no-margin">{{ vetement.nom_vetement }}</h1>
+                <div class="declinaison-rating-row">
+                    <p class="no-margin declinaison-price">{{ vetement.prix_vetement }} €</p>
+                    {% if note_vetement is defined and note_vetement.nb_notes > 0 %}
+                        <p class="no-margin declinaison-rating">{{ note_vetement.moyenne_note }}/5 · {{ note_vetement.nb_notes }} avis</p>
+                    {% else %}
+                        <p class="no-margin declinaison-rating">Pas encore d'avis</p>
+                    {% endif %}
+                </div>
+                <p class="no-margin declinaison-description">{{ vetement.description }}</p>
+                <div class="divider"></div>
+
+                <h3 class="no-margin">Choisir une taille</h3>
+                <p class="no-margin declinaison-size-help">Sélectionnez une déclinaison disponible avant d'ajouter au panier.</p>
+                <form class="declinaison-form" action="/client/panier/add" method="post">
+                    <div class="declinaison-size-list">
+                        {% for item_declinaison in declinaisons %}
+                            <label class="declinaison-size-item {% if item_declinaison.stock <= 0 %}declinaison-size-item-disabled{% endif %}">
+                                <div class="declinaison-size-left">
+                                    <input type="radio"
+                                           name="id_declinaison_vetement"
+                                           value="{{ item_declinaison.id_declinaison_vetement }}"
+                                           {% if item_declinaison.stock <= 0 %}disabled{% endif %}
+                                           required>
+                                    <span class="declinaison-size-name">Taille {{ item_declinaison.libelle_taille }}</span>
+                                </div>
+
+                                {% if item_declinaison.stock > 0 %}
+                                    <span class="vetement-stock">Stock: {{ item_declinaison.stock }}</span>
+                                {% else %}
+                                    <span class="vetement-stock-warning">Rupture</span>
+                                {% endif %}
+                            </label>
+                        {% endfor %}
+                    </div>
+
+                    <div class="declinaison-action-row">
+                        <label class="declinaison-qty-label" for="declinaison-quantite">Quantité</label>
+                        <div class="input-vetement">
+                            <div class="input-vetement-wrapper">
+                                <input class="card-input"
+                                       type="number"
+                                       name="quantite"
+                                       id="declinaison-quantite"
+                                       value="{{ quantite if quantite else 1 }}"
+                                       min="1"
+                                       required>
+                                <span class="material-symbols-outlined input-vetement-up">arrow_drop_up</span>
+                                <span class="material-symbols-outlined input-vetement-down">arrow_drop_down</span>
+                            </div>
+                        </div>
+                        <button class="validate-button-black declinaison-submit" type="submit">
+                            <span class="material-symbols-outlined">shopping_cart</span>
+                            Ajouter au panier
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% include('_commentaire.html') %}
+    </section>
+</main>
+{% endblock %}

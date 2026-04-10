@@ -149,11 +149,115 @@
         .card-vetement {
             width: 40%;
         }
+
+        .vetement-detail-card {
+            grid-template-columns: 1fr;
+        }
+
+        .vetement-detail-media {
+            border-right: none;
+            border-bottom: solid 1px rgb(216, 216, 216);
+        }
+
+        .vetement-detail-image-frame {
+            max-width: 370px;
+        }
+
+        .vetement-detail-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .declinaison-card {
+            grid-template-columns: 1fr;
+        }
+
+        .declinaison-media {
+            padding: 22px;
+        }
+
+        .declinaison-image-frame {
+            max-width: 370px;
+        }
+
+        .declinaison-comments {
+            padding: 20px;
+        }
+
+        .declinaison-comments-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
     }
 
     @media (max-width: 500px) {
         .card-vetement {
             width: 80%;
+        }
+
+        .vetement-detail-page {
+            padding: 18px 14px 30px 14px;
+        }
+
+        .vetement-detail-info,
+        .vetement-detail-panel,
+        .vetement-detail-comments {
+            padding: 16px;
+        }
+
+        .vetement-detail-price-row {
+            align-items: flex-start;
+        }
+
+        .vetement-comment-meta {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .declinaison-page {
+            padding: 18px 14px 30px 14px;
+        }
+
+        .declinaison-details {
+            padding: 20px 18px;
+        }
+
+        .declinaison-title {
+            font-size: 1.6rem;
+        }
+
+        .declinaison-rating-row {
+            align-items: flex-start;
+        }
+
+        .declinaison-size-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .declinaison-action-row {
+            align-items: stretch;
+        }
+
+        .declinaison-action-row .input-vetement {
+            width: 130px;
+            min-height: 42px;
+        }
+
+        .declinaison-submit {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .declinaison-comments {
+            padding: 16px;
+        }
+
+        .declinaison-comment-meta {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
         }
     }
 
@@ -221,6 +325,20 @@
     @media (max-width: 900px) {
         .dashboard-grid {
             grid-template-columns: repeat(2, 1fr);
+        }
+
+        .dataviz-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 800px) {
+        .dataviz-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .dataviz-card {
+            min-height: auto;
         }
     }
 
