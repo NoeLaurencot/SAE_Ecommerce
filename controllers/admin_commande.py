@@ -30,9 +30,10 @@ def admin_commande_show():
     commande_adresses = None
     id_commande = request.args.get('id_commande', None)
     if id_commande != None:
-        sql = '''SELECT nom_vetement,quantite,prix,prix*quantite as prix_total
+        sql = '''SELECT nom_vetement,quantite,prix,prix*quantite as prix_total,libelle_taille
                  FROM ligne_commande
-                          JOIN sae_commerce.declinaison_vetement dv on ligne_commande.declinaison_vetement_id = dv.id_declinaison_vetement
+                          JOIN declinaison_vetement dv on ligne_commande.declinaison_vetement_id = dv.id_declinaison_vetement
+                          JOIN taille on dv.taille_id = taille.id_taille
                           JOIN vetement on dv.vetement_id = vetement.id_vetement
                  WHERE commande_id = %s;
               '''
