@@ -153,9 +153,9 @@ CREATE TABLE IF NOT EXISTS ligne_commande
 CREATE TABLE IF NOT EXISTS ligne_panier
 (
     declinaison_vetement_id INT,
-    utilisateur_id           INT,
-    date_ajout               DATE,
-    quantite                 DECIMAL(15, 0),
+    utilisateur_id          INT,
+    date_ajout              DATE,
+    quantite                DECIMAL(15, 0),
     PRIMARY KEY (declinaison_vetement_id, utilisateur_id),
     CONSTRAINT fk_ligne_panier_decvetement FOREIGN KEY (declinaison_vetement_id) REFERENCES declinaison_vetement (id_declinaison_vetement),
     CONSTRAINT fk_ligne_panier_utilisateur FOREIGN KEY (utilisateur_id) REFERENCES utilisateur (id_utilisateur)
@@ -548,24 +548,13 @@ VALUES (4, 1, 4),
        (27, 32, 6),
        (20, 32, 7);
 
-
 INSERT INTO adresse (nom_adresse, rue_adresse, code_postal, ville, date_utilisation, utilisateur_id, valide)
-VALUES ('3 Rue du Cerisier', 'Rue du Cerisier', '70000', 'Vesoul', '2026-02-23 00:00:00', 2, true),
-       ('18 Rue Edouard Belin', 'Rue Edouard Belin', '70000', 'Vesoul', '2026-02-24 00:00:00', 2, true),
-       ('5 Rue de la 5eme DB', 'Rue de la 5eme DB', '90000', 'Belfort', '2025-02-24 00:00:00', 3, true),
-       ('2 Grande Rue', 'Grande Rue', '90000', 'Belfort', '2025-02-21 00:00:00', 3, true);
-
-INSERT INTO commande (date_achat, utilisateur_id, etat_id, adresse_livraison_id, adresse_facturation_id)
-VALUES ('2026-02-20', 2, 1, 1, 1),
-       ('2026-02-20', 2, 1, 1, 2),
-       ('2026-02-21', 3, 2, 3, 3),
-       ('2026-02-22', 3, 3, 3, 4);
-
-INSERT INTO ligne_panier (declinaison_vetement_id, utilisateur_id, date_ajout, quantite)
-VALUES (2, 2, '2026-02-20', 2),
-       (45, 2, '2026-02-20', 1),
-       (1, 3, '2026-02-21', 1),
-       (5, 3, '2026-02-21', 2);
+VALUES ('3 Rue du Cerisier', 'Rue du Cerisier', 70000, 'Vesoul', '2026-02-23 00:00:00', 2, true),
+       ('18 Rue Edouard Belin', 'Rue Edouard Belin', 70000, 'Vesoul', '2026-02-24 00:00:00', 2, true),
+       ('105 Boulevard Haussmann', 'Boulevard Haussmann', 75008, 'Paris', '2026-01-10 00:00:00', 2, true),
+       ('5 Rue de la 5eme DB', 'Rue de la 5eme DB', 90000, 'Belfort', '2025-02-24 00:00:00', 3, true),
+       ('2 Grande Rue', 'Grande Rue', 90000, 'Belfort', '2025-02-21 00:00:00', 3, true),
+       ('22 Place de la Cathédrale', 'Place de la Cathédrale', 67000, 'Strasbourg', '2025-03-01 00:00:00', 3, true);
 
 INSERT INTO vetement_collection (vetement_id, collection_id)
 VALUES (1, 1),
@@ -612,101 +601,57 @@ VALUES (1, 1),
        (31, 3),
        (32, 1);
 
-
-
-
-INSERT INTO adresse (nom_adresse, rue_adresse, code_postal, ville, date_utilisation, utilisateur_id, valide)
-VALUES
-
-('Maison Doubs', '10 Rue de la Paix', 25000, 'Besançon', NOW(), 2, true),
-
-('Appart Strasbourg', '22 Place de la Cathédrale', 67000, 'Strasbourg', NOW(), 2, true),
-
-('Bureau Paris', '105 Boulevard Haussmann', 75008, 'Paris', NOW(), 2, true),
-
-('Villa Marseille', '5 Avenue du Prado', 13000, 'Marseille', NOW(), 2, true);
-
-
 INSERT INTO commande (date_achat, utilisateur_id, etat_id, adresse_livraison_id, adresse_facturation_id)
-VALUES ('2026-03-01', 2, 2, 5, 5);
+VALUES ('2026-02-20', 2, 3, 1, 1),
+       ('2026-02-20', 2, 3, 1, 2),
+       ('2026-02-21', 2, 3, 2, 3),
+       ('2026-02-22', 2, 3, 2, 2),
+       ('2026-03-01', 2, 3, 2, 2),
+       ('2026-03-02', 2, 3, 3, 3),
+       ('2026-03-03', 2, 3, 1, 2),
+       ('2026-03-04', 2, 3, 2, 2),
+       ('2026-03-05', 2, 3, 2, 1),
+       ('2026-03-06', 2, 3, 3, 3),
+       ('2026-03-07', 2, 3, 1, 1),
+       ('2026-03-08', 2, 1, 3, 3),
 
-
-INSERT INTO commande (date_achat, utilisateur_id, etat_id, adresse_livraison_id, adresse_facturation_id)
-VALUES ('2026-03-02', 2, 2, 6, 6);
-
-INSERT INTO commande (date_achat, utilisateur_id, etat_id, adresse_livraison_id, adresse_facturation_id)
-VALUES ('2026-03-03', 2, 2, 7, 7);
-
-INSERT INTO commande (date_achat, utilisateur_id, etat_id, adresse_livraison_id, adresse_facturation_id)
-VALUES ('2026-03-04', 2, 2, 8, 8);
-
+       ('2026-03-09', 3, 3, 4, 4),
+       ('2026-03-10', 3, 3, 5, 6),
+       ('2026-03-11', 3, 3, 4, 4),
+       ('2026-03-12', 3, 3, 6, 6),
+       ('2026-03-13', 3, 3, 4, 4),
+       ('2026-03-14', 3, 3, 6, 6),
+       ('2026-03-15', 3, 3, 6, 6),
+       ('2026-03-16', 3, 3, 5, 5),
+       ('2026-03-17', 3, 3, 5, 4),
+       ('2026-03-18', 3, 3, 4, 4),
+       ('2026-03-19', 3, 3, 4, 6),
+       ('2026-03-20', 3, 3, 6, 6);
 
 INSERT INTO ligne_commande (declinaison_vetement_id, commande_id, quantite, prix)
-VALUES
-    (1, 5, 2, 370.00),
-    (8, 6, 1, 710.00),
-    (15, 7, 3, 2100.00),
-    (22, 8, 1, 1320.00);
-
-
-INSERT INTO adresse (nom_adresse, rue_adresse, code_postal, ville, date_utilisation, utilisateur_id, valide)
-VALUES
-    ('Maison Paris', '12 Rue de la Paix', 75001, 'Paris', NOW(), 2, true),
-    ('Bureau Lyon', '45 Rue de la République', 69002, 'Lyon', NOW(), 2, true),
-    ('Villa Marseille', '5 Avenue du Prado', 13008, 'Marseille', NOW(), 2, true),
-    ('Maison Bordeaux', '22 Quai des Chartrons', 33000, 'Bordeaux', NOW(), 2, true),
-    ('Appart Nantes', '8 Chaussée de la Madeleine', 44000, 'Nantes', NOW(), 2, true),
-    ('Maison Lille', '101 Rue Nationale', 59000, 'Lille', NOW(), 2, true),
-    ('Gite Toulouse', '3 Place du Capitole', 31000, 'Toulouse', NOW(), 2, true),
-    ('Maison Nice', '12 Promenade des Anglais', 06000, 'Nice', NOW(), 2, true),
-    ('Bureau Strasbourg', '1 Place Kléber', 67000, 'Strasbourg', NOW(), 2, true),
-    ('Maison Rennes', '4 Rue de la Monnaie', 35000, 'Rennes', NOW(), 2, true),
-    ('Maison Montpellier', '9 Rue de la Loge', 34000, 'Montpellier', NOW(), 2, true),
-    ('Maison Dijon', '14 Rue de la Liberté', 21000, 'Dijon', NOW(), 2, true);
-
-INSERT INTO commande (date_achat, utilisateur_id, etat_id, adresse_livraison_id, adresse_facturation_id)
-VALUES
-    ('2026-03-01', 2, 4, 9, 9),
-    ('2026-03-02', 2, 4, 9, 9),
-    ('2026-03-03', 2, 4, 10, 10),
-    ('2026-03-04', 2, 4, 11, 11),
-    ('2026-03-05', 2, 4, 12, 12),
-    ('2026-03-06', 2, 4, 13, 13),
-    ('2026-03-07', 2, 4, 14, 14),
-    ('2026-03-08', 2, 4, 15, 15),
-    ('2026-03-09', 2, 4, 16, 16),
-    ('2026-03-10', 2, 4, 17, 17),
-    ('2026-03-11', 2, 4, 18, 18),
-    ('2026-03-12', 2, 4, 19, 19),
-    ('2026-03-13', 2, 4, 20, 20),
-    ('2026-03-14', 2, 4, 9, 9),
-    ('2026-03-15', 2, 4, 10, 10),
-    ('2026-03-16', 2, 4, 12, 12),
-    ('2026-03-17', 2, 4, 14, 14),
-    ('2026-03-18', 2, 4, 9, 9),
-    ('2026-03-19', 2, 4, 11, 11),
-    ('2026-03-20', 2, 4, 15, 15);
-
-INSERT INTO ligne_commande (declinaison_vetement_id, commande_id, quantite, prix)
-VALUES
-    (1, 9, 5, 370.00),
-    (15, 9, 2, 2100.00),
-    (8, 10, 3, 710.00),
-    (22, 11, 4, 950.00),
-    (30, 12, 1, 830.00),
-    (45, 13, 10, 1640.00),
-    (50, 14, 2, 1200.00),
-    (60, 15, 6, 550.00),
-    (70, 16, 1, 1900.00),
-    (80, 17, 3, 1320.00),
-    (90, 18, 2, 3700.00),
-    (100, 19, 1, 6200.00),
-    (110, 20, 4, 710.00),
-    (1, 21, 2, 370.00),
-    (15, 22, 1, 2100.00),
-    (45, 23, 3, 1640.00),
-    (60, 24, 2, 550.00),
-    (8, 25, 5, 710.00),
-    (30, 26, 2, 830.00),
-    (1, 27, 8, 370.00),
-    (15, 28, 1, 2100.00);
+VALUES (1, 1, 2, 370.00),
+       (8, 2, 1, 710.00),
+       (15, 3, 3, 2100.00),
+       (22, 4, 1, 1320.00),
+       (1, 5, 2, 370.00),
+       (15, 5, 1, 2100.00),
+       (8, 6, 3, 710.00),
+       (22, 7, 4, 950.00),
+       (30, 8, 1, 830.00),
+       (45, 9, 2, 1640.00),
+       (50, 9, 1, 1200.00),
+       (60, 10, 6, 550.00),
+       (70, 11, 1, 1900.00),
+       (80, 12, 3, 1320.00),
+       (90, 13, 2, 3700.00),
+       (100, 14, 1, 6200.00),
+       (110, 15, 4, 710.00),
+       (1, 16, 2, 370.00),
+       (15, 17, 1, 2100.00),
+       (45, 18, 3, 1640.00),
+       (60, 19, 2, 550.00),
+       (8, 20, 5, 710.00),
+       (30, 21, 2, 830.00),
+       (1, 22, 8, 370.00),
+       (15, 23, 1, 2100.00),
+       (22, 24, 3, 950.00);
