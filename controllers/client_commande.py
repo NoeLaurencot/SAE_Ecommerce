@@ -84,8 +84,8 @@ def client_commande_add():
     id_client = session['id_user']
     shipping_adress_id = request.form.get('shipping_adress_id')
     payment_adress_id = request.form.get('payment_adress_id')
-    same_adress = request.form.get('same_adress')
-    if same_adress:
+    same_address = request.form.get('same_address')
+    if same_address:
         payment_adress_id = shipping_adress_id
 
     sql="""SELECT id_adresse
