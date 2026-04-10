@@ -21,7 +21,7 @@ def client_panier_show():
     sql = """
     SELECT id_declinaison_vetement, nom_vetement, vetement.photo, stock, prix_vetement, libelle_taille, libelle_marque, ligne_panier.quantite, ligne_panier.date_ajout
     FROM ligne_panier
-    INNER JOIN declinaison_vetement on ligne_panier.declinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
+    INNER JOIN declinaison_vetement on ligne_panier.ideclinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
     INNER JOIN vetement ON declinaison_vetement.vetement_id = vetement.id_vetement
     INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
     INNER JOIN taille ON declinaison_vetement.taille_id = taille.id_taille
@@ -34,7 +34,7 @@ def client_panier_show():
     sql = """
     SELECT SUM(prix_vetement * quantite) as prix_TTC, SUM(prix_vetement * 0.2 * quantite) AS prix_taxe, SUM(prix_vetement * quantite - prix_vetement * 0.2 * quantite) AS prix_HT
     FROM ligne_panier
-    INNER JOIN declinaison_vetement on ligne_panier.declinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
+    INNER JOIN declinaison_vetement on ligne_panier.ideclinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
     INNER JOIN vetement ON declinaison_vetement.vetement_id = vetement.id_vetement
     INNER JOIN utilisateur ON ligne_panier.utilisateur_id = utilisateur.id_utilisateur
     WHERE id_utilisateur = %s;
@@ -97,7 +97,7 @@ def client_panier_add():
         id_declinaison_vetement = declinaisons[0]['id_declinaison_vetement']
         
         sql = '''
-        INSERT INTO ligne_panier(declinaison_vetement_id, utilisateur_id, date_ajout, quantite)
+        INSERT INTO ligne_panier(ideclinaison_vetement_id, utilisateur_id, date_ajout, quantite)
         VALUES (%s, %s, %s, %s)
         '''
         mycursor.execute(sql, (id_declinaison_vetement, id_client, '2026-05-05', quantite))
@@ -120,12 +120,40 @@ def client_panier_add():
         FROM vetement
         WHERE id_vetement = %s
         '''
-        mycursor.execute(sql, (id_vetement))
+        mycursor.execute(sql, (id_vetement,))
         vetement = mycursor.fetchone()
+
+        sql = '''
+        SELECT ROUND(AVG(note), 1) AS moyenne_note,
+               COUNT(*) AS nb_notes
+        FROM note
+        WHERE vetement_id = %s
+        '''
+        mycursor.execute(sql, (id_vetement,))
+        note_vetement = mycursor.fetchone()
+
+        sql = '''
+        SELECT c.commentaire,
+               c.date_commentaire,
+               u.nom
+        FROM commentaire c
+        JOIN utilisateur u
+            ON u.id_utilisateur = c.utilisateur_id
+        WHERE c.vetement_id = %s
+          AND c.valide = 1
+          AND u.role = 'ROLE_client'
+        ORDER BY c.date_commentaire DESC
+        LIMIT 8
+        '''
+        mycursor.execute(sql, (id_vetement,))
+        commentaires_vetement = mycursor.fetchall()
+
         return render_template('client/boutique/declinaison_vetement.html'
                                    , declinaisons=declinaisons
                                    , quantite=quantite
-                                   , vetement=vetement)
+                                   , vetement=vetement
+                                   , note_vetement=note_vetement
+                                   , commentaires_vetement=commentaires_vetement)
 
 # ajout dans le panier d'un vetement
 """

@@ -152,7 +152,7 @@ CREATE TABLE IF NOT EXISTS ligne_commande
 
 CREATE TABLE IF NOT EXISTS ligne_panier
 (
-    declinaison_vetement_id INT,
+    ideclinaison_vetement_id INT,
     utilisateur_id           INT,
     date_ajout               DATE,
     quantite                 DECIMAL(15, 0),
