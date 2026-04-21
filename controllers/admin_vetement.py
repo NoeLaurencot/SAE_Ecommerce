@@ -158,7 +158,6 @@ def valid_add_vetement():
     photo = request.files.get('photo', '')
     marque_id = request.form.get('marque_id', '')
     fournisseur_id = request.form.get('fournisseur_id', '')
-    taille_id = request.form.get('fournisseur_id', '')
     collection_ids = request.form.getlist('collection_id')
     stock = request.form.get('stock', '')
     
@@ -169,11 +168,11 @@ def valid_add_vetement():
         filename = "placeholder"
 
     sql = '''  
-    INSERT INTO vetement(nom_vetement, prix_vetement, description, matiere_id, type_vetement_id, photo, marque_id, fournisseur_id, taille_id, stock)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); 
+    INSERT INTO vetement(nom_vetement, prix_vetement, description, matiere_id, type_vetement_id, photo, marque_id, fournisseur_id)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s); 
     '''
 
-    tuple_add = (nom, prix, description, matiere_id, type_vetement_id, filename, marque_id, fournisseur_id, taille_id, stock)
+    tuple_add = (nom, prix, description, matiere_id, type_vetement_id, filename, marque_id, fournisseur_id)
     mycursor.execute(sql, tuple_add)
 
     sql = '''SELECT last_insert_id() as last_insert_id
@@ -189,9 +188,16 @@ def valid_add_vetement():
     for collection_id in collection_ids:
         mycursor.execute(sql, (id_vetement, collection_id))
 
+    sql = '''
+    INSERT INTO declinaison_vetement(stock, vetement_id, taille_id)
+    VALUES (%s, %s, %s);
+    '''
+
+    mycursor.execute(sql, (stock, id_vetement, 4))
+
     get_db().commit()
 
-    message = u'Vêtement ajouté, nom : ' + nom + ' - description : ' + description + ' - prix : ' + prix + ' - matiere_id : ' + matiere_id + ' - type_vetement : ' + type_vetement_id + ' - photo : ' + filename + ' - marque_id : ' + marque_id + ' - id_fournisseur : ' + fournisseur_id + ' - taille_id : ' + taille_id + ' - collection_ids : ' + ', '.join(collection_ids) + ' - stock : ' + stock
+    message = u'Vêtement ajouté, nom : ' + nom + ' - description : ' + description + ' - prix : ' + prix + ' - matiere_id : ' + matiere_id + ' - type_vetement : ' + type_vetement_id + ' - photo : ' + filename + ' - marque_id : ' + marque_id + ' - id_fournisseur : ' + fournisseur_id + ' - taille_id : ' + '4' + ' - collection_ids : ' + ', '.join(collection_ids) + ' - stock : ' + stock
     flash(message, 'alert-success')
     return redirect('/admin/vetement/show')
 
