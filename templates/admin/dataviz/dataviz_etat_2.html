@@ -83,7 +83,7 @@
                     labels: labels,
                     datasets: [{ label: label, data: data, backgroundColor: color }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+                options: { responsive: true, maintainAspectRatio: false, scales: { yAxes: [{ ticks: { beginAtZero: true, min: 0 } }] } }
             });
         };
 
