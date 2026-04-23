@@ -182,11 +182,14 @@ CREATE TABLE IF NOT EXISTS note
 
 CREATE TABLE IF NOT EXISTS commentaire
 (
-    vetement_id      INT,
-    utilisateur_id   INT,
-    date_commentaire DATETIME,
-    commentaire      TEXT,
-    valide           BOOLEAN,
+    vetement_id           INT,
+    utilisateur_id        INT,
+    date_commentaire      DATETIME,
+    commentaire           TEXT,
+    valide                BOOLEAN,
+    parent_vetement_id    INT          DEFAULT NULL,
+    parent_utilisateur_id INT          DEFAULT NULL,
+    parent_date           DATETIME     DEFAULT NULL,
     PRIMARY KEY (vetement_id, utilisateur_id, date_commentaire),
     CONSTRAINT fk_commentaire_vetement FOREIGN KEY (vetement_id) REFERENCES vetement (id_vetement),
     CONSTRAINT fk_commentaire_utilisateur FOREIGN KEY (utilisateur_id) REFERENCES utilisateur (id_utilisateur)
