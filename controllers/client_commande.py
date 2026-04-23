@@ -182,10 +182,11 @@ def client_commande_show():
         if int(id_commande) not in should_have:
             flash(u'Ce n\'est pas votre commande', 'alert-danger')
             return redirect('/')
-        sql = ''' SELECT nom_vetement,quantite,prix,prix*quantite as prix_total
+        sql = ''' SELECT nom_vetement,quantite,prix,prix*quantite as prix_total, taille.libelle_taille
                  FROM ligne_commande
                           JOIN declinaison_vetement on ligne_commande.declinaison_vetement_id = declinaison_vetement.id_declinaison_vetement
                           JOIN vetement on declinaison_vetement.vetement_id = vetement.id_vetement
+                          JOIN taille ON declinaison_vetement.taille_id = taille.id_taille
                  WHERE commande_id = %s;'''
         mycursor.execute(sql,id_commande)
         vetement_commandes = mycursor.fetchall()

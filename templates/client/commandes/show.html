@@ -20,7 +20,7 @@
                 <tbody>
                 {% for vetement_commande in vetement_commandes %}
                     <tr>
-                        <td>{{ vetement_commande.nom_vetement }}</td>
+                        <td>{{ vetement_commande.nom_vetement }} ({{ vetement_commande.libelle_taille }})</td>
                         <td>{{ vetement_commande.quantite }}</td>
                         <td>{{ vetement_commande.prix }}</td>
                         <td>{{ vetement_commande.prix_total }}</td>

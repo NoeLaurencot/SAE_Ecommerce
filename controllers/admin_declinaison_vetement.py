@@ -153,10 +153,34 @@ def admin_delete_declinaison_vetement():
     mycursor = get_db().cursor()
 
     sql = '''
+    SELECT COUNT(ligne_panier.declinaison_vetement_id) AS total
+    FROM ligne_panier
+    WHERE ligne_panier.declinaison_vetement_id = %s
+    '''
+    mycursor.execute(sql, (id_declinaison_vetement))
+    total_panier = mycursor.fetchone()
+    print(total_panier)
+    if total_panier['total'] > 0:
+        flash(u"Cette déclinaison est dans un panier, impossible de la supprimer.", 'alert-danger')
+        return redirect('/admin/vetement/edit?id=' + str(id_vetement))
+
+    sql = '''
+    SELECT COUNT(ligne_commande.declinaison_vetement_id) AS total
+    FROM ligne_commande
+    WHERE ligne_commande.declinaison_vetement_id = %s
+    '''
+    mycursor.execute(sql, (id_declinaison_vetement))
+    total_commande = mycursor.fetchone()
+    print(total_commande)
+    if total_commande['total'] > 0:
+        flash(u"Cette déclinaison est dans une commande, impossible de la supprimer.", 'alert-danger')
+        return redirect('/admin/vetement/edit?id=' + str(id_vetement))
+
+    sql = '''
     DELETE FROM declinaison_vetement
     WHERE declinaison_vetement.id_declinaison_vetement = %s;
     '''
-    mycursor.execute(sql, (id_declinaison_vetement));
+    mycursor.execute(sql, (id_declinaison_vetement))
 
     get_db().commit()
 

@@ -224,12 +224,23 @@ def delete_vetement():
     if (False):
         pass
     else:
+        sql_check = '''
+        SELECT COUNT(id_declinaison_vetement) AS total
+        FROM declinaison_vetement
+        WHERE declinaison_vetement.vetement_id = %s;
+        '''
+        mycursor.execute(sql_check, (id_vetement))
+        result = mycursor.fetchone()
+        if result and result['total'] > 0:
+            flash(u'Le vêtement a des déclinaisons. Suppression impossible.', 'alert-warning')
+            return redirect('/admin/vetement/show')
+
         sql = '''
         SELECT photo
         FROM vetement
         WHERE vetement.id_vetement = %s;
         '''
-        mycursor.execute(sql, id_vetement)
+        mycursor.execute(sql, (id_vetement))
         vetement = mycursor.fetchone()
 
         if (vetement):
@@ -238,28 +249,28 @@ def delete_vetement():
             image = ''
 
         sql = ''' 
+        DELETE FROM commentaire
+        WHERE vetement_id = %s;
+        '''
+        mycursor.execute(sql, (id_vetement))
+
+        sql = ''' 
+        DELETE FROM note
+        WHERE vetement_id = %s;
+        '''
+        mycursor.execute(sql, (id_vetement))
+
+        sql = ''' 
         DELETE FROM vetement_collection
         WHERE vetement_id = %s;
           '''
-        mycursor.execute(sql, id_vetement)
-
-        sql = ''' 
-        DELETE FROM ligne_panier
-        WHERE vetement_id = %s;
-          '''
-        mycursor.execute(sql, id_vetement)
-
-        sql = ''' 
-        DELETE FROM ligne_commande
-        WHERE vetement_id = %s;
-          '''
-        mycursor.execute(sql, id_vetement)
+        mycursor.execute(sql, (id_vetement))
 
         sql = ''' 
         DELETE FROM vetement
         WHERE id_vetement = %s;
           '''
-        mycursor.execute(sql, id_vetement)
+        mycursor.execute(sql, (id_vetement))
         get_db().commit()
         if image != None:
             #os.remove('static/images/' + image)
@@ -292,28 +303,50 @@ def cascade_delete_vetement():
     #     image = ''
 
     sql = '''
+    DELETE FROM commentaire
+    WHERE vetement_id = %s;
+    '''
+    mycursor.execute(sql, (id_vetement,))
+
+    sql = '''
+    DELETE FROM note
+    WHERE vetement_id = %s;
+    '''
+    mycursor.execute(sql, (id_vetement,))
+
+    sql = '''
     DELETE FROM vetement_collection
     WHERE vetement_id = %s;
     '''
-    mycursor.execute(sql, id_vetement)
+    mycursor.execute(sql, (id_vetement,))
 
     sql = '''
     DELETE FROM ligne_panier
-    WHERE vetement_id = %s;
+    WHERE declinaison_vetement_id IN (
+        SELECT id_declinaison_vetement FROM declinaison_vetement WHERE vetement_id = %s
+    );
     '''
-    mycursor.execute(sql, id_vetement)
+    mycursor.execute(sql, (id_vetement,))
 
     sql = '''
     DELETE FROM ligne_commande
+    WHERE declinaison_vetement_id IN (
+        SELECT id_declinaison_vetement FROM declinaison_vetement WHERE vetement_id = %s
+    );
+    '''
+    mycursor.execute(sql, (id_vetement,))
+
+    sql = '''
+    DELETE FROM declinaison_vetement
     WHERE vetement_id = %s;
     '''
-    mycursor.execute(sql, id_vetement)
+    mycursor.execute(sql, (id_vetement,))
 
     sql = '''
     DELETE FROM vetement
     WHERE id_vetement = %s;
     '''
-    mycursor.execute(sql, id_vetement)
+    mycursor.execute(sql, (id_vetement,))
     get_db().commit()
 
     message = u'Vêtement supprimé, id : ' + id_vetement
@@ -475,8 +508,9 @@ def valid_edit_vetement():
 
 
 
-@admin_vetement.route('/admin/vetement/avis/<int:id>', methods=['GET'])
-def admin_avis(id):
+@admin_vetement.route('/admin/vetement/avis', methods=['GET'])
+def admin_avis():
+    id = request.args.get('id')
     mycursor = get_db().cursor()
     vetement=[]
     commentaires = {}
