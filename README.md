@@ -8,6 +8,8 @@ Boutique fictive faite avec Flask
 
 Boutique de vêtements de luxe
 
+[Gaullois](https://sae-ecommerce.onrender.com/)
+
  ## Auteurs
 
  - Jules JEANROT
@@ -16,6 +18,3 @@ Boutique de vêtements de luxe
 
  - Noé LAURENÇOT
 
-[Lien site 1](https://sae-ecommerce.onrender.com/)
-
-[Lien site 2](https://earlyalpha.ddns.net/)
