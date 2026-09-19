@@ -2,6 +2,7 @@ from flask import g
 from dotenv import load_dotenv
 import os
 import pymysql.cursors
+import certifi
 
 load_dotenv()
 db_login = os.environ["DB_LOGIN"]
@@ -17,8 +18,11 @@ def get_db():
             user=db_login,
             password=db_password,
             database=db_name,
-            port=db_port,
+            port=int(db_port),
             charset='utf8mb4',
+            ssl_ca=certifi.where(),
+            ssl_verify_cert=True,
+            ssl_verify_identity=True,
             cursorclass=pymysql.cursors.DictCursor
         )
     return g.db
